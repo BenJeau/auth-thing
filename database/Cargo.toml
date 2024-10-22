@@ -7,3 +7,4 @@ version = "0.1.0"
 chrono = { workspace = true }
 serde = { workspace = true }
 sqlx = { workspace = true }
+tracing = { workspace = true }
