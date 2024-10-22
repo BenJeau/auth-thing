@@ -1,0 +1,9 @@
+[package]
+edition = "2021"
+name = "database"
+version = "0.1.0"
+
+[dependencies]
+chrono = { workspace = true }
+serde = { workspace = true }
+sqlx = { workspace = true }
