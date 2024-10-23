@@ -45,7 +45,7 @@ impl ServerState {
         #[cfg(debug_assertions)]
         let version = Version {
             commit_sha: "dev".to_string(),
-            version: "v0.0.0".to_string(),
+            version: "0.0.0".to_string(),
         };
 
         #[cfg(not(debug_assertions))]

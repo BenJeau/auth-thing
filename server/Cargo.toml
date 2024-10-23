@@ -6,12 +6,15 @@ version = "0.1.0"
 [dependencies]
 axum = { workspace = true }
 figment = { workspace = true }
+http = { workspace = true }
 sentry = { workspace = true }
 sentry-tower = { workspace = true }
 sentry-tracing = { workspace = true }
 serde = { workspace = true }
 strum = { workspace = true }
 tokio = { workspace = true }
+tower = { workspace = true }
+tower-http = { workspace = true }
 tracing = { workspace = true }
 tracing-subscriber = { workspace = true }
 

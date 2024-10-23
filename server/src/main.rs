@@ -2,6 +2,8 @@ use tracing::info;
 
 mod config;
 mod error;
+mod layers;
+mod middlewares;
 mod routes;
 mod state;
 mod telemetry;
