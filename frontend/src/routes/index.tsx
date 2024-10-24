@@ -1,9 +1,11 @@
-import { Button } from "@/components/ui/button";
-import { useQuery } from "@tanstack/react-query";
-import { usersQueryOptions } from "../api/users";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { createFileRoute } from "@tanstack/react-router";
 
-export default function App() {
-  const users = useQuery(usersQueryOptions);
+import { Button } from "@/components/ui/button";
+import { usersQueryOptions } from "@/api/users";
+
+const IndexComponent: React.FC = () => {
+  const users = useSuspenseQuery(usersQueryOptions);
 
   return (
     <div>
@@ -11,4 +13,10 @@ export default function App() {
       <pre>{JSON.stringify(users.data, null, 4)}</pre>
     </div>
   );
-}
+};
+
+export const Route = createFileRoute("/")({
+  component: IndexComponent,
+  loader: async ({ context: { queryClient } }) =>
+    await queryClient.ensureQueryData(usersQueryOptions),
+});
