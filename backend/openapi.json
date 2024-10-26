@@ -19,6 +19,120 @@
     }
   ],
   "paths": {
+    "/applications": {
+      "get": {
+        "summary": "Get all applications",
+        "operationId": "get_applications",
+        "responses": {
+          "200": {
+            "description": "List matching applications by query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Application"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Applications"
+        ],
+        "summary": "Create a new application",
+        "operationId": "create_application",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModifyApplication"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Application created successfully",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Application was not created"
+          }
+        }
+      }
+    },
+    "/applications/{id}": {
+      "get": {
+        "summary": "Get application by database ID",
+        "operationId": "get_application",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Application database ID",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get application by ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Application"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Application was not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Applications"
+        ],
+        "summary": "Update an application",
+        "operationId": "update_application",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModifyApplication"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Application updated successfully",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Application was not updated"
+          }
+        }
+      }
+    },
     "/users": {
       "get": {
         "tags": [
@@ -86,7 +200,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "User database ID to get User for",
+            "description": "User database ID",
             "required": true
           }
         ],
@@ -142,6 +256,84 @@
   },
   "components": {
     "schemas": {
+      "Application": {
+        "type": "object",
+        "required": [
+          "id",
+          "created_at",
+          "updated_at",
+          "creator_id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "creator_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "website": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "icon": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "ModifyApplication": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "website": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "icon": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
       "ModifyUser": {
         "type": "object",
         "required": [
