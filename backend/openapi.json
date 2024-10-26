@@ -1,0 +1,244 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Auth Thing REST API",
+    "description": "A [Axum](https://github.com/tokio-rs/axum) Rust based API REST endpoints for the Auth Thing system interfacing with SQLite via [sqlx](https://github.com/launchbadge/sqlx). This documentation is generated using [utoipa](https://github.com/juhaku/utoipa).\n\n## How to use\n\nSelect a tag (category) to reveal information about the endpoints and select an endpoint to test them. To query the API, you'll need to authenticate yourself with one of the methods below or by clicking on any of the locks.\n\n## Authentication\n\nAll endpoints are protected except for auth endpoints. You either need to authenticate with one of the following ways all within the `Authorization` request header:\n1. provide a JWT as a bearer token - `Bearer JWT_TOKEN`\n2. provide username + password as basic authentication - `Basic base64(username:password)`\n3. provide a API token as token authentication - `Token API_TOKEN`\n\nOnly the documentation `/api/v1/docs` and the authentication `/api/v1/auth` endpoints are not protected.\n\n## Clients\n\nThere's no official API client yet, but thanks to the OpenAPI documentation, you can generate your own HTTP client using something like [OpenAPI Generator](https://openapi-generator.tech/) with the JSON from the OpenAPI docs located at `/api/v1/docs/openapi.json`.",
+    "contact": {
+      "name": "Benoît Jeaurond",
+      "email": "benoit@jeaurond.dev"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/license/MIT"
+    },
+    "version": "0.1.0"
+  },
+  "servers": [
+    {
+      "url": "/api/v1"
+    }
+  ],
+  "paths": {
+    "/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get all users",
+        "operationId": "get_users",
+        "responses": {
+          "200": {
+            "description": "List matching users by query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Create a new user",
+        "operationId": "create_user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModifyUser"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "User created successfully",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User was not created"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get user by database ID",
+        "operationId": "get_user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User database ID to get User for",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get user by ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User was not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Update a user",
+        "operationId": "update_user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModifyUser"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "User updated successfully",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User was not updated"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ModifyUser": {
+        "type": "object",
+        "required": [
+          "email"
+        ],
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "username": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "picture": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "disabled": {
+            "type": "boolean"
+          },
+          "verified": {
+            "type": "boolean"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "required": [
+          "id",
+          "created_at",
+          "updated_at",
+          "email",
+          "disabled",
+          "verified"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "email": {
+            "type": "string"
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "username": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "picture": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "disabled": {
+            "type": "boolean"
+          },
+          "verified": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Health",
+      "description": "Overall health check for the service"
+    },
+    {
+      "name": "Users",
+      "description": "User management"
+    }
+  ]
+}

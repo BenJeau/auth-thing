@@ -134,7 +134,10 @@ impl<F> CommonTowerLayer<F>
 where
     F: Fn(&Request<Body>) -> Span + Send + Clone + 'static + Sync,
 {
-    pub fn apply_middlewares(self, router: Router) -> Router {
+    pub fn apply_middlewares<S: Send + Clone + Sync + 'static>(
+        self,
+        router: Router<S>,
+    ) -> Router<S> {
         let mut router = router
             .layer(self.size_limit_layer)
             .layer(self.timeout_layer)

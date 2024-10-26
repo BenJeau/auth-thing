@@ -8,3 +8,4 @@ chrono = { workspace = true }
 serde = { workspace = true }
 sqlx = { workspace = true }
 tracing = { workspace = true }
+utoipa = { workspace = true }

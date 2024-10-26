@@ -1,4 +1,4 @@
-use axum::{routing::get, Router};
+use utoipa_axum::{router::OpenApiRouter, routes};
 
 use crate::ServerState;
 
@@ -6,8 +6,11 @@ pub mod get;
 pub mod post;
 pub mod put;
 
-pub fn router() -> Router<ServerState> {
-    Router::new()
-        .route("/:id", get(get::get_user).put(put::update_user))
-        .route("/", get(get::get_users).post(post::create_user))
+pub fn router() -> OpenApiRouter<ServerState> {
+    OpenApiRouter::new()
+        .nest(
+            "/:id",
+            OpenApiRouter::new().routes(routes!(get::get_user, put::update_user)),
+        )
+        .routes(routes!(get::get_users, post::create_user))
 }
