@@ -17,7 +17,7 @@ use crate::Result;
         (status = 404, description = "User was not found")
     ),
     params(
-        ("id", Path, description = "User database ID to get User for")
+        ("id", Path, description = "User database ID")
     )
 )]
 pub async fn get_user(

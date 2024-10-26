@@ -3,11 +3,13 @@ use utoipa_axum::router::OpenApiRouter;
 
 use crate::{layers::CommonTowerLayerBuilder, middlewares, ServerState};
 
+mod applications;
 mod openapi;
-pub mod users;
+mod users;
 
 pub fn openapi_router(state: ServerState) -> OpenApiRouter {
     let stateful_router = OpenApiRouter::new()
+        .nest("/applications", applications::router())
         .nest("/users", users::router())
         .route_layer(from_fn_with_state(
             state.clone(),
