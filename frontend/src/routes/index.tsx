@@ -104,11 +104,11 @@ const IndexComponent: React.FC = () => {
   const users = api.useSuspenseQuery("get", "/users");
 
   return (
-    <div className="flex gap-4 flex-col bg-cyan-100 dark:bg-cyan-950 rounded-t-2xl p-6 shadow-inner border border-b-0 border-cyan-400 dark:border-cyan-900 flex-1">
-      <div className="flex justify-between gap-2 flex-wrap">
+    <div className="flex gap-4 flex-col bg-emerald-100 dark:bg-emerald-950/30 rounded-t-2xl pt-6 shadow-inner border border-b-0 border-emerald-400 dark:border-emerald-900 flex-1">
+      <div className="flex justify-between gap-2 px-6 flex-wrap">
         <h1 className="text-xl font-bold flex gap-2 items-baseline">
-          Users
-          <EntryCount count={users.data.length} />
+          Applications
+          <EntryCount count={3} />
         </h1>
         <div className="flex gap-2">
           <Input type="text" placeholder="Filter" />
@@ -117,7 +117,21 @@ const IndexComponent: React.FC = () => {
           </Button>
         </div>
       </div>
-      <DataTable columns={userTableColumnDef} data={users.data} />
+      <div className="flex gap-4 flex-col bg-cyan-100 -mx-[1px] dark:bg-cyan-950/30 rounded-t-2xl p-6 shadow-inner border border-b-0 border-cyan-400 dark:border-cyan-900 flex-1">
+        <div className="flex justify-between gap-2 flex-wrap">
+          <h1 className="text-xl font-bold flex gap-2 items-baseline">
+            Users
+            <EntryCount count={users.data.length} />
+          </h1>
+          <div className="flex gap-2">
+            <Input type="text" placeholder="Filter" />
+            <Button>
+              <Filter />
+            </Button>
+          </div>
+        </div>
+        <DataTable columns={userTableColumnDef} data={users.data} />
+      </div>
     </div>
   );
 };
