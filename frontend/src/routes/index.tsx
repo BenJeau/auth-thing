@@ -1,8 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Filter } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Filter, Plus } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 
-import { api, components } from "@/api";
+import { api, models } from "@/api";
 import { EntryCount } from "@/components";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -38,7 +38,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="rounded-xl border  shadow-inner bg-white">
+    <div className="rounded-xl border  shadow-inner bg-white/50">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -85,7 +85,7 @@ export function DataTable<TData, TValue>({
   );
 }
 
-const userTableColumnDef: ColumnDef<components["schemas"]["User"]>[] = [
+const userTableColumnDef: ColumnDef<models["User"]>[] = [
   {
     accessorKey: "id",
     header: "ID",
@@ -100,26 +100,47 @@ const userTableColumnDef: ColumnDef<components["schemas"]["User"]>[] = [
   },
 ];
 
+const ApplicationCard: React.FC<{ application: models["Application"] }> = ({
+  application,
+}) => (
+  <div>
+    <h2 className="font-bold">{application.name}</h2>
+    <p>{application.description}</p>
+  </div>
+);
+
 const IndexComponent: React.FC = () => {
   const users = api.useSuspenseQuery("get", "/users");
+  const applications = api.useSuspenseQuery("get", "/applications");
 
   return (
-    <div className="flex gap-4 flex-col bg-emerald-100 dark:bg-emerald-950/30 rounded-t-2xl pt-6 shadow-inner border border-b-0 border-emerald-400 dark:border-emerald-900 flex-1">
-      <div className="flex justify-between gap-2 px-6 flex-wrap">
-        <h1 className="text-xl font-bold flex gap-2 items-baseline">
-          Applications
-          <EntryCount count={3} />
-        </h1>
-        <div className="flex gap-2">
-          <Input type="text" placeholder="Filter" />
-          <Button>
-            <Filter />
-          </Button>
-        </div>
-      </div>
-      <div className="flex gap-4 flex-col bg-cyan-100 -mx-[1px] dark:bg-cyan-950/30 rounded-t-2xl p-6 shadow-inner border border-b-0 border-cyan-400 dark:border-cyan-900 flex-1">
+    <div className="flex gap-8 flex-col bg-emerald-100 dark:bg-emerald-950/30 rounded-t-2xl pt-5 shadow-inner border border-b-0 border-emerald-400 dark:border-emerald-900 flex-1">
+      <div className="px-5 flex gap-4 flex-col">
         <div className="flex justify-between gap-2 flex-wrap">
-          <h1 className="text-xl font-bold flex gap-2 items-baseline">
+          <h1 className="text-lg font-bold flex gap-2 items-baseline">
+            Applications
+            <EntryCount count={applications.data.length} />
+          </h1>
+          <div className="flex gap-2">
+            <Input type="text" placeholder="Filter" />
+            <Button className="bg-emerald-400">
+              <Filter />
+            </Button>
+          </div>
+        </div>
+        {applications.data.map((application) => (
+          <ApplicationCard key={application.id} application={application} />
+        ))}
+        <Link to="/apps/create">
+          <div className="border border-emerald-400 border-dashed p-4 rounded-lg bg-white/50 hover:bg-white transition-all cursor-pointer flex gap-2 shadow-inner">
+            <Plus />
+            <h2 className="text-md font-bold">Create a new application</h2>
+          </div>
+        </Link>
+      </div>
+      <div className="flex gap-4 flex-col bg-cyan-100 -mx-[1px] dark:bg-cyan-950/30 rounded-t-2xl p-5 shadow-inner border border-b-0 border-cyan-400 dark:border-cyan-900 flex-1">
+        <div className="flex justify-between gap-2 flex-wrap">
+          <h1 className="text-lg font-bold flex gap-2 items-baseline">
             Users
             <EntryCount count={users.data.length} />
           </h1>
@@ -139,5 +160,8 @@ const IndexComponent: React.FC = () => {
 export const Route = createFileRoute("/")({
   component: IndexComponent,
   loader: async ({ context: { queryClient } }) =>
-    queryClient.ensureQueryData(api.queryOptions("get", "/users")),
+    Promise.all([
+      queryClient.ensureQueryData(api.queryOptions("get", "/users")),
+      queryClient.ensureQueryData(api.queryOptions("get", "/applications")),
+    ]),
 });

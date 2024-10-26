@@ -9,7 +9,9 @@ const fetchClient = createFetchClient<paths>({
   baseUrl: BASE_API_URL,
 });
 
-export type { components };
+type models = components["schemas"];
+
+export type { models };
 export const api = createClient(fetchClient);
 export const queryClient = new QueryClient({
   defaultOptions: {
