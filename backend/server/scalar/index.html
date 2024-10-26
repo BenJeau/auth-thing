@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <link
       rel="icon"
-      href="data:image/svg+xml,%3Csvg width='512' height='512' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%233C310B' d='M0 0h512v512H0z'/%3E%3Cpath d='M193 115.825v61.425a63 63 0 1 0 126 0v-61.425M208.75 303.25 193 287.5M303.25 303.25 319 287.5' stroke='%23FACC15' stroke-width='20' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M208.75 366.25c-44.1 0-78.75-34.65-78.75-78.75v-63a125.997 125.997 0 0 1 36.905-89.095 125.997 125.997 0 0 1 178.19 0A125.997 125.997 0 0 1 382 224.5v63c0 44.1-34.65 78.75-78.75 78.75h-94.5ZM193 366.25l-31.5 47.25M319 366.25l31.5 47.25' stroke='%23FACC15' stroke-width='20' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"
+      href="data:image/svg+xml,%3Csvg width='512' height='512' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23083344' d='M0 0h512v512H0z'/%3E%3Cpath d='M256 224.5a31.5 31.5 0 0 0-31.5 31.5c0 16.065-1.575 39.532-4.095 63M287.5 273.64c0 37.485 0 100.485-15.75 139.86M339.317 398.065c1.89-9.45 6.773-36.225 7.875-47.565M98.5 256a157.505 157.505 0 0 1 107.694-149.418A157.503 157.503 0 0 1 382 161.5M98.5 319h.157M410.35 319c3.15-31.5 2.063-84.325 0-94.5' stroke='%2322D3EE' stroke-width='20' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M145.75 374.125C153.625 350.5 161.5 303.25 161.5 256a94.498 94.498 0 0 1 5.355-31.5M203.237 413.5c3.308-10.395 7.088-20.79 8.978-31.5M208.75 174.1a94.504 94.504 0 0 1 94.526.015A94.5 94.5 0 0 1 350.5 256v31.5' stroke='%2322D3EE' stroke-width='20' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"
     />
     <title>Auth Thing API Reference</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -17,10 +17,21 @@
           body.classList.remove("light-mode", "dark-mode");
           body.classList.add(event.matches ? "dark-mode" : "light-mode");
         });
+
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
+      const isDark = prefersDark.matches;
+      const body = document.querySelector("body");
+      if (!body) return;
+      body.classList.remove("light-mode", "dark-mode");
+      body.classList.add(isDark ? "dark-mode" : "light-mode");
     </script>
   </head>
   <body>
-    <script id="api-reference" type="application/json">OPENAPI_SPEC</script>
-    <script>SCALAR_JS</script>
+    <script id="api-reference" type="application/json">
+      OPENAPI_SPEC
+    </script>
+    <script>
+      SCALAR_JS;
+    </script>
   </body>
 </html>

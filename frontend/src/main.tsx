@@ -1,27 +1,33 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { RouterProvider, createRouter } from "@tanstack/react-router";
+
+import Providers from "@/lib/providers";
 
 import "./index.css";
-import Providers from "./lib/providers.tsx";
-import { routeTree } from "./routeTree.gen";
-import { queryClient } from "./api/index.ts";
 
-const router = createRouter({ routeTree, context: { queryClient } });
+const root = document.getElementById("root")!;
 
-declare module "@tanstack/react-router" {
-  interface Register {
-    router: typeof router;
-  }
+if (!root) {
+  throw new Error("Root element not found");
 }
 
-const rootElement = document.getElementById("root")!;
-if (!rootElement.innerHTML) {
-  createRoot(rootElement).render(
-    <StrictMode>
-      <Providers>
-        <RouterProvider router={router} />
-      </Providers>
-    </StrictMode>
-  );
+const loadingContainer = document.getElementById("loading-container");
+const loadingContent = document.getElementById("loading-content");
+
+if (loadingContent) {
+  loadingContent.classList.add("scale-150");
+  loadingContent.classList.add("opacity-100");
 }
+
+if (loadingContainer) {
+  loadingContainer.style.opacity = "0";
+  setTimeout(() => {
+    loadingContainer.remove();
+  }, 300);
+}
+
+createRoot(root).render(
+  <StrictMode>
+    <Providers />
+  </StrictMode>
+);
