@@ -3,12 +3,13 @@ import createFetchClient from "openapi-fetch";
 import createClient from "openapi-react-query";
 
 import { BASE_API_URL } from "@/lib/config";
-import type { paths } from "@/api/openapi-client";
+import type { paths, components } from "@/api/openapi-client";
 
 const fetchClient = createFetchClient<paths>({
   baseUrl: BASE_API_URL,
 });
 
+export type { components };
 export const api = createClient(fetchClient);
 export const queryClient = new QueryClient({
   defaultOptions: {
