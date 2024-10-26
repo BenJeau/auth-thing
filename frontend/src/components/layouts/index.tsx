@@ -6,8 +6,8 @@ const Layout: React.FC = () => {
   useUpdateTheme();
 
   return (
-    <div className="container mx-auto p-4 flex flex-col gap-4">
-      <div className="p-2 flex gap-2">
+    <div className="container mx-auto flex flex-col gap-6 mt-6">
+      <div className="flex gap-2">
         <Link to="/" className="[&.active]:font-bold">
           Home
         </Link>{" "}
@@ -15,7 +15,9 @@ const Layout: React.FC = () => {
           About
         </Link>
       </div>
-      <Outlet />
+      <main className="flex-1 flex flex-col">
+        <Outlet />
+      </main>
     </div>
   );
 };
