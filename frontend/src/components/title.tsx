@@ -25,7 +25,9 @@ const Title: React.FC<Props> = ({ title, back, extra, ...props }) => (
         )}
         {title}
       </div>
-      {"count" in props && props.count && <EntryCount count={props.count} />}
+      {"count" in props && props.count !== undefined && (
+        <EntryCount count={props.count} />
+      )}
       {"titleExtra" in props && props.titleExtra}
     </h2>
     {extra}
