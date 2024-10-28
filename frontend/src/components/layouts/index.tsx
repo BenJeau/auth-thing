@@ -4,6 +4,8 @@ import { Fingerprint } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useUpdateTheme } from "@/atoms/theme";
 
+import Container from "./container";
+
 const Layout: React.FC = () => {
   useUpdateTheme();
 
@@ -31,4 +33,5 @@ const Layout: React.FC = () => {
   );
 };
 
+export { Container };
 export default Layout;
