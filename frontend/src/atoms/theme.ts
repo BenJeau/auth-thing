@@ -47,7 +47,6 @@ export const useUpdateTheme = () => {
     window
       .matchMedia("(prefers-color-scheme: dark)")
       .addEventListener("change", ({ matches }) => {
-        if (rawTheme !== "system") return;
         if (matches) {
           setSystemTheme("dark");
         } else {

@@ -131,6 +131,28 @@
             "description": "Application was not updated"
           }
         }
+      },
+      "delete": {
+        "tags": [
+          "Applications"
+        ],
+        "operationId": "delete_application",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Application database ID",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Application deleted successfully"
+          },
+          "404": {
+            "description": "Application not found"
+          }
+        }
       }
     },
     "/users": {

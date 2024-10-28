@@ -34,7 +34,7 @@ export interface paths {
         /** Update an application */
         put: operations["update_application"];
         post?: never;
-        delete?: never;
+        delete: operations["delete_application"];
         options?: never;
         head?: never;
         patch?: never;
@@ -236,6 +236,34 @@ export interface operations {
             };
             /** @description Application was not updated */
             400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    delete_application: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Application database ID */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Application deleted successfully */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Application not found */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

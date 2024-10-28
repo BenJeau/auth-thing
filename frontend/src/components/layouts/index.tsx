@@ -8,17 +8,17 @@ const Layout: React.FC = () => {
   useUpdateTheme();
 
   return (
-    <div className="container mx-auto flex flex-col gap-6 mt-6">
+    <div className="container mx-auto flex flex-col gap-6 mt-6 px-4">
       <div className="flex gap-4 items-center justify-between">
         <Link
           to="/"
           className="flex gap-4 font-bold text-xl items-center hover:underline"
         >
-          <Fingerprint strokeWidth={2.5} size={28} />
+          <Fingerprint size={32} />
           Auth Thing
         </Link>
 
-        <Avatar>
+        <Avatar className="shadow-md">
           <AvatarImage src="https://github.com/shadcn.png" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>

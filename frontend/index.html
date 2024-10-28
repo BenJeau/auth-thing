@@ -20,6 +20,7 @@
         }
       }
       #loading-content {
+        margin-top: calc(3rem + 40px);
         animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
       }
       #loading-container {
@@ -39,7 +40,7 @@
   </head>
   <body
     style="margin: 0; position: relative"
-    class="bg-background text-[#083344] shadow-inner selection:bg-primary/50 selection:text-[#083344] dark:text-[#ecfeff] dark:selection:bg-primary/50 dark:selection:text-[#ecfeff]"
+    class="bg-background text-[#083344] selection:bg-primary/50 selection:text-[#083344] dark:text-[#ecfeff] dark:selection:bg-primary/50 dark:selection:text-[#ecfeff]"
   >
     <div
       id="root"
@@ -80,7 +81,9 @@
         ? "dark"
         : "light";
 
-      const savedTheme = JSON.parse(localStorage.getItem("theme") || '"dark"');
+      const savedTheme = JSON.parse(
+        localStorage.getItem("theme") || '"system"'
+      );
       const isDark =
         savedTheme === "system"
           ? systemTheme === "dark"
@@ -90,11 +93,9 @@
 
       if (isDark) {
         loadingContainer.style.backgroundColor = "#083344";
-        window.document.documentElement.style.backgroundColor = "#083344";
         window.document.documentElement.classList.add("dark");
       } else {
-        loadingContainer.style.backgroundColor = "white";
-        window.document.documentElement.style.backgroundColor = "white";
+        loadingContainer.style.backgroundColor = "#ecfeff";
         window.document.documentElement.classList.add("light");
       }
     </script>

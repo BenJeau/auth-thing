@@ -18,11 +18,12 @@ pub async fn get_applications(pool: &SqlitePool) -> Result<Vec<Application>> {
 
 pub async fn create_application(pool: &SqlitePool, application: ModifyApplication) -> Result<i64> {
     sqlx::query_scalar!(
-        "INSERT INTO applications (name, description, website, icon) VALUES (?, ?, ?, ?) RETURNING id",
+        "INSERT INTO applications (name, description, website, icon, creator_id) VALUES (?, ?, ?, ?, ?) RETURNING id",
         application.name,
         application.description,
         application.website,
-        application.icon
+        application.icon,
+        1 // TODO: get creator ID from context
     )
     .fetch_one(pool)
     .await
@@ -44,4 +45,11 @@ pub async fn update_application(
     .execute(pool)
     .await
     .map(|row| row.rows_affected())
+}
+
+pub async fn delete_application(pool: &SqlitePool, id: i64) -> Result<u64> {
+    sqlx::query!("DELETE FROM applications WHERE id = ?", id)
+        .execute(pool)
+        .await
+        .map(|row| row.rows_affected())
 }

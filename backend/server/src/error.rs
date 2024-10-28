@@ -10,6 +10,7 @@ pub enum Error {
     DatabaseMigration(database::MigrateError),
     Io(std::io::Error),
     AddrParse(std::net::AddrParseError),
+    NotFound(String),
 }
 
 impl std::error::Error for Error {}
@@ -45,6 +46,7 @@ impl IntoResponse for Error {
 
         match self {
             Self::Database(database::Error::RowNotFound) => StatusCode::NOT_FOUND.into_response(),
+            Self::NotFound(message) => (StatusCode::NOT_FOUND, message).into_response(),
             _ => StatusCode::INTERNAL_SERVER_ERROR.into_response(),
         }
     }
