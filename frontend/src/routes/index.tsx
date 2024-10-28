@@ -1,18 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Filter, Plus } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
-
-import { api, models } from "@/api";
-import { Layouts, Title } from "@/components";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-
+import { useState } from "react";
 import {
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 
+import { api, models } from "@/api";
+import { Layouts, Title } from "@/components";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -125,6 +124,12 @@ const IndexComponent: React.FC = () => {
   const users = api.useSuspenseQuery("get", "/users");
   const applications = api.useSuspenseQuery("get", "/applications");
 
+  const [filterApplication, setFilterApplication] = useState("");
+
+  const filteredApplications = applications.data.filter((application) =>
+    application.name.toLowerCase().includes(filterApplication.toLowerCase())
+  );
+
   const authenticationProvidersSection = (
     <Layouts.Container color="fuchsia" className="z-20 -mx-[8px]">
       <Title
@@ -172,10 +177,15 @@ const IndexComponent: React.FC = () => {
     <Layouts.Container color="emerald" bottomContent={usersSection}>
       <Title
         title="Applications"
-        count={applications.data.length}
+        count={filteredApplications.length}
         extra={
           <div className="flex gap-2">
-            <Input type="text" placeholder="Filter" />
+            <Input
+              type="text"
+              placeholder="Filter"
+              value={filterApplication}
+              onChange={(e) => setFilterApplication(e.target.value)}
+            />
             <Button className="bg-emerald-400">
               <Filter />
             </Button>
@@ -183,7 +193,7 @@ const IndexComponent: React.FC = () => {
         }
       />
       <div className="grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 grid gap-2">
-        {applications.data.map((application) => (
+        {filteredApplications.map((application) => (
           <ApplicationCard key={application.id} application={application} />
         ))}
         <Link
