@@ -148,7 +148,7 @@ const IndexComponent: React.FC = () => {
               </div>
             }
           />
-          <div className="grid-cols-3 grid gap-2">
+          <div className="grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 grid gap-2">
             {applications.data.map((application) => (
               <ApplicationCard key={application.id} application={application} />
             ))}
