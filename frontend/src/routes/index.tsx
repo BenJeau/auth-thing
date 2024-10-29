@@ -150,7 +150,7 @@ const IndexComponent: React.FC = () => {
   const usersSection = (
     <Layouts.Container
       color="cyan"
-      className="z-10 -mx-[4px]"
+      className="z-10 -mx-[8px]"
       bottomContent={authenticationProvidersSection}
     >
       <Title
