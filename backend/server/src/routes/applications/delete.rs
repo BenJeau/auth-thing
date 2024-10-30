@@ -7,6 +7,7 @@ use http::StatusCode;
 
 use crate::{Error, Result};
 
+/// Delete an application
 #[utoipa::path(
     delete,
     path = "",

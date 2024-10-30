@@ -133,6 +133,7 @@
         "tags": [
           "Applications"
         ],
+        "summary": "Delete an application",
         "operationId": "delete_application",
         "parameters": [
           {
@@ -311,6 +312,7 @@
         "tags": [
           "Roles"
         ],
+        "summary": "Delete a role",
         "operationId": "delete_role",
         "parameters": [
           {
@@ -443,6 +445,105 @@
           },
           "404": {
             "description": "User was not updated"
+          }
+        }
+      }
+    },
+    "/users/{id}/roles": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get user roles",
+        "operationId": "get_user_roles",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User database ID",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List matching user roles by query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Role"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}/roles/{id}": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Assign a role to a user",
+        "operationId": "assign_user_role",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User database ID",
+            "required": true
+          },
+          {
+            "name": "role_id",
+            "in": "path",
+            "description": "Role database ID",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Role assigned successfully",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Role doesn't exist"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Remove a role from a user",
+        "operationId": "remove_user_role",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User database ID",
+            "required": true
+          },
+          {
+            "name": "role_id",
+            "in": "path",
+            "description": "Role database ID",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Role removed successfully"
+          },
+          "404": {
+            "description": "Role doesn't exist"
           }
         }
       }

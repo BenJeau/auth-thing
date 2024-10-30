@@ -58,3 +58,35 @@ pub async fn delete_role(pool: &SqlitePool, id: i64) -> Result<u64> {
         .await
         .map(|row| row.rows_affected())
 }
+
+pub async fn get_user_roles(pool: &SqlitePool, user_id: i64) -> Result<Vec<Role>> {
+    sqlx::query_as!(
+        Role,
+        "SELECT roles.* FROM roles INNER JOIN users_roles ON roles.id = users_roles.role_id WHERE users_roles.user_id = ?",
+        user_id
+    )
+    .fetch_all(pool)
+    .await
+}
+
+pub async fn delete_user_role(pool: &SqlitePool, user_id: i64, role_id: i64) -> Result<u64> {
+    sqlx::query!(
+        "DELETE FROM users_roles WHERE user_id = ? AND role_id = ?",
+        user_id,
+        role_id
+    )
+    .execute(pool)
+    .await
+    .map(|row| row.rows_affected())
+}
+
+pub async fn create_user_role(pool: &SqlitePool, user_id: i64, role_id: i64) -> Result<u64> {
+    sqlx::query!(
+        "INSERT INTO users_roles (user_id, role_id) VALUES (?, ?)",
+        user_id,
+        role_id
+    )
+    .execute(pool)
+    .await
+    .map(|row| row.rows_affected())
+}

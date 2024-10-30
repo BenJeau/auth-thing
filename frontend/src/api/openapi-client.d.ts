@@ -34,6 +34,7 @@ export interface paths {
         /** Update an application */
         put: operations["update_application"];
         post?: never;
+        /** Delete an application */
         delete: operations["delete_application"];
         options?: never;
         head?: never;
@@ -87,6 +88,7 @@ export interface paths {
         /** Update a role */
         put: operations["update_role"];
         post?: never;
+        /** Delete a role */
         delete: operations["delete_role"];
         options?: never;
         head?: never;
@@ -124,6 +126,41 @@ export interface paths {
         put: operations["update_user"];
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/users/{id}/roles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get user roles */
+        get: operations["get_user_roles"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/users/{id}/roles/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Assign a role to a user */
+        post: operations["assign_user_role"];
+        /** Remove a role from a user */
+        delete: operations["remove_user_role"];
         options?: never;
         head?: never;
         patch?: never;
@@ -594,6 +631,91 @@ export interface operations {
                 };
             };
             /** @description User was not updated */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    get_user_roles: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description User database ID */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List matching user roles by query */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Role"][];
+                };
+            };
+        };
+    };
+    assign_user_role: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description User database ID */
+                id: string;
+                /** @description Role database ID */
+                role_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Role assigned successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/plain": string;
+                };
+            };
+            /** @description Role doesn't exist */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    remove_user_role: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description User database ID */
+                id: string;
+                /** @description Role database ID */
+                role_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Role removed successfully */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Role doesn't exist */
             404: {
                 headers: {
                     [name: string]: unknown;
