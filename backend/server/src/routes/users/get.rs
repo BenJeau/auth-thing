@@ -3,9 +3,9 @@ use axum::{
     response::IntoResponse,
     Json,
 };
-use database::{logic, SqlitePool};
+use database::{logic, models, SqlitePool};
 
-use crate::Result;
+use crate::{Error, Result};
 
 /// Get user by database ID
 #[utoipa::path(
@@ -13,7 +13,7 @@ use crate::Result;
     path = "",
     tag = "Users",
     responses(
-        (status = 200, description = "Get user by ID", body = database::models::users::User),
+        (status = 200, description = "Get user by ID", body = models::users::User),
         (status = 404, description = "User was not found")
     ),
     params(
@@ -24,9 +24,13 @@ pub async fn get_user(
     Path(id): Path<i64>,
     State(pool): State<SqlitePool>,
 ) -> Result<impl IntoResponse> {
-    let users = logic::users::get_user_by_id(&pool, id).await?;
+    let users = logic::users::get_user(&pool, id).await?;
 
-    Ok(Json(users))
+    if let Some(user) = users {
+        Ok(Json(user))
+    } else {
+        Err(Error::NotFound(format!("User with ID {} not found", id)))
+    }
 }
 
 /// Get all users
@@ -35,7 +39,7 @@ pub async fn get_user(
     path = "",
     tag = "Users",
     responses(
-        (status = 200, description = "List matching users by query", body = [database::models::users::User]),
+        (status = 200, description = "List matching users by query", body = [models::users::User]),
     )
 )]
 pub async fn get_users(State(pool): State<SqlitePool>) -> Result<impl IntoResponse> {

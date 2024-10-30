@@ -7,15 +7,19 @@ mod get;
 mod post;
 mod put;
 
+mod roles;
+
 pub fn router() -> OpenApiRouter<ServerState> {
     OpenApiRouter::new()
         .nest(
             "/:id",
-            OpenApiRouter::new().routes(routes!(
-                get::get_application,
-                put::update_application,
-                delete::delete_application
-            )),
+            OpenApiRouter::new()
+                .routes(routes!(
+                    get::get_application,
+                    put::update_application,
+                    delete::delete_application
+                ))
+                .nest("/roles", roles::router()),
         )
         .routes(routes!(get::get_applications, post::create_application))
 }

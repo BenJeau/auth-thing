@@ -4,8 +4,9 @@ use axum::{
     Json,
 };
 use database::{logic, models, SqlitePool};
+use http::StatusCode;
 
-use crate::Result;
+use crate::{Error, Result};
 
 /// Update a user
 #[utoipa::path(
@@ -15,7 +16,7 @@ use crate::Result;
     request_body = database::models::users::ModifyUser,
     responses(
         (status = 200, description = "User updated successfully", body = String),
-        (status = 400, description = "User was not updated")
+        (status = 404, description = "User was not updated")
     )
 )]
 pub async fn update_user(
@@ -23,7 +24,11 @@ pub async fn update_user(
     Path(id): Path<i64>,
     Json(user): Json<models::users::ModifyUser>,
 ) -> Result<impl IntoResponse> {
-    let id = logic::users::update_user(&pool, id, user).await?;
+    let count = logic::users::update_user(&pool, id, user).await?;
 
-    Ok(id.to_string())
+    if count == 0 {
+        Err(Error::NotFound("User not found".to_string()))
+    } else {
+        Ok(StatusCode::NO_CONTENT)
+    }
 }

@@ -1,9 +1,9 @@
 use crate::models::applications::{Application, ModifyApplication};
 use sqlx::{Result, SqlitePool};
 
-pub async fn get_application_by_id(pool: &SqlitePool, id: i64) -> Result<Application> {
+pub async fn get_application(pool: &SqlitePool, id: i64) -> Result<Option<Application>> {
     sqlx::query_as!(Application, "SELECT * FROM applications WHERE id = ?", id)
-        .fetch_one(pool)
+        .fetch_optional(pool)
         .await
 }
 

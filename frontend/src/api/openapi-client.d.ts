@@ -40,6 +40,59 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/applications/{id}/roles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get roles for application */
+        get: operations["get_application_roles"];
+        put?: never;
+        /** Create a new role */
+        post: operations["create_role"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/roles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get all roles */
+        get: operations["get_roles"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/roles/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get role by database ID */
+        get: operations["get_role"];
+        /** Update a role */
+        put: operations["update_role"];
+        post?: never;
+        delete: operations["delete_role"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/users": {
         parameters: {
             query?: never;
@@ -100,6 +153,10 @@ export interface components {
             website?: string | null;
             icon?: string | null;
         };
+        ModifyRole: {
+            name: string;
+            description?: string | null;
+        };
         ModifyUser: {
             email: string;
             name?: string | null;
@@ -107,6 +164,20 @@ export interface components {
             picture?: string | null;
             disabled?: boolean;
             verified?: boolean;
+        };
+        Role: {
+            /** Format: int64 */
+            id: number;
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            updated_at: string;
+            /** Format: int64 */
+            creator_id: number;
+            /** Format: int64 */
+            application_id: number;
+            name: string;
+            description?: string | null;
         };
         User: {
             /** Format: int64 */
@@ -173,13 +244,6 @@ export interface operations {
                     "text/plain": string;
                 };
             };
-            /** @description Application was not created */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
         };
     };
     get_application: {
@@ -235,7 +299,7 @@ export interface operations {
                 };
             };
             /** @description Application was not updated */
-            400: {
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -263,6 +327,168 @@ export interface operations {
                 content?: never;
             };
             /** @description Application not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    get_application_roles: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Application database ID */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List matching roles by query */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Role"][];
+                };
+            };
+        };
+    };
+    create_role: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Application database ID */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ModifyRole"];
+            };
+        };
+        responses: {
+            /** @description Role created successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/plain": string;
+                };
+            };
+        };
+    };
+    get_roles: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List matching roles by query */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Role"][];
+                };
+            };
+        };
+    };
+    get_role: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Role database ID */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Get role by ID */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Role"];
+                };
+            };
+            /** @description Role was not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    update_role: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Role database ID */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ModifyRole"];
+            };
+        };
+        responses: {
+            /** @description Role updated successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/plain": string;
+                };
+            };
+            /** @description Role was not updated */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    delete_role: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Role database ID */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Role deleted successfully */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Role not found */
             404: {
                 headers: {
                     [name: string]: unknown;
@@ -312,13 +538,6 @@ export interface operations {
                 content: {
                     "text/plain": string;
                 };
-            };
-            /** @description User was not created */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
             };
         };
     };
@@ -375,7 +594,7 @@ export interface operations {
                 };
             };
             /** @description User was not updated */
-            400: {
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

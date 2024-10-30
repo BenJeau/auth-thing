@@ -4,18 +4,19 @@ use axum::{
     Json,
 };
 use database::{logic, models, SqlitePool};
+use http::StatusCode;
 
-use crate::Result;
+use crate::{Error, Result};
 
 /// Update an application
 #[utoipa::path(
     put,
     path = "",
     tag = "Applications",
-    request_body = database::models::applications::ModifyApplication,
+    request_body = models::applications::ModifyApplication,
     responses(
         (status = 200, description = "Application updated successfully", body = String),
-        (status = 400, description = "Application was not updated")
+        (status = 404, description = "Application was not updated")
     )
 )]
 pub async fn update_application(
@@ -23,7 +24,11 @@ pub async fn update_application(
     Path(id): Path<i64>,
     Json(application): Json<models::applications::ModifyApplication>,
 ) -> Result<impl IntoResponse> {
-    let id = logic::applications::update_application(&pool, id, application).await?;
+    let count = logic::applications::update_application(&pool, id, application).await?;
 
-    Ok(id.to_string())
+    if count == 0 {
+        Err(Error::NotFound("Application not found".to_string()))
+    } else {
+        Ok(StatusCode::NO_CONTENT)
+    }
 }

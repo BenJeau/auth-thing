@@ -3,16 +3,16 @@ use axum::{
     response::IntoResponse,
     Json,
 };
-use database::{logic, SqlitePool};
+use database::{logic, models, SqlitePool};
 
-use crate::Result;
+use crate::{Error, Result};
 
 /// Get application by database ID
 #[utoipa::path(
     get,
     path = "",
     responses(
-        (status = 200, description = "Get application by ID", body = database::models::applications::Application),
+        (status = 200, description = "Get application by ID", body = models::applications::Application),
         (status = 404, description = "Application was not found")
     ),
     params(
@@ -23,9 +23,16 @@ pub async fn get_application(
     Path(id): Path<i64>,
     State(pool): State<SqlitePool>,
 ) -> Result<impl IntoResponse> {
-    let application = logic::applications::get_application_by_id(&pool, id).await?;
+    let application = logic::applications::get_application(&pool, id).await?;
 
-    Ok(Json(application))
+    if let Some(application) = application {
+        Ok(Json(application))
+    } else {
+        Err(Error::NotFound(format!(
+            "Application with ID {} not found",
+            id
+        )))
+    }
 }
 
 /// Get all applications
@@ -33,7 +40,7 @@ pub async fn get_application(
     get,
     path = "",
     responses(
-        (status = 200, description = "List matching applications by query", body = [database::models::applications::Application]),
+        (status = 200, description = "List matching applications by query", body = [models::applications::Application]),
     )
 )]
 pub async fn get_applications(State(pool): State<SqlitePool>) -> Result<impl IntoResponse> {

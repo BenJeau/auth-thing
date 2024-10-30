@@ -10,8 +10,7 @@ use crate::Result;
     tag = "Users",
     request_body = database::models::users::ModifyUser,
     responses(
-        (status = 200, description = "User created successfully", body = String),
-        (status = 400, description = "User was not created")
+        (status = 200, description = "User created successfully", body = String)
     )
 )]
 pub async fn create_user(

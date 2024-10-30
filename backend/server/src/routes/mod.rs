@@ -5,11 +5,13 @@ use crate::{layers::CommonTowerLayerBuilder, middlewares, ServerState};
 
 mod applications;
 mod openapi;
+mod roles;
 mod users;
 
 pub fn openapi_router(state: ServerState) -> OpenApiRouter {
     let stateful_router = OpenApiRouter::new()
         .nest("/applications", applications::router())
+        .nest("/roles", roles::router())
         .nest("/users", users::router())
         .route_layer(from_fn_with_state(
             state.clone(),

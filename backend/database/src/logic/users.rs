@@ -1,9 +1,9 @@
 use crate::models::users::{ModifyUser, User};
 use sqlx::{Result, SqlitePool};
 
-pub async fn get_user_by_id(pool: &SqlitePool, id: i64) -> Result<User> {
+pub async fn get_user(pool: &SqlitePool, id: i64) -> Result<Option<User>> {
     sqlx::query_as!(User, "SELECT * FROM users WHERE id = ?", id)
-        .fetch_one(pool)
+        .fetch_optional(pool)
         .await
 }
 

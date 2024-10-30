@@ -8,10 +8,9 @@ use crate::Result;
     post,
     path = "",
     tag = "Applications",
-    request_body = database::models::applications::ModifyApplication,
+    request_body = models::applications::ModifyApplication,
     responses(
-        (status = 200, description = "Application created successfully", body = String),
-        (status = 400, description = "Application was not created")
+        (status = 200, description = "Application created successfully", body = String)
     )
 )]
 pub async fn create_application(

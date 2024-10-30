@@ -65,9 +65,6 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Application was not created"
           }
         }
       }
@@ -127,7 +124,7 @@
               }
             }
           },
-          "400": {
+          "404": {
             "description": "Application was not updated"
           }
         }
@@ -151,6 +148,184 @@
           },
           "404": {
             "description": "Application not found"
+          }
+        }
+      }
+    },
+    "/applications/{id}/roles": {
+      "get": {
+        "summary": "Get roles for application",
+        "operationId": "get_application_roles",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Application database ID",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List matching roles by query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Role"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Roles"
+        ],
+        "summary": "Create a new role",
+        "operationId": "create_role",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Application database ID",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModifyRole"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Role created successfully",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/roles": {
+      "get": {
+        "summary": "Get all roles",
+        "operationId": "get_roles",
+        "responses": {
+          "200": {
+            "description": "List matching roles by query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Role"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/roles/{id}": {
+      "get": {
+        "summary": "Get role by database ID",
+        "operationId": "get_role",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Role database ID",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get role by ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Role"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Role was not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Roles"
+        ],
+        "summary": "Update a role",
+        "operationId": "update_role",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Role database ID",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModifyRole"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Role updated successfully",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Role was not updated"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Roles"
+        ],
+        "operationId": "delete_role",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Role database ID",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Role deleted successfully"
+          },
+          "404": {
+            "description": "Role not found"
           }
         }
       }
@@ -204,9 +379,6 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "User was not created"
           }
         }
       }
@@ -269,7 +441,7 @@
               }
             }
           },
-          "400": {
+          "404": {
             "description": "User was not updated"
           }
         }
@@ -356,6 +528,23 @@
           }
         }
       },
+      "ModifyRole": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
       "ModifyUser": {
         "type": "object",
         "required": [
@@ -388,6 +577,48 @@
           },
           "verified": {
             "type": "boolean"
+          }
+        }
+      },
+      "Role": {
+        "type": "object",
+        "required": [
+          "id",
+          "created_at",
+          "updated_at",
+          "creator_id",
+          "application_id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "creator_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "application_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
           }
         }
       },
