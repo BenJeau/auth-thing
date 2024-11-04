@@ -11,6 +11,7 @@ use crate::Result;
 #[utoipa::path(
     get,
     path = "",
+    tag = "Roles",
     responses(
         (status = 200, description = "List matching roles by query", body = [models::roles::Role]),
     ),

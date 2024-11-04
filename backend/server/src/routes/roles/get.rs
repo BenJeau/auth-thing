@@ -11,6 +11,7 @@ use crate::{Error, Result};
 #[utoipa::path(
     get,
     path = "",
+    tag = "Roles",
     responses(
         (status = 200, description = "Get role by ID", body = models::roles::Role),
         (status = 404, description = "Role was not found")
@@ -36,6 +37,7 @@ pub async fn get_role(
 #[utoipa::path(
     get,
     path = "",
+    tag = "Roles",
     responses(
         (status = 200, description = "List matching roles by query", body = [models::roles::Role]),
     )

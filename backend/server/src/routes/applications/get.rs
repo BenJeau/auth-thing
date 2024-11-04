@@ -11,6 +11,7 @@ use crate::{Error, Result};
 #[utoipa::path(
     get,
     path = "",
+    tag = "Applications",
     responses(
         (status = 200, description = "Get application by ID", body = models::applications::Application),
         (status = 404, description = "Application was not found")
@@ -39,6 +40,7 @@ pub async fn get_application(
 #[utoipa::path(
     get,
     path = "",
+    tag = "Applications",
     responses(
         (status = 200, description = "List matching applications by query", body = [models::applications::Application]),
     )

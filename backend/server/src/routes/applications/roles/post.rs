@@ -23,9 +23,9 @@ use crate::Result;
 pub async fn create_role(
     State(pool): State<SqlitePool>,
     Path(id): Path<i64>,
-    Json(user): Json<models::roles::ModifyRole>,
+    Json(role): Json<models::roles::ModifyRole>,
 ) -> Result<impl IntoResponse> {
-    let id = logic::roles::create_role(&pool, user, 1, id).await?;
+    let id = logic::roles::create_role(&pool, role, 1, id).await?;
 
     Ok(id.to_string())
 }

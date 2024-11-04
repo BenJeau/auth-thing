@@ -23,7 +23,7 @@ Only the documentation `/api/v1/docs` and the authentication `/api/v1/auth` endp
 
 ## Clients
 
-There's no official API client yet, but thanks to the OpenAPI documentation, you can generate your own HTTP client using something like [OpenAPI Generator](https://openapi-generator.tech/) with the JSON from the OpenAPI docs located at `/api/v1/docs/openapi.json`.",
+There's no official API client yet, but thanks to the OpenAPI documentation, you can generate your own HTTP client using something like [OpenAPI Generator](https://openapi-generator.tech/) with the JSON from the OpenAPI docs located at `/api/v1/docs/openapi.json`. The frontend's API client is generated using [OpenAPI TS](https://openapi-ts.dev/) which has Tanstack Query bindings!",
         contact(
             name = "Benoît Jeaurond",
             email = "benoit@jeaurond.dev"
@@ -37,7 +37,10 @@ There's no official API client yet, but thanks to the OpenAPI documentation, you
         (url = "/api/v1")
     ),
     tags(
+        (name = "Applications", description = "Application management"),
         (name = "Health", description = "Overall health check for the service"),
+        (name = "Providers", description = "Authentication provider management"),
+        (name = "Roles", description = "Role management"),
         (name = "Users", description = "User management"),
     ),
 )]

@@ -21,6 +21,9 @@
   "paths": {
     "/applications": {
       "get": {
+        "tags": [
+          "Applications"
+        ],
         "summary": "Get all applications",
         "operationId": "get_applications",
         "responses": {
@@ -71,6 +74,9 @@
     },
     "/applications/{id}": {
       "get": {
+        "tags": [
+          "Applications"
+        ],
         "summary": "Get application by database ID",
         "operationId": "get_application",
         "parameters": [
@@ -155,6 +161,9 @@
     },
     "/applications/{id}/roles": {
       "get": {
+        "tags": [
+          "Roles"
+        ],
         "summary": "Get roles for application",
         "operationId": "get_application_roles",
         "parameters": [
@@ -219,8 +228,165 @@
         }
       }
     },
+    "/health": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "Verifies if the backend is healthy and it's related services",
+        "operationId": "health",
+        "responses": {
+          "200": {
+            "description": "Backend is healthy"
+          }
+        }
+      }
+    },
+    "/providers": {
+      "get": {
+        "tags": [
+          "Providers"
+        ],
+        "summary": "Get all providers",
+        "operationId": "get_providers",
+        "responses": {
+          "200": {
+            "description": "List matching providers by query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Provider"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Providers"
+        ],
+        "summary": "Create a new provider",
+        "operationId": "create_provider",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModifyProvider"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Provider created successfully",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/providers/{id}": {
+      "get": {
+        "tags": [
+          "Providers"
+        ],
+        "summary": "Get prodiver by database ID",
+        "operationId": "get_provider",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Provider database ID",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get provider by ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Provider"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Provider was not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Providers"
+        ],
+        "summary": "Update a provider",
+        "operationId": "update_provider",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModifyProvider"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Provider updated successfully",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Provider was not updated"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Providers"
+        ],
+        "summary": "Delete a provider",
+        "operationId": "delete_provider",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Provider database ID",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Provider deleted successfully"
+          },
+          "404": {
+            "description": "Provider not found"
+          }
+        }
+      }
+    },
     "/roles": {
       "get": {
+        "tags": [
+          "Roles"
+        ],
         "summary": "Get all roles",
         "operationId": "get_roles",
         "responses": {
@@ -242,6 +408,9 @@
     },
     "/roles/{id}": {
       "get": {
+        "tags": [
+          "Roles"
+        ],
         "summary": "Get role by database ID",
         "operationId": "get_role",
         "parameters": [
@@ -558,7 +727,16 @@
           "created_at",
           "updated_at",
           "creator_id",
-          "name"
+          "name",
+          "password_auth",
+          "password_min_length",
+          "password_requires_lowercase",
+          "password_requires_uppercase",
+          "password_requires_number",
+          "password_requires_special",
+          "password_requires_unique",
+          "password_requires_non_common",
+          "verification_required"
         ],
         "properties": {
           "id": {
@@ -597,6 +775,53 @@
               "string",
               "null"
             ]
+          },
+          "password_auth": {
+            "type": "boolean"
+          },
+          "password_min_length": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "password_max_length": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64"
+          },
+          "password_requires_lowercase": {
+            "type": "boolean"
+          },
+          "password_requires_uppercase": {
+            "type": "boolean"
+          },
+          "password_requires_number": {
+            "type": "boolean"
+          },
+          "password_requires_special": {
+            "type": "boolean"
+          },
+          "password_requires_unique": {
+            "type": "boolean"
+          },
+          "password_requires_non_common": {
+            "type": "boolean"
+          },
+          "verification_required": {
+            "type": "boolean"
+          },
+          "verification_method": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "verification_code": {
+            "type": [
+              "string",
+              "null"
+            ]
           }
         }
       },
@@ -626,6 +851,33 @@
               "string",
               "null"
             ]
+          }
+        }
+      },
+      "ModifyProvider": {
+        "type": "object",
+        "required": [
+          "name",
+          "kind",
+          "client_id",
+          "client_secret",
+          "redirect_uri"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "client_id": {
+            "type": "string"
+          },
+          "client_secret": {
+            "type": "string"
+          },
+          "redirect_uri": {
+            "type": "string"
           }
         }
       },
@@ -678,6 +930,48 @@
           },
           "verified": {
             "type": "boolean"
+          }
+        }
+      },
+      "Provider": {
+        "type": "object",
+        "required": [
+          "id",
+          "created_at",
+          "updated_at",
+          "name",
+          "kind",
+          "client_id",
+          "client_secret",
+          "redirect_uri"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "client_id": {
+            "type": "string"
+          },
+          "client_secret": {
+            "type": "string"
+          },
+          "redirect_uri": {
+            "type": "string"
           }
         }
       },
@@ -779,8 +1073,20 @@
   },
   "tags": [
     {
+      "name": "Applications",
+      "description": "Application management"
+    },
+    {
       "name": "Health",
       "description": "Overall health check for the service"
+    },
+    {
+      "name": "Providers",
+      "description": "Authentication provider management"
+    },
+    {
+      "name": "Roles",
+      "description": "Role management"
     },
     {
       "name": "Users",

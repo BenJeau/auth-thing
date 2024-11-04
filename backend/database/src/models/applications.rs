@@ -13,6 +13,18 @@ pub struct Application {
     pub description: Option<String>,
     pub website: Option<String>,
     pub icon: Option<String>,
+    pub password_auth: bool,
+    pub password_min_length: i64,
+    pub password_max_length: Option<i64>,
+    pub password_requires_lowercase: bool,
+    pub password_requires_uppercase: bool,
+    pub password_requires_number: bool,
+    pub password_requires_special: bool,
+    pub password_requires_unique: bool,
+    pub password_requires_non_common: bool,
+    pub verification_required: bool,
+    pub verification_method: Option<String>,
+    pub verification_code: Option<String>,
 }
 
 #[derive(Debug, Deserialize, ToSchema)]

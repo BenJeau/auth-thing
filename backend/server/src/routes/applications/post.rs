@@ -15,9 +15,9 @@ use crate::Result;
 )]
 pub async fn create_application(
     State(pool): State<SqlitePool>,
-    Json(user): Json<models::applications::ModifyApplication>,
+    Json(application): Json<models::applications::ModifyApplication>,
 ) -> Result<impl IntoResponse> {
-    let id = logic::applications::create_application(&pool, user).await?;
+    let id = logic::applications::create_application(&pool, application).await?;
 
     Ok(id.to_string())
 }

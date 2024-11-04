@@ -5,8 +5,8 @@ run-db:
 	cargo sqlx database setup
 
 reset-db:
-	cargo sqlx database drop
-	cargo sqlx database setup
+	cd database && cargo sqlx database drop -y
+	cd database && cargo sqlx database setup
 
 link-openapi:
 	npx @redocly/cli@latest lint ./openapi.json 
