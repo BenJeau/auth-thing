@@ -59,6 +59,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/auth/applications/{slug}/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Login to authenticate and generate a new JWT */
+        post: operations["login"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/applications/{slug}/signup": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Signup to create a new user */
+        post: operations["signup"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/health": {
         parameters: {
             query?: never;
@@ -228,29 +262,42 @@ export interface components {
             /** Format: int64 */
             id: number;
             /** Format: date-time */
-            created_at: string;
+            createdAt: string;
             /** Format: date-time */
-            updated_at: string;
+            updatedAt: string;
             /** Format: int64 */
-            creator_id: number;
+            creatorId: number;
+            slug: string;
             name: string;
             description?: string | null;
             website?: string | null;
             icon?: string | null;
-            password_auth: boolean;
+            passwordAuth: boolean;
             /** Format: int64 */
-            password_min_length: number;
+            passwordMinLength: number;
             /** Format: int64 */
-            password_max_length?: number | null;
-            password_requires_lowercase: boolean;
-            password_requires_uppercase: boolean;
-            password_requires_number: boolean;
-            password_requires_special: boolean;
-            password_requires_unique: boolean;
-            password_requires_non_common: boolean;
-            verification_required: boolean;
-            verification_method?: string | null;
-            verification_code?: string | null;
+            passwordMaxLength?: number | null;
+            passwordRequiresLowercase: boolean;
+            passwordRequiresUppercase: boolean;
+            passwordRequiresNumber: boolean;
+            passwordRequiresSpecial: boolean;
+            passwordRequiresUnique: boolean;
+            passwordRequiresNonCommon: boolean;
+            verificationRequired: boolean;
+            verificationMethod?: string | null;
+            verificationCode?: string | null;
+        };
+        /** @description Data needed to login a user */
+        LoginUserRequest: {
+            /** @description The email of the user to authenticate */
+            email: string;
+            /** @description The password of the user to authenticate */
+            password: string;
+        };
+        /** @description Response from login request */
+        LoginUserResponse: {
+            /** @description The JWT token created from login request that can be used to authenticate yourself */
+            jwtToken: string;
         };
         ModifyApplication: {
             name: string;
@@ -269,54 +316,90 @@ export interface components {
             name: string;
             description?: string | null;
         };
+        /** @description Fields to modify a user */
         ModifyUser: {
+            /** @description Email of the user */
             email: string;
+            /** @description Full name of the user */
             name?: string | null;
+            /** @description Username of the user */
             username?: string | null;
+            /** @description Picture of the user */
             picture?: string | null;
+            /** @description Whether the user is enabled or not, if they are able to login/access the platform */
             disabled?: boolean;
+            /** @description Whether the user has verified their email or not */
             verified?: boolean;
         };
         Provider: {
             /** Format: int64 */
             id: number;
             /** Format: date-time */
-            created_at: string;
+            createdAt: string;
             /** Format: date-time */
-            updated_at: string;
+            updatedAt: string;
             name: string;
             kind: string;
-            client_id: string;
-            client_secret: string;
-            redirect_uri: string;
+            clientId: string;
+            clientSecret: string;
+            redirectUri: string;
         };
         Role: {
             /** Format: int64 */
             id: number;
             /** Format: date-time */
-            created_at: string;
+            createdAt: string;
             /** Format: date-time */
-            updated_at: string;
+            updatedAt: string;
             /** Format: int64 */
-            creator_id: number;
+            creatorId: number;
             /** Format: int64 */
-            application_id: number;
+            applicationId: number;
             name: string;
             description?: string | null;
         };
-        User: {
-            /** Format: int64 */
-            id: number;
-            /** Format: date-time */
-            created_at: string;
-            /** Format: date-time */
-            updated_at: string;
-            email: string;
+        /** @description Data needed to signup/create a new user */
+        SignupUserRequest: {
+            /** @description The name of the user to authenticate */
             name?: string | null;
+            /** @description The username of the user to authenticate */
             username?: string | null;
+            /** @description The email of the user to authenticate */
+            email: string;
+            /** @description The password of the user to authenticate */
+            password: string;
+        };
+        /** @description A user of the platform */
+        User: {
+            /**
+             * Format: int64
+             * @description Database ID of the user
+             */
+            id: number;
+            /**
+             * Format: date-time
+             * @description Time when the user was created
+             */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @description Time when the user was updated
+             */
+            updatedAt: string;
+            /** @description Email of the user */
+            email: string;
+            /** @description Full name of the user */
+            name?: string | null;
+            /** @description Username of the user */
+            username?: string | null;
+            /** @description Picture of the user */
             picture?: string | null;
+            /** @description Whether the user is enabled or not, if they are able to login/access the platform */
             disabled: boolean;
+            /** @description Whether the user has verified their email or not */
             verified: boolean;
+            /** @description Language and general location (locale) of the user */
+            preferredLocale?: string | null;
         };
     };
     responses: never;
@@ -507,6 +590,60 @@ export interface operations {
                 content: {
                     "text/plain": string;
                 };
+            };
+        };
+    };
+    login: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Application slug */
+                slug: string;
+            };
+            cookie?: never;
+        };
+        /** @description User information needed to authenticate a user */
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LoginUserRequest"];
+            };
+        };
+        responses: {
+            /** @description User logged in successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LoginUserResponse"];
+                };
+            };
+        };
+    };
+    signup: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Application slug */
+                slug: string;
+            };
+            cookie?: never;
+        };
+        /** @description User information needed to create new user */
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SignupUserRequest"];
+            };
+        };
+        responses: {
+            /** @description User created successfully */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

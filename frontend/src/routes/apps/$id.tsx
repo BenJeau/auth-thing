@@ -3,6 +3,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { api, queryClient } from "@/api";
 import { Layouts, Title } from "@/components";
 import { Button } from "@/components/ui/button";
+import { beforeLoadAuthenticated } from "@/lib/auth";
 
 const ApplicationComponent: React.FC = () => {
   const params = Route.useParams();
@@ -42,6 +43,7 @@ const ApplicationComponent: React.FC = () => {
 
 export const Route = createFileRoute("/apps/$id")({
   component: ApplicationComponent,
+  beforeLoad: beforeLoadAuthenticated(),
   loader: async ({ context: { queryClient }, params }) => {
     await queryClient.ensureQueryData(
       api.queryOptions("get", "/applications/{id}", {

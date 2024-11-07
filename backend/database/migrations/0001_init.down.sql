@@ -1,6 +1,9 @@
+DROP TABLE api_tokens;
+DROP TABLE action_logs;
 DROP TABLE application_providers;
 DROP TABLE providers;
 DROP TABLE users_roles;
 DROP TABLE roles;
+DROP TABLE application_passwords;
 DROP TABLE applications;
 DROP TABLE users;

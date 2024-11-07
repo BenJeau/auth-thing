@@ -3,27 +3,55 @@ use serde::{Deserialize, Serialize};
 use sqlx::FromRow;
 use utoipa::ToSchema;
 
-#[derive(Debug, FromRow, Serialize, ToSchema)]
+/// A user of the platform
+#[derive(Debug, FromRow, Serialize, ToSchema, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct User {
+    /// Database ID of the user
     pub id: i64,
+    /// Time when the user was created
     pub created_at: NaiveDateTime,
+    /// Time when the user was updated
     pub updated_at: NaiveDateTime,
+    /// Email of the user
     pub email: String,
+    /// Full name of the user
     pub name: Option<String>,
+    /// Username of the user
     pub username: Option<String>,
+    /// Picture of the user
     pub picture: Option<String>,
+    /// Whether the user is enabled or not, if they are able to login/access the platform
     pub disabled: bool,
+    /// Whether the user has verified their email or not
     pub verified: bool,
+    /// Language and general location (locale) of the user
+    pub preferred_locale: Option<String>,
 }
 
+#[derive(FromRow)]
+
+pub struct UserWithLatestPassword {
+    #[sqlx(flatten)]
+    pub user: User,
+    pub password: String,
+}
+
+/// Fields to modify a user
 #[derive(Debug, Deserialize, ToSchema)]
 pub struct ModifyUser {
+    /// Email of the user
     pub email: String,
+    /// Full name of the user
     pub name: Option<String>,
+    /// Username of the user
     pub username: Option<String>,
+    /// Picture of the user
     pub picture: Option<String>,
+    /// Whether the user is enabled or not, if they are able to login/access the platform
     #[serde(default)]
     pub disabled: bool,
+    /// Whether the user has verified their email or not
     #[serde(default)]
     pub verified: bool,
 }

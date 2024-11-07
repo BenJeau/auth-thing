@@ -26,9 +26,24 @@ impl Server {
 }
 
 #[derive(Deserialize, Clone)]
+pub struct Encryption {
+    pub server_key: String,
+}
+
+#[derive(Deserialize, Clone)]
+pub struct Jwt {
+    pub secret: String,
+    pub issuer: String,
+    pub audience: String,
+    pub expiration: u64,
+}
+
+#[derive(Deserialize, Clone)]
 pub struct Config {
     pub database: Database,
     pub server: Server,
+    pub encryption: Encryption,
+    pub jwt: Jwt,
 }
 
 impl Config {

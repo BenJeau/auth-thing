@@ -1,22 +1,12 @@
-import { QueryClient } from "@tanstack/react-query";
-import createFetchClient from "openapi-fetch";
 import createClient from "openapi-react-query";
 
-import { BASE_API_URL } from "@/lib/config";
-import type { paths, components } from "@/api/openapi-client";
-
-const fetchClient = createFetchClient<paths>({
-  baseUrl: BASE_API_URL,
-});
+import type { components } from "@/api/openapi-client";
+import { fetchClient } from "@/api/fetch-client";
+import { queryClient } from "@/api/query-client";
 
 type models = components["schemas"];
 
+const api = createClient(fetchClient);
+
+export { queryClient, api };
 export type { models };
-export const api = createClient(fetchClient);
-export const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: false,
-    },
-  },
-});

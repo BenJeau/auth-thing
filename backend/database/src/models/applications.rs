@@ -4,11 +4,13 @@ use sqlx::FromRow;
 use utoipa::ToSchema;
 
 #[derive(Debug, FromRow, Serialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct Application {
     pub id: i64,
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
     pub creator_id: i64,
+    pub slug: String,
     pub name: String,
     pub description: Option<String>,
     pub website: Option<String>,

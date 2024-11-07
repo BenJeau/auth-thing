@@ -1,10 +1,15 @@
+use std::net::SocketAddr;
 use tracing::info;
 
+mod auth_middlewares;
 mod config;
+mod crypto;
 mod error;
+mod jwt;
 mod layers;
 mod middlewares;
 mod routes;
+mod schemas;
 mod state;
 mod telemetry;
 
@@ -29,7 +34,7 @@ fn main() {
 async fn start() -> Result<()> {
     telemetry::setup_tracing(ENV_FILTER).await;
 
-    let state = ServerState::new().await;
+    let state = ServerState::new().await?;
     database::run_migrations(&state.pool).await?;
 
     let address = state.config.server.address()?;
@@ -37,7 +42,7 @@ async fn start() -> Result<()> {
 
     axum::serve(
         tokio::net::TcpListener::bind(address).await?,
-        routes::router(state),
+        routes::router(state).into_make_service_with_connect_info::<SocketAddr>(),
     )
     .await?;
 

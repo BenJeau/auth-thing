@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useForm } from "@tanstack/react-form";
-import { zodValidator } from "@tanstack/zod-form-adapter";
-import { z } from "zod";
+import * as v from "valibot";
+import { valibotValidator } from "@tanstack/valibot-form-adapter";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -9,12 +9,13 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Form, Layouts, Title } from "@/components";
 import { api, queryClient } from "@/api";
+import { beforeLoadAuthenticated } from "@/lib/auth";
 
-const formSchema = z.object({
-  name: z.string().min(1),
-  description: z.string(),
-  website: z.string(),
-  icon: z.string(),
+const formSchema = v.object({
+  name: v.pipe(v.string(), v.minLength(1)),
+  description: v.string(),
+  website: v.string(),
+  icon: v.string(),
 });
 
 const IndexComponent: React.FC = () => {
@@ -23,7 +24,7 @@ const IndexComponent: React.FC = () => {
 
   const form = useForm({
     defaultValues: { name: "", description: "", website: "", icon: "" },
-    validatorAdapter: zodValidator(),
+    validatorAdapter: valibotValidator(),
     validators: {
       onChange: formSchema,
     },
@@ -126,4 +127,5 @@ const IndexComponent: React.FC = () => {
 
 export const Route = createFileRoute("/apps/create/")({
   component: IndexComponent,
+  beforeLoad: beforeLoadAuthenticated(),
 });

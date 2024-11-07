@@ -1,9 +1,9 @@
 import { atomWithLocalStorage } from "@/atoms";
 
 export interface User {
-  id: string;
+  id: number;
   email: string;
-  name: string;
+  name?: string;
   givenName?: string;
   familyName?: string;
   roles: string[];

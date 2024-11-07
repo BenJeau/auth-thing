@@ -2,12 +2,13 @@ CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    email TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
     name TEXT,
     username TEXT,
     picture TEXT,
     disabled BOOLEAN DEFAULT FALSE NOT NULL,
-    verified BOOLEAN DEFAULT FALSE NOT NULL
+    verified BOOLEAN DEFAULT FALSE NOT NULL,
+    preferred_locale TEXT
 );
 
 CREATE TABLE applications (
@@ -15,6 +16,7 @@ CREATE TABLE applications (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     creator_id INTEGER NOT NULL,
+    slug TEXT NOT NULL UNIQUE,
     name TEXT NOT NULL,
     description TEXT,
     website TEXT, -- unsure if this is needed...
@@ -92,4 +94,28 @@ CREATE TABLE application_providers (
     provider_id INTEGER NOT NULL,
     FOREIGN KEY (application_id) REFERENCES applications(id),
     FOREIGN KEY (provider_id) REFERENCES providers(id)
+);
+
+CREATE TABLE action_logs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    user_id INTEGER NOT NULL,
+    ip_address TEXT NOT NULL,
+    user_agent TEXT NOT NULL,
+    uri TEXT NOT NULL,
+    method TEXT NOT NULL
+);
+
+CREATE TABLE api_tokens (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    application_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    token TEXT NOT NULL,
+    note TEXT NOT NULL,
+    expires_at DATETIME,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (application_id) REFERENCES applications(id)
 );

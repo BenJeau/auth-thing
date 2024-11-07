@@ -4,6 +4,7 @@ use sqlx::FromRow;
 use utoipa::ToSchema;
 
 #[derive(Debug, FromRow, Serialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct Provider {
     pub id: i64,
     pub created_at: NaiveDateTime,

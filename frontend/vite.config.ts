@@ -18,4 +18,22 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ["react", "react-dom"],
+          tanstack: [
+            "@tanstack/react-query",
+            "@tanstack/react-router",
+            "@tanstack/react-table",
+            "@tanstack/react-form",
+          ],
+        },
+        chunkFileNames: "assets/js/[name]-[hash].js",
+        entryFileNames: "assets/js/[name]-[hash].js",
+        assetFileNames: "assets/[ext]/[name]-[hash].[ext]",
+      },
+    },
+  },
 });

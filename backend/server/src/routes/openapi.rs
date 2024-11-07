@@ -16,10 +16,10 @@ Select a tag (category) to reveal information about the endpoints and select an 
 
 All endpoints are protected except for auth endpoints. You either need to authenticate with one of the following ways all within the `Authorization` request header:
 1. provide a JWT as a bearer token - `Bearer JWT_TOKEN`
-2. provide username + password as basic authentication - `Basic base64(username:password)`
+2. provide username + password as basic authentication - `Basic base64(username:password)` _(**Note**: You also need to supply the `X-Auth-Realm` followed by the application ID due to the multi-tenant structure)_
 3. provide a API token as token authentication - `Token API_TOKEN`
 
-Only the documentation `/api/v1/docs` and the authentication `/api/v1/auth` endpoints are not protected.
+Only the documentation `/api/v1/docs`, the authentication `/api/v1/auth`, and `/api/v1/health` endpoints are not protected.
 
 ## Clients
 

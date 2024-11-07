@@ -8,6 +8,7 @@ use tracing::info;
 
 pub mod logic;
 pub mod models;
+mod slug;
 
 pub async fn connect_to_db(
     url: &str,

@@ -21,6 +21,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
+import { beforeLoadAuthenticated } from "@/lib/auth";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -210,6 +211,7 @@ const IndexComponent: React.FC = () => {
 
 export const Route = createFileRoute("/")({
   component: IndexComponent,
+  beforeLoad: beforeLoadAuthenticated(),
   loader: async ({ context: { queryClient } }) =>
     Promise.all([
       queryClient.ensureQueryData(api.queryOptions("get", "/users")),

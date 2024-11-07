@@ -2,13 +2,15 @@ use axum::extract::FromRef;
 use database::SqlitePool;
 use tracing::instrument;
 
-use crate::config::Config;
+use crate::{config::Config, crypto::Crypto, jwt::JwtManager, Result};
 
 #[derive(Clone)]
 pub struct ServerState {
     pub pool: SqlitePool,
     pub config: Config,
     pub version: Version,
+    pub crypto: Crypto,
+    pub jwt_manager: JwtManager,
 }
 
 #[derive(Clone)]
@@ -29,9 +31,15 @@ impl FromRef<ServerState> for Config {
     }
 }
 
+impl FromRef<ServerState> for Crypto {
+    fn from_ref(state: &ServerState) -> Self {
+        state.crypto.clone()
+    }
+}
+
 impl ServerState {
     #[instrument(skip_all)]
-    pub async fn new() -> Self {
+    pub async fn new() -> Result<Self> {
         let config = Config::new().expect("Failed to load config");
 
         let pool = database::connect_to_db(
@@ -54,10 +62,16 @@ impl ServerState {
             version: env!("SERVER_VERSION").to_string(),
         };
 
-        Self {
+        let crypto = Crypto::new(&config.encryption.server_key)?;
+
+        let jwt_manager = JwtManager::new(&config.jwt);
+
+        Ok(Self {
             pool,
             config,
             version,
-        }
+            crypto,
+            jwt_manager,
+        })
     }
 }

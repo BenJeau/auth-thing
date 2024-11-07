@@ -1,7 +1,7 @@
-import { AnimatePresence, motion } from "framer-motion";
 import { cva, VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
+import { AutoAnimate } from "@/components";
 
 const containerVariants = cva(
   "flex gap-8 flex-col rounded-t-2xl shadow-lg border-2 border-b-0 flex-1 relative",
@@ -33,18 +33,14 @@ const Container: React.FC<Props> = ({
   bottomContent,
   children,
 }) => (
-  <AnimatePresence>
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 10 }}
-      transition={{ duration: 0.5 }}
-      className={cn(containerVariants({ color, className }))}
-    >
-      <div className="p-5 flex gap-4 flex-col sticky top-0">{children}</div>
-      {bottomContent}
-    </motion.div>
-  </AnimatePresence>
+  <AutoAnimate
+    slideIn
+    duration={0.5}
+    className={cn(containerVariants({ color, className }))}
+  >
+    <div className="p-5 flex gap-4 flex-col sticky top-0">{children}</div>
+    {bottomContent}
+  </AutoAnimate>
 );
 
 export default Container;

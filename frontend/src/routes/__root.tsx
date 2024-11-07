@@ -2,7 +2,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { createRootRouteWithContext } from "@tanstack/react-router";
 import { lazy, Suspense } from "react";
 
-import { Layouts } from "@/components";
+import { Error, Layouts } from "@/components";
 
 const TanStackRouterDevtools =
   process.env.NODE_ENV === "production"
@@ -26,4 +26,7 @@ export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
 }>()({
   component: RouteComponent,
+  errorComponent: ({ error, info }) => (
+    <Error error={error} info={info} showImage />
+  ),
 });

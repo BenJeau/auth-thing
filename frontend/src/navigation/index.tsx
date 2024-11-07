@@ -2,8 +2,8 @@ import { createRouter } from "@tanstack/react-router";
 import { Fingerprint } from "lucide-react";
 
 import { routeTree } from "@/navigation/routeTree.gen";
-import { queryClient } from "@/api";
-import { NotFound } from "@/components";
+import { queryClient } from "@/api/query-client";
+import { NotFound, Error } from "@/components";
 
 export const router = createRouter({
   routeTree,
@@ -18,7 +18,7 @@ export const router = createRouter({
       <Fingerprint size={72} strokeWidth={1.5} />
     </div>
   ),
-  // defaultErrorComponent: Error,
+  defaultErrorComponent: Error,
 });
 
 declare module "@tanstack/react-router" {

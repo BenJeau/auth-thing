@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Auth Thing REST API",
-    "description": "A [Axum](https://github.com/tokio-rs/axum) Rust based API REST endpoints for the Auth Thing system interfacing with SQLite via [sqlx](https://github.com/launchbadge/sqlx). This documentation is generated using [utoipa](https://github.com/juhaku/utoipa).\n\n## How to use\n\nSelect a tag (category) to reveal information about the endpoints and select an endpoint to test them. To query the API, you'll need to authenticate yourself with one of the methods below or by clicking on any of the locks.\n\n## Authentication\n\nAll endpoints are protected except for auth endpoints. You either need to authenticate with one of the following ways all within the `Authorization` request header:\n1. provide a JWT as a bearer token - `Bearer JWT_TOKEN`\n2. provide username + password as basic authentication - `Basic base64(username:password)`\n3. provide a API token as token authentication - `Token API_TOKEN`\n\nOnly the documentation `/api/v1/docs` and the authentication `/api/v1/auth` endpoints are not protected.\n\n## Clients\n\nThere's no official API client yet, but thanks to the OpenAPI documentation, you can generate your own HTTP client using something like [OpenAPI Generator](https://openapi-generator.tech/) with the JSON from the OpenAPI docs located at `/api/v1/docs/openapi.json`.",
+    "description": "A [Axum](https://github.com/tokio-rs/axum) Rust based API REST endpoints for the Auth Thing system interfacing with SQLite via [sqlx](https://github.com/launchbadge/sqlx). This documentation is generated using [utoipa](https://github.com/juhaku/utoipa).\n\n## How to use\n\nSelect a tag (category) to reveal information about the endpoints and select an endpoint to test them. To query the API, you'll need to authenticate yourself with one of the methods below or by clicking on any of the locks.\n\n## Authentication\n\nAll endpoints are protected except for auth endpoints. You either need to authenticate with one of the following ways all within the `Authorization` request header:\n1. provide a JWT as a bearer token - `Bearer JWT_TOKEN`\n2. provide username + password as basic authentication - `Basic base64(username:password)` _(**Note**: You also need to supply the `X-Auth-Realm` followed by the application ID due to the multi-tenant structure)_\n3. provide a API token as token authentication - `Token API_TOKEN`\n\nOnly the documentation `/api/v1/docs`, the authentication `/api/v1/auth`, and `/api/v1/health` endpoints are not protected.\n\n## Clients\n\nThere's no official API client yet, but thanks to the OpenAPI documentation, you can generate your own HTTP client using something like [OpenAPI Generator](https://openapi-generator.tech/) with the JSON from the OpenAPI docs located at `/api/v1/docs/openapi.json`. The frontend's API client is generated using [OpenAPI TS](https://openapi-ts.dev/) which has Tanstack Query bindings!",
     "contact": {
       "name": "Benoît Jeaurond",
       "email": "benoit@jeaurond.dev"
@@ -224,6 +224,79 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/auth/applications/{slug}/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Login to authenticate and generate a new JWT",
+        "operationId": "login",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "description": "Application slug",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "description": "User information needed to authenticate a user",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginUserRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "User logged in successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginUserResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/applications/{slug}/signup": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Signup to create a new user",
+        "operationId": "signup",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "description": "Application slug",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "description": "User information needed to create new user",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignupUserRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "User created successfully"
           }
         }
       }
@@ -724,36 +797,40 @@
         "type": "object",
         "required": [
           "id",
-          "created_at",
-          "updated_at",
-          "creator_id",
+          "createdAt",
+          "updatedAt",
+          "creatorId",
+          "slug",
           "name",
-          "password_auth",
-          "password_min_length",
-          "password_requires_lowercase",
-          "password_requires_uppercase",
-          "password_requires_number",
-          "password_requires_special",
-          "password_requires_unique",
-          "password_requires_non_common",
-          "verification_required"
+          "passwordAuth",
+          "passwordMinLength",
+          "passwordRequiresLowercase",
+          "passwordRequiresUppercase",
+          "passwordRequiresNumber",
+          "passwordRequiresSpecial",
+          "passwordRequiresUnique",
+          "passwordRequiresNonCommon",
+          "verificationRequired"
         ],
         "properties": {
           "id": {
             "type": "integer",
             "format": "int64"
           },
-          "created_at": {
+          "createdAt": {
             "type": "string",
             "format": "date-time"
           },
-          "updated_at": {
+          "updatedAt": {
             "type": "string",
             "format": "date-time"
           },
-          "creator_id": {
+          "creatorId": {
             "type": "integer",
             "format": "int64"
+          },
+          "slug": {
+            "type": "string"
           },
           "name": {
             "type": "string"
@@ -776,52 +853,83 @@
               "null"
             ]
           },
-          "password_auth": {
+          "passwordAuth": {
             "type": "boolean"
           },
-          "password_min_length": {
+          "passwordMinLength": {
             "type": "integer",
             "format": "int64"
           },
-          "password_max_length": {
+          "passwordMaxLength": {
             "type": [
               "integer",
               "null"
             ],
             "format": "int64"
           },
-          "password_requires_lowercase": {
+          "passwordRequiresLowercase": {
             "type": "boolean"
           },
-          "password_requires_uppercase": {
+          "passwordRequiresUppercase": {
             "type": "boolean"
           },
-          "password_requires_number": {
+          "passwordRequiresNumber": {
             "type": "boolean"
           },
-          "password_requires_special": {
+          "passwordRequiresSpecial": {
             "type": "boolean"
           },
-          "password_requires_unique": {
+          "passwordRequiresUnique": {
             "type": "boolean"
           },
-          "password_requires_non_common": {
+          "passwordRequiresNonCommon": {
             "type": "boolean"
           },
-          "verification_required": {
+          "verificationRequired": {
             "type": "boolean"
           },
-          "verification_method": {
+          "verificationMethod": {
             "type": [
               "string",
               "null"
             ]
           },
-          "verification_code": {
+          "verificationCode": {
             "type": [
               "string",
               "null"
             ]
+          }
+        }
+      },
+      "LoginUserRequest": {
+        "type": "object",
+        "description": "Data needed to login a user",
+        "required": [
+          "email",
+          "password"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "The email of the user to authenticate"
+          },
+          "password": {
+            "type": "string",
+            "description": "The password of the user to authenticate"
+          }
+        }
+      },
+      "LoginUserResponse": {
+        "type": "object",
+        "description": "Response from login request",
+        "required": [
+          "jwtToken"
+        ],
+        "properties": {
+          "jwtToken": {
+            "type": "string",
+            "description": "The JWT token created from login request that can be used to authenticate yourself"
           }
         }
       },
@@ -900,36 +1008,43 @@
       },
       "ModifyUser": {
         "type": "object",
+        "description": "Fields to modify a user",
         "required": [
           "email"
         ],
         "properties": {
           "email": {
-            "type": "string"
+            "type": "string",
+            "description": "Email of the user"
           },
           "name": {
             "type": [
               "string",
               "null"
-            ]
+            ],
+            "description": "Full name of the user"
           },
           "username": {
             "type": [
               "string",
               "null"
-            ]
+            ],
+            "description": "Username of the user"
           },
           "picture": {
             "type": [
               "string",
               "null"
-            ]
+            ],
+            "description": "Picture of the user"
           },
           "disabled": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether the user is enabled or not, if they are able to login/access the platform"
           },
           "verified": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether the user has verified their email or not"
           }
         }
       },
@@ -937,24 +1052,24 @@
         "type": "object",
         "required": [
           "id",
-          "created_at",
-          "updated_at",
+          "createdAt",
+          "updatedAt",
           "name",
           "kind",
-          "client_id",
-          "client_secret",
-          "redirect_uri"
+          "clientId",
+          "clientSecret",
+          "redirectUri"
         ],
         "properties": {
           "id": {
             "type": "integer",
             "format": "int64"
           },
-          "created_at": {
+          "createdAt": {
             "type": "string",
             "format": "date-time"
           },
-          "updated_at": {
+          "updatedAt": {
             "type": "string",
             "format": "date-time"
           },
@@ -964,13 +1079,13 @@
           "kind": {
             "type": "string"
           },
-          "client_id": {
+          "clientId": {
             "type": "string"
           },
-          "client_secret": {
+          "clientSecret": {
             "type": "string"
           },
-          "redirect_uri": {
+          "redirectUri": {
             "type": "string"
           }
         }
@@ -979,10 +1094,10 @@
         "type": "object",
         "required": [
           "id",
-          "created_at",
-          "updated_at",
-          "creator_id",
-          "application_id",
+          "createdAt",
+          "updatedAt",
+          "creatorId",
+          "applicationId",
           "name"
         ],
         "properties": {
@@ -990,19 +1105,19 @@
             "type": "integer",
             "format": "int64"
           },
-          "created_at": {
+          "createdAt": {
             "type": "string",
             "format": "date-time"
           },
-          "updated_at": {
+          "updatedAt": {
             "type": "string",
             "format": "date-time"
           },
-          "creator_id": {
+          "creatorId": {
             "type": "integer",
             "format": "int64"
           },
-          "application_id": {
+          "applicationId": {
             "type": "integer",
             "format": "int64"
           },
@@ -1017,12 +1132,45 @@
           }
         }
       },
+      "SignupUserRequest": {
+        "type": "object",
+        "description": "Data needed to signup/create a new user",
+        "required": [
+          "email",
+          "password"
+        ],
+        "properties": {
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The name of the user to authenticate"
+          },
+          "username": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The username of the user to authenticate"
+          },
+          "email": {
+            "type": "string",
+            "description": "The email of the user to authenticate"
+          },
+          "password": {
+            "type": "string",
+            "description": "The password of the user to authenticate"
+          }
+        }
+      },
       "User": {
         "type": "object",
+        "description": "A user of the platform",
         "required": [
           "id",
-          "created_at",
-          "updated_at",
+          "createdAt",
+          "updatedAt",
           "email",
           "disabled",
           "verified"
@@ -1030,42 +1178,58 @@
         "properties": {
           "id": {
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "description": "Database ID of the user"
           },
-          "created_at": {
+          "createdAt": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "description": "Time when the user was created"
           },
-          "updated_at": {
+          "updatedAt": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "description": "Time when the user was updated"
           },
           "email": {
-            "type": "string"
+            "type": "string",
+            "description": "Email of the user"
           },
           "name": {
             "type": [
               "string",
               "null"
-            ]
+            ],
+            "description": "Full name of the user"
           },
           "username": {
             "type": [
               "string",
               "null"
-            ]
+            ],
+            "description": "Username of the user"
           },
           "picture": {
             "type": [
               "string",
               "null"
-            ]
+            ],
+            "description": "Picture of the user"
           },
           "disabled": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether the user is enabled or not, if they are able to login/access the platform"
           },
           "verified": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether the user has verified their email or not"
+          },
+          "preferredLocale": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Language and general location (locale) of the user"
           }
         }
       }

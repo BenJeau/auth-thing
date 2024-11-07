@@ -11,16 +11,51 @@
 // Import Routes
 
 import { Route as rootRoute } from "./../routes/__root";
+import { Route as AuthRouteImport } from "./../routes/auth/route";
 import { Route as IndexImport } from "./../routes/index";
+import { Route as AuthIndexImport } from "./../routes/auth/index";
+import { Route as AuthSignupImport } from "./../routes/auth/signup";
+import { Route as AuthLogoutImport } from "./../routes/auth/logout";
+import { Route as AuthLoginImport } from "./../routes/auth/login";
 import { Route as AppsIdImport } from "./../routes/apps/$id";
 import { Route as AppsCreateIndexImport } from "./../routes/apps/create/index";
 
 // Create/Update Routes
 
+const AuthRouteRoute = AuthRouteImport.update({
+  id: "/auth",
+  path: "/auth",
+  getParentRoute: () => rootRoute,
+} as any);
+
 const IndexRoute = IndexImport.update({
   id: "/",
   path: "/",
   getParentRoute: () => rootRoute,
+} as any);
+
+const AuthIndexRoute = AuthIndexImport.update({
+  id: "/",
+  path: "/",
+  getParentRoute: () => AuthRouteRoute,
+} as any);
+
+const AuthSignupRoute = AuthSignupImport.update({
+  id: "/signup",
+  path: "/signup",
+  getParentRoute: () => AuthRouteRoute,
+} as any);
+
+const AuthLogoutRoute = AuthLogoutImport.update({
+  id: "/logout",
+  path: "/logout",
+  getParentRoute: () => AuthRouteRoute,
+} as any);
+
+const AuthLoginRoute = AuthLoginImport.update({
+  id: "/login",
+  path: "/login",
+  getParentRoute: () => AuthRouteRoute,
 } as any);
 
 const AppsIdRoute = AppsIdImport.update({
@@ -46,12 +81,47 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof IndexImport;
       parentRoute: typeof rootRoute;
     };
+    "/auth": {
+      id: "/auth";
+      path: "/auth";
+      fullPath: "/auth";
+      preLoaderRoute: typeof AuthRouteImport;
+      parentRoute: typeof rootRoute;
+    };
     "/apps/$id": {
       id: "/apps/$id";
       path: "/apps/$id";
       fullPath: "/apps/$id";
       preLoaderRoute: typeof AppsIdImport;
       parentRoute: typeof rootRoute;
+    };
+    "/auth/login": {
+      id: "/auth/login";
+      path: "/login";
+      fullPath: "/auth/login";
+      preLoaderRoute: typeof AuthLoginImport;
+      parentRoute: typeof AuthRouteImport;
+    };
+    "/auth/logout": {
+      id: "/auth/logout";
+      path: "/logout";
+      fullPath: "/auth/logout";
+      preLoaderRoute: typeof AuthLogoutImport;
+      parentRoute: typeof AuthRouteImport;
+    };
+    "/auth/signup": {
+      id: "/auth/signup";
+      path: "/signup";
+      fullPath: "/auth/signup";
+      preLoaderRoute: typeof AuthSignupImport;
+      parentRoute: typeof AuthRouteImport;
+    };
+    "/auth/": {
+      id: "/auth/";
+      path: "/";
+      fullPath: "/auth/";
+      preLoaderRoute: typeof AuthIndexImport;
+      parentRoute: typeof AuthRouteImport;
     };
     "/apps/create/": {
       id: "/apps/create/";
@@ -65,42 +135,100 @@ declare module "@tanstack/react-router" {
 
 // Create and export the route tree
 
+interface AuthRouteRouteChildren {
+  AuthLoginRoute: typeof AuthLoginRoute;
+  AuthLogoutRoute: typeof AuthLogoutRoute;
+  AuthSignupRoute: typeof AuthSignupRoute;
+  AuthIndexRoute: typeof AuthIndexRoute;
+}
+
+const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthLoginRoute: AuthLoginRoute,
+  AuthLogoutRoute: AuthLogoutRoute,
+  AuthSignupRoute: AuthSignupRoute,
+  AuthIndexRoute: AuthIndexRoute,
+};
+
+const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
+  AuthRouteRouteChildren,
+);
+
 export interface FileRoutesByFullPath {
   "/": typeof IndexRoute;
+  "/auth": typeof AuthRouteRouteWithChildren;
   "/apps/$id": typeof AppsIdRoute;
+  "/auth/login": typeof AuthLoginRoute;
+  "/auth/logout": typeof AuthLogoutRoute;
+  "/auth/signup": typeof AuthSignupRoute;
+  "/auth/": typeof AuthIndexRoute;
   "/apps/create": typeof AppsCreateIndexRoute;
 }
 
 export interface FileRoutesByTo {
   "/": typeof IndexRoute;
   "/apps/$id": typeof AppsIdRoute;
+  "/auth/login": typeof AuthLoginRoute;
+  "/auth/logout": typeof AuthLogoutRoute;
+  "/auth/signup": typeof AuthSignupRoute;
+  "/auth": typeof AuthIndexRoute;
   "/apps/create": typeof AppsCreateIndexRoute;
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute;
   "/": typeof IndexRoute;
+  "/auth": typeof AuthRouteRouteWithChildren;
   "/apps/$id": typeof AppsIdRoute;
+  "/auth/login": typeof AuthLoginRoute;
+  "/auth/logout": typeof AuthLogoutRoute;
+  "/auth/signup": typeof AuthSignupRoute;
+  "/auth/": typeof AuthIndexRoute;
   "/apps/create/": typeof AppsCreateIndexRoute;
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: "/" | "/apps/$id" | "/apps/create";
+  fullPaths:
+    | "/"
+    | "/auth"
+    | "/apps/$id"
+    | "/auth/login"
+    | "/auth/logout"
+    | "/auth/signup"
+    | "/auth/"
+    | "/apps/create";
   fileRoutesByTo: FileRoutesByTo;
-  to: "/" | "/apps/$id" | "/apps/create";
-  id: "__root__" | "/" | "/apps/$id" | "/apps/create/";
+  to:
+    | "/"
+    | "/apps/$id"
+    | "/auth/login"
+    | "/auth/logout"
+    | "/auth/signup"
+    | "/auth"
+    | "/apps/create";
+  id:
+    | "__root__"
+    | "/"
+    | "/auth"
+    | "/apps/$id"
+    | "/auth/login"
+    | "/auth/logout"
+    | "/auth/signup"
+    | "/auth/"
+    | "/apps/create/";
   fileRoutesById: FileRoutesById;
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
+  AuthRouteRoute: typeof AuthRouteRouteWithChildren;
   AppsIdRoute: typeof AppsIdRoute;
   AppsCreateIndexRoute: typeof AppsCreateIndexRoute;
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRouteRoute: AuthRouteRouteWithChildren,
   AppsIdRoute: AppsIdRoute,
   AppsCreateIndexRoute: AppsCreateIndexRoute,
 };
@@ -118,6 +246,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/auth",
         "/apps/$id",
         "/apps/create/"
       ]
@@ -125,8 +254,33 @@ export const routeTree = rootRoute
     "/": {
       "filePath": "index.tsx"
     },
+    "/auth": {
+      "filePath": "auth/route.tsx",
+      "children": [
+        "/auth/login",
+        "/auth/logout",
+        "/auth/signup",
+        "/auth/"
+      ]
+    },
     "/apps/$id": {
       "filePath": "apps/$id.tsx"
+    },
+    "/auth/login": {
+      "filePath": "auth/login.tsx",
+      "parent": "/auth"
+    },
+    "/auth/logout": {
+      "filePath": "auth/logout.tsx",
+      "parent": "/auth"
+    },
+    "/auth/signup": {
+      "filePath": "auth/signup.tsx",
+      "parent": "/auth"
+    },
+    "/auth/": {
+      "filePath": "auth/index.tsx",
+      "parent": "/auth"
     },
     "/apps/create/": {
       "filePath": "apps/create/index.tsx"

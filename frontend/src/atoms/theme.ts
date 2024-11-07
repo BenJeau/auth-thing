@@ -14,7 +14,7 @@ type SystemTheme = "dark" | "light";
 type Theme = SystemTheme | "system";
 
 export const themeAtom = atomWithLocalStorage<Theme>("theme", "system");
-export const systemThemeAtom = atom<Theme>(getSystemTheme());
+export const systemThemeAtom = atom<SystemTheme>(getSystemTheme());
 
 export const computedTheme = atom((get) => {
   const theme = get(themeAtom);
