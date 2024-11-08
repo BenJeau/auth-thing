@@ -42,8 +42,8 @@ CREATE TABLE application_passwords (
     application_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
     password TEXT NOT NULL,
-    FOREIGN KEY (application_id) REFERENCES applications(id),
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    FOREIGN KEY (application_id) REFERENCES applications(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE roles (
@@ -55,7 +55,7 @@ CREATE TABLE roles (
     name TEXT NOT NULL,
     description TEXT,
     FOREIGN KEY (creator_id) REFERENCES users(id),
-    FOREIGN KEY (application_id) REFERENCES applications(id)
+    FOREIGN KEY (application_id) REFERENCES applications(id) ON DELETE CASCADE
 );
 
 CREATE TABLE users_roles (
@@ -63,8 +63,8 @@ CREATE TABLE users_roles (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     user_id INTEGER NOT NULL,
     role_id INTEGER NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (role_id) REFERENCES roles(id)
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE
 );
 
 -- CREATE TABLE sessions (
@@ -92,8 +92,8 @@ CREATE TABLE application_providers (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     application_id INTEGER NOT NULL,
     provider_id INTEGER NOT NULL,
-    FOREIGN KEY (application_id) REFERENCES applications(id),
-    FOREIGN KEY (provider_id) REFERENCES providers(id)
+    FOREIGN KEY (application_id) REFERENCES applications(id) ON DELETE CASCADE,
+    FOREIGN KEY (provider_id) REFERENCES providers(id) ON DELETE CASCADE
 );
 
 CREATE TABLE action_logs (
@@ -116,6 +116,6 @@ CREATE TABLE api_tokens (
     token TEXT NOT NULL,
     note TEXT NOT NULL,
     expires_at DATETIME,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (application_id) REFERENCES applications(id)
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (application_id) REFERENCES applications(id) ON DELETE CASCADE
 );
