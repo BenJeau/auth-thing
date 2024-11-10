@@ -42,6 +42,28 @@ impl Totp {
             .generate_totp(&self.secret, steps, self.digits)
     }
 
+    pub fn generate_otp_sequence(
+        &self,
+        timestamp: impl steps::SystemTimeExt,
+        before_count: u64,
+        after_count: u64,
+    ) -> Result<Vec<String>> {
+        let current_step = steps::get_number_of_steps(self.offset, self.period, timestamp);
+
+        if before_count > current_step {
+            return Err(Error::InvalidBeforeRange(before_count, current_step));
+        }
+
+        let step_range = (current_step - before_count)..=(current_step + after_count);
+
+        step_range
+            .map(|step| {
+                self.algorithm
+                    .generate_totp(&self.secret, step, self.digits)
+            })
+            .collect()
+    }
+
     /// Definition/format: https://github.com/google/google-authenticator/wiki/Key-Uri-Format
     pub fn otpauth_uri(&self, label: &str, issuer: &str) -> String {
         let mut uri = String::from("otpauth://totp/");
@@ -120,11 +142,75 @@ mod tests {
     }
 
     #[test]
-    fn test_convenience_api() {
+    fn test_now() {
+        // Gets a period that is greater than the difference of the current time and the Unix epoch,
+        // which will make the test deterministic regardless of the current time since the number of
+        // steps will always be 0
+        let period = std::time::UNIX_EPOCH.elapsed().unwrap().as_secs() + 1;
+        let secret = "testing_secret";
+        let totp = Totp::new(secret, CryptoAlgorithm::Sha1, 8, period, 0);
+        let code = totp.now().unwrap();
+        assert_eq!(code, "41553593");
+    }
+
+    #[test]
+    fn test_at() {
         let secret = "testing_secret";
         let totp = Totp::new(secret, CryptoAlgorithm::Sha1, 8, 30, 0);
         let code = totp.at(MockSystemTime(59)).unwrap();
         assert_eq!(code, "61456674");
+    }
+
+    #[test]
+    fn test_generate_otp_sequence_with_0_before_and_after() {
+        let secret = "testing_secret";
+        let totp = Totp::new(secret, CryptoAlgorithm::Sha1, 8, 30, 0);
+        let sequence = totp
+            .generate_otp_sequence(MockSystemTime(59), 0, 0)
+            .unwrap();
+        assert_eq!(sequence, vec!["61456674"]);
+    }
+
+    #[test]
+    fn test_generate_otp_sequence_with_1_before_and_0_after() {
+        let secret = "testing_secret";
+        let totp = Totp::new(secret, CryptoAlgorithm::Sha1, 8, 30, 0);
+        let sequence = totp
+            .generate_otp_sequence(MockSystemTime(59), 1, 0)
+            .unwrap();
+        assert_eq!(sequence, vec!["41553593", "61456674"]);
+    }
+
+    #[test]
+    fn test_generate_otp_sequence_with_0_before_and_1_after() {
+        let secret = "testing_secret";
+        let totp = Totp::new(secret, CryptoAlgorithm::Sha1, 8, 30, 0);
+        let sequence = totp
+            .generate_otp_sequence(MockSystemTime(59), 0, 1)
+            .unwrap();
+        assert_eq!(sequence, vec!["61456674", "49594351"]);
+    }
+
+    #[test]
+    fn test_generate_otp_sequence_with_before_count_greater_than_number_of_steps_then_returns_error(
+    ) {
+        let secret = "testing_secret";
+        let totp = Totp::new(secret, CryptoAlgorithm::Sha1, 8, 30, 0);
+        let result = totp.generate_otp_sequence(MockSystemTime(59), 2, 0);
+        assert_eq!(result, Err(Error::InvalidBeforeRange(2, 1)));
+    }
+
+    #[test]
+    fn test_generate_otp_sequence_with_2_before_and_3_after() {
+        let secret = "testing_secret";
+        let totp = Totp::new(secret, CryptoAlgorithm::Sha1, 8, 30, 0);
+        let sequence = totp
+            .generate_otp_sequence(MockSystemTime(89), 2, 3)
+            .unwrap();
+        assert_eq!(
+            sequence,
+            vec!["41553593", "61456674", "49594351", "73533374", "19509204", "11802581"]
+        );
     }
 
     #[test]
@@ -136,17 +222,5 @@ mod tests {
             uri,
             "otpauth://totp/Label%20wow?secret=ORSXG5DJNZTV643FMNZGK5A&issuer=testingOk&algorithm=SHA1&digits=8&period=30"
         );
-    }
-
-    #[test]
-    fn test_now() {
-        // Gets a period that is greater than the difference of the current time and the Unix epoch,
-        // which will make the test deterministic regardless of the current time since the number of
-        // steps will always be 1
-        let period = std::time::UNIX_EPOCH.elapsed().unwrap().as_secs() + 1;
-        let secret = "testing_secret";
-        let totp = Totp::new(secret, CryptoAlgorithm::Sha1, 8, period, 0);
-        let code = totp.now().unwrap();
-        assert_eq!(code, "41553593");
     }
 }

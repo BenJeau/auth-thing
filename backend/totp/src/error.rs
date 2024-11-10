@@ -1,6 +1,7 @@
 #[derive(Debug, PartialEq)]
 pub enum Error {
     InvalidDigits(u8),
+    InvalidBeforeRange(u64, u64),
 }
 
 impl std::fmt::Display for Error {
@@ -8,6 +9,13 @@ impl std::fmt::Display for Error {
         match self {
             Self::InvalidDigits(digits) => {
                 write!(f, "Invalid number of digits requested: {}", digits)
+            }
+            Self::InvalidBeforeRange(before, steps) => {
+                write!(
+                    f,
+                    "Invalid range of steps requested creates a negative number of steps: before_range={} steps={}",
+                    before, steps
+                )
             }
         }
     }
@@ -26,5 +34,15 @@ mod tests {
         let result = Error::InvalidDigits(10);
 
         assert_eq!(result.to_string(), "Invalid number of digits requested: 10");
+    }
+
+    #[test]
+    fn test_given_invalid_before_range_then_error_is_returned() {
+        let result = Error::InvalidBeforeRange(10, 20);
+
+        assert_eq!(
+            result.to_string(),
+            "Invalid range of steps requested creates a negative number of steps: before_range=10 steps=20"
+        );
     }
 }

@@ -5,7 +5,6 @@ pub trait SystemTimeExt {
 }
 
 impl SystemTimeExt for SystemTime {
-    #[cfg_attr(test, mutants::skip)]
     fn elapsed(&self) -> Duration {
         self.duration_since(std::time::UNIX_EPOCH)
             .expect("Time went backwards")
@@ -87,5 +86,19 @@ mod tests {
         let number_of_steps = get_number_of_steps(offset, period, time_fetcher);
 
         assert_eq!(number_of_steps, 2);
+    }
+
+    #[test]
+    fn test_now() {
+        // Gets a period that is greater than the difference of the current time and the Unix epoch,
+        // which will make the test deterministic regardless of the current time since the number of
+        // steps will always be 1
+        let period = std::time::UNIX_EPOCH.elapsed().unwrap().as_secs() - 1;
+        let offset = 0;
+        let time_fetcher = std::time::SystemTime::now();
+
+        let number_of_steps = get_number_of_steps(offset, period, time_fetcher);
+
+        assert_eq!(number_of_steps, 1);
     }
 }
