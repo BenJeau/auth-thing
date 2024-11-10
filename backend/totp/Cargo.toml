@@ -1,6 +1,9 @@
 [package]
+edition = "2021"
 name = "totp"
 version = "0.1.0"
-edition = "2021"
 
 [dependencies]
+
+[dev-dependencies]
+mutants = { workspace = true }
