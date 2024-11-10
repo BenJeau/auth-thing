@@ -1,5 +1,5 @@
 [workspace]
-members = ["database", "server"]
+members = ["database", "server", "totp"]
 resolver = "2"
 
 [workspace.dependencies]
