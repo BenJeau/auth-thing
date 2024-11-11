@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "INSERT INTO action_logs (user_id, ip_address, user_agent, uri, method) VALUES (?, ?, ?, ?, ?)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 5
+    },
+    "nullable": []
+  },
+  "hash": "8d83e74f29e9225c184f7548f516f23c410c23d8acff28f0c2da1a2afce6be06"
+}

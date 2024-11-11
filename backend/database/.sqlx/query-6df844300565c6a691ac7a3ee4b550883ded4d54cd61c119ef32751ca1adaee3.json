@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "UPDATE applications SET name = ?, description = ?, website = ?, icon = ? WHERE id = ?",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 5
+    },
+    "nullable": []
+  },
+  "hash": "6df844300565c6a691ac7a3ee4b550883ded4d54cd61c119ef32751ca1adaee3"
+}

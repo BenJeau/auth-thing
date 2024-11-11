@@ -1,0 +1,62 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT * FROM action_logs",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "created_at",
+        "ordinal": 1,
+        "type_info": "Datetime"
+      },
+      {
+        "name": "updated_at",
+        "ordinal": 2,
+        "type_info": "Datetime"
+      },
+      {
+        "name": "user_id",
+        "ordinal": 3,
+        "type_info": "Integer"
+      },
+      {
+        "name": "ip_address",
+        "ordinal": 4,
+        "type_info": "Text"
+      },
+      {
+        "name": "user_agent",
+        "ordinal": 5,
+        "type_info": "Text"
+      },
+      {
+        "name": "uri",
+        "ordinal": 6,
+        "type_info": "Text"
+      },
+      {
+        "name": "method",
+        "ordinal": 7,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 0
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "113fa1803b62ca32f6f34b638db608a50de5ba023dfd2a47936567874280541b"
+}

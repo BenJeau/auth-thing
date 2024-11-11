@@ -1,0 +1,74 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT users.* FROM users INNER JOIN users_roles ON users.id = users_roles.user_id INNER JOIN roles ON users_roles.role_id = roles.id WHERE roles.application_id = ?",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "created_at",
+        "ordinal": 1,
+        "type_info": "Datetime"
+      },
+      {
+        "name": "updated_at",
+        "ordinal": 2,
+        "type_info": "Datetime"
+      },
+      {
+        "name": "email",
+        "ordinal": 3,
+        "type_info": "Text"
+      },
+      {
+        "name": "name",
+        "ordinal": 4,
+        "type_info": "Text"
+      },
+      {
+        "name": "username",
+        "ordinal": 5,
+        "type_info": "Text"
+      },
+      {
+        "name": "picture",
+        "ordinal": 6,
+        "type_info": "Text"
+      },
+      {
+        "name": "disabled",
+        "ordinal": 7,
+        "type_info": "Bool"
+      },
+      {
+        "name": "verified",
+        "ordinal": 8,
+        "type_info": "Bool"
+      },
+      {
+        "name": "preferred_locale",
+        "ordinal": 9,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "513dac52611da2991d1b0b78c74c156f520457673bf355f27b3f136d8da4c7b2"
+}

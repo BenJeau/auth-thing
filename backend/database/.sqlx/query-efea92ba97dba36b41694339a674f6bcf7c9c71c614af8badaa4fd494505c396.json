@@ -1,0 +1,56 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT roles.* FROM roles INNER JOIN users_roles ON roles.id = users_roles.role_id WHERE users_roles.user_id = ?",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "created_at",
+        "ordinal": 1,
+        "type_info": "Datetime"
+      },
+      {
+        "name": "updated_at",
+        "ordinal": 2,
+        "type_info": "Datetime"
+      },
+      {
+        "name": "creator_id",
+        "ordinal": 3,
+        "type_info": "Integer"
+      },
+      {
+        "name": "application_id",
+        "ordinal": 4,
+        "type_info": "Integer"
+      },
+      {
+        "name": "name",
+        "ordinal": 5,
+        "type_info": "Text"
+      },
+      {
+        "name": "description",
+        "ordinal": 6,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "efea92ba97dba36b41694339a674f6bcf7c9c71c614af8badaa4fd494505c396"
+}

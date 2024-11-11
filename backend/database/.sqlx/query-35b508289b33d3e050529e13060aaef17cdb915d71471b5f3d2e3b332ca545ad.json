@@ -1,0 +1,62 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT * FROM api_tokens WHERE id = ?",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "created_at",
+        "ordinal": 1,
+        "type_info": "Datetime"
+      },
+      {
+        "name": "updated_at",
+        "ordinal": 2,
+        "type_info": "Datetime"
+      },
+      {
+        "name": "application_id",
+        "ordinal": 3,
+        "type_info": "Integer"
+      },
+      {
+        "name": "user_id",
+        "ordinal": 4,
+        "type_info": "Integer"
+      },
+      {
+        "name": "token",
+        "ordinal": 5,
+        "type_info": "Text"
+      },
+      {
+        "name": "note",
+        "ordinal": 6,
+        "type_info": "Text"
+      },
+      {
+        "name": "expires_at",
+        "ordinal": 7,
+        "type_info": "Datetime"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "35b508289b33d3e050529e13060aaef17cdb915d71471b5f3d2e3b332ca545ad"
+}

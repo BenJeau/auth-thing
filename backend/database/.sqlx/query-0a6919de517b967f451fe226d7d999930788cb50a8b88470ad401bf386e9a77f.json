@@ -1,0 +1,62 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT * FROM providers",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "created_at",
+        "ordinal": 1,
+        "type_info": "Datetime"
+      },
+      {
+        "name": "updated_at",
+        "ordinal": 2,
+        "type_info": "Datetime"
+      },
+      {
+        "name": "name",
+        "ordinal": 3,
+        "type_info": "Text"
+      },
+      {
+        "name": "kind",
+        "ordinal": 4,
+        "type_info": "Text"
+      },
+      {
+        "name": "client_id",
+        "ordinal": 5,
+        "type_info": "Text"
+      },
+      {
+        "name": "client_secret",
+        "ordinal": 6,
+        "type_info": "Text"
+      },
+      {
+        "name": "redirect_uri",
+        "ordinal": 7,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 0
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "0a6919de517b967f451fe226d7d999930788cb50a8b88470ad401bf386e9a77f"
+}

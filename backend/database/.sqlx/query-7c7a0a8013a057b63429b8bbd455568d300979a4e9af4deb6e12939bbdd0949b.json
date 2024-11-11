@@ -1,0 +1,140 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT * FROM applications ORDER BY created_at DESC",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "created_at",
+        "ordinal": 1,
+        "type_info": "Datetime"
+      },
+      {
+        "name": "updated_at",
+        "ordinal": 2,
+        "type_info": "Datetime"
+      },
+      {
+        "name": "creator_id",
+        "ordinal": 3,
+        "type_info": "Integer"
+      },
+      {
+        "name": "slug",
+        "ordinal": 4,
+        "type_info": "Text"
+      },
+      {
+        "name": "name",
+        "ordinal": 5,
+        "type_info": "Text"
+      },
+      {
+        "name": "description",
+        "ordinal": 6,
+        "type_info": "Text"
+      },
+      {
+        "name": "website",
+        "ordinal": 7,
+        "type_info": "Text"
+      },
+      {
+        "name": "icon",
+        "ordinal": 8,
+        "type_info": "Text"
+      },
+      {
+        "name": "password_auth",
+        "ordinal": 9,
+        "type_info": "Bool"
+      },
+      {
+        "name": "password_min_length",
+        "ordinal": 10,
+        "type_info": "Integer"
+      },
+      {
+        "name": "password_max_length",
+        "ordinal": 11,
+        "type_info": "Integer"
+      },
+      {
+        "name": "password_requires_lowercase",
+        "ordinal": 12,
+        "type_info": "Bool"
+      },
+      {
+        "name": "password_requires_uppercase",
+        "ordinal": 13,
+        "type_info": "Bool"
+      },
+      {
+        "name": "password_requires_number",
+        "ordinal": 14,
+        "type_info": "Bool"
+      },
+      {
+        "name": "password_requires_special",
+        "ordinal": 15,
+        "type_info": "Bool"
+      },
+      {
+        "name": "password_requires_unique",
+        "ordinal": 16,
+        "type_info": "Bool"
+      },
+      {
+        "name": "password_requires_non_common",
+        "ordinal": 17,
+        "type_info": "Bool"
+      },
+      {
+        "name": "verification_required",
+        "ordinal": 18,
+        "type_info": "Bool"
+      },
+      {
+        "name": "verification_method",
+        "ordinal": 19,
+        "type_info": "Text"
+      },
+      {
+        "name": "verification_code",
+        "ordinal": 20,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 0
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true
+    ]
+  },
+  "hash": "7c7a0a8013a057b63429b8bbd455568d300979a4e9af4deb6e12939bbdd0949b"
+}
