@@ -1,0 +1,24 @@
+services:
+  auth_thing:
+    container_name: auth_thing
+    image: auth_thing:latest
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 3456:3456
+    volumes:
+      - backend_data:/app/backend/target
+      - frontend_data:/pnpm
+    networks:
+      - proxy-network
+    environment:
+      - AUTH__DATABASE__URL=sqlite://db.sqlite
+      - AUTH__FRONTEND__ENABLED=true
+
+networks:
+  proxy-network:
+
+volumes:
+  backend_data:
+  frontend_data:
