@@ -3,7 +3,7 @@ lto = true
 strip = true
 
 [workspace]
-members = ["database", "server", "totp"]
+members = ["database", "email", "server", "totp"]
 resolver = "2"
 
 [workspace.dependencies]
@@ -19,6 +19,7 @@ headers = "0.4.0"
 hmac = "0.12.1"
 http = "1.1.0"
 jsonwebtoken = "9.3.0"
+lettre = { version = "0.11.10", features = ["tokio1-native-tls", "tracing"] }
 rand = "0.8.5"
 regex = "1.11.1"
 sentry = "0.34.0"

@@ -1,0 +1,8 @@
+[package]
+edition = "2021"
+name = "email"
+version = "0.1.0"
+
+[dependencies]
+lettre = { workspace = true }
+tokio = { workspace = true }
