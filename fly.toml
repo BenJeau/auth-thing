@@ -1,0 +1,25 @@
+# fly.toml app configuration file generated for auth-thing on 2024-11-11T16:30:58-05:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'auth-thing'
+primary_region = 'yul'
+
+[build]
+
+[http_service]
+auto_start_machines = true
+auto_stop_machines = 'stop'
+force_https = true
+internal_port = 3456
+min_machines_running = 0
+processes = ['app']
+
+[[vm]]
+cpu_kind = 'shared'
+cpus = 1
+memory = '1gb'
+
+[env]
+AUTH__FRONTEND__ENABLED = "true"
