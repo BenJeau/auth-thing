@@ -8,8 +8,8 @@ pub struct MessageBuilder {
     pub content_type: ContentType,
 }
 
-impl MessageBuilder {
-    pub fn new() -> Self {
+impl Default for MessageBuilder {
+    fn default() -> Self {
         Self {
             from: None,
             to: None,
@@ -17,6 +17,12 @@ impl MessageBuilder {
             body: "".to_string(),
             content_type: ContentType::TEXT_HTML,
         }
+    }
+}
+
+impl MessageBuilder {
+    pub fn new() -> Self {
+        Self::default()
     }
 
     pub fn from(mut self, from: String) -> Self {

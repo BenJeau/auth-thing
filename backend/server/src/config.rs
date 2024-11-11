@@ -39,11 +39,20 @@ pub struct Jwt {
 }
 
 #[derive(Deserialize, Clone)]
+pub struct Email {
+    pub relay: String,
+    pub username: String,
+    pub password: String,
+}
+
+#[derive(Deserialize, Clone)]
 pub struct Config {
     pub database: Database,
     pub server: Server,
     pub encryption: Encryption,
     pub jwt: Jwt,
+    #[serde(default)]
+    pub email: Option<Email>,
 }
 
 impl Config {

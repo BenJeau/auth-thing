@@ -1,5 +1,6 @@
 use axum::extract::FromRef;
 use database::SqlitePool;
+use email::Mailer;
 use tracing::instrument;
 
 use crate::{config::Config, crypto::Crypto, jwt::JwtManager, Result};
@@ -11,6 +12,7 @@ pub struct ServerState {
     pub version: Version,
     pub crypto: Crypto,
     pub jwt_manager: JwtManager,
+    pub mailer: Option<Mailer>,
 }
 
 #[derive(Clone)]
@@ -66,12 +68,19 @@ impl ServerState {
 
         let jwt_manager = JwtManager::new(&config.jwt);
 
+        let mailer = if let Some(email) = &config.email {
+            Some(Mailer::new(&email.relay, &email.username, &email.password)?)
+        } else {
+            None
+        };
+
         Ok(Self {
             pool,
             config,
             version,
             crypto,
             jwt_manager,
+            mailer,
         })
     }
 }

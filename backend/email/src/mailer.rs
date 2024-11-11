@@ -3,6 +3,7 @@ use lettre::{
     AsyncSmtpTransport, AsyncTransport, Tokio1Executor,
 };
 
+#[derive(Clone)]
 pub struct Mailer {
     smtp: AsyncSmtpTransport<Tokio1Executor>,
 }

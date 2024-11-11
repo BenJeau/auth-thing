@@ -21,6 +21,7 @@ pub enum Error {
     Forbidden,
     Unauthorized(String),
     MissingHeader(String),
+    Email(email::Error),
 }
 
 impl std::error::Error for Error {}
@@ -70,6 +71,12 @@ impl From<jsonwebtoken::errors::Error> for Error {
 impl From<serde_json::Error> for Error {
     fn from(e: serde_json::Error) -> Self {
         Self::SerdeJson(e)
+    }
+}
+
+impl From<email::Error> for Error {
+    fn from(e: email::Error) -> Self {
+        Self::Email(e)
     }
 }
 

@@ -16,7 +16,8 @@ mod telemetry;
 pub use error::{Error, Result};
 pub use state::ServerState;
 
-const ENV_FILTER: &str = "server=debug,tower_http=debug,database=debug";
+const ENV_FILTER: &str =
+    "server=debug,tower_http=debug,database=debug,email=debug,totp=debug,lettre=debug";
 
 fn main() {
     telemetry::setup_basic_logging(ENV_FILTER);
