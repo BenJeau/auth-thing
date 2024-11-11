@@ -10,3 +10,19 @@ reset-db:
 
 link-openapi:
 	npx @redocly/cli@latest lint ./openapi.json 
+
+test:
+	cargo nextest run
+
+lint:
+	cargo clippy -- -D warnings
+
+format:
+	cargo fmt
+
+mutation-test:
+	cargo mutants -j5
+
+coverage:
+	cargo llvm-cov nextest
+	cargo llvm-cov report --html
