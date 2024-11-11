@@ -45,6 +45,11 @@ pub struct Email {
     pub password: String,
 }
 
+#[derive(Deserialize, Clone, Default)]
+pub struct Frontend {
+    pub enabled: bool,
+}
+
 #[derive(Deserialize, Clone)]
 pub struct Config {
     pub database: Database,
@@ -53,6 +58,8 @@ pub struct Config {
     pub jwt: Jwt,
     #[serde(default)]
     pub email: Option<Email>,
+    #[serde(default)]
+    pub frontend: Frontend,
 }
 
 impl Config {

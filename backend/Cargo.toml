@@ -19,10 +19,10 @@ headers = "0.4.0"
 hmac = "0.12.1"
 http = "1.1.0"
 jsonwebtoken = "9.3.0"
-lettre = { version = "0.11.10", features = ["tokio1-native-tls", "tracing"] }
+lettre = { version = "0.11.10", features = ["builder", "hostname", "pool", "smtp-transport", "tokio1-rustls-tls", "tracing"], default-features = false }
 rand = "0.8.5"
 regex = "1.11.1"
-sentry = "0.34.0"
+sentry = { version = "0.34.0", features = ["backtrace", "contexts", "debug-images", "panic", "reqwest", "rustls"], default-features = false }
 sentry-tower = { version = "0.34.0", features = ["http"] }
 sentry-tracing = "0.34.0"
 serde = { version = "1.0.214", features = ["derive"] }
@@ -31,9 +31,9 @@ sha1 = "0.10.6"
 sha2 = "0.10.8"
 sqlx = { version = "0.8.2", features = ["chrono", "macros", "migrate", "runtime-tokio", "sqlite"] }
 strum = { version = "0.26.3", features = ["derive"] }
-tokio = { version = "1.41.0", features = ["full"] }
+tokio = { version = "1.41.1", features = ["macros", "rt-multi-thread"] }
 tower = "0.5.1"
-tower-http = { version = "0.6.1", features = ["compression-gzip", "cors", "propagate-header", "set-header", "timeout", "trace"] }
+tower-http = { version = "0.6.1", features = ["compression-gzip", "cors", "fs", "normalize-path", "propagate-header", "set-header", "timeout", "trace"] }
 tracing = "0.1.40"
 tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
 urlencoding = "2.1.3"

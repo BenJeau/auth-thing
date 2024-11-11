@@ -1,3 +1,4 @@
+use axum::{extract::Request, ServiceExt};
 use std::net::SocketAddr;
 use tracing::info;
 
@@ -41,9 +42,11 @@ async fn start() -> Result<()> {
     let address = state.config.server.address()?;
     info!("Listening on {address}");
 
+    let app = routes::router(state);
+
     axum::serve(
         tokio::net::TcpListener::bind(address).await?,
-        routes::router(state).into_make_service_with_connect_info::<SocketAddr>(),
+        ServiceExt::<Request>::into_make_service_with_connect_info::<SocketAddr>(app),
     )
     .await?;
 
