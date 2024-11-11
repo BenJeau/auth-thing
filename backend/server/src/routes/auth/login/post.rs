@@ -65,7 +65,7 @@ pub async fn login(
     }
 
     let action_log = models::action_logs::CreateActionLog {
-        user_id: user.user.id.clone(),
+        user_id: user.user.id,
         ip_address: addr.to_string(),
         user_agent: user_agent.to_string(),
         uri: uri.to_string(),

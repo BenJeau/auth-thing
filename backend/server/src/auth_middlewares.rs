@@ -55,7 +55,7 @@ impl headers::Header for Realm {
     where
         I: Iterator<Item = &'i HeaderValue>,
     {
-        let value = values.next().ok_or_else(|| headers::Error::invalid())?;
+        let value = values.next().ok_or_else(headers::Error::invalid)?;
 
         let realm = value
             .to_str()
@@ -141,7 +141,7 @@ pub async fn auth_middleware(
                 return Err(Error::Unauthorized("Invalid API token".to_string()));
             }
 
-            Some(data.user.into())
+            Some(data.user)
         }
         (None, None, Some(_), None) => return Err(Error::MissingHeader(REALM.to_string())),
         _ => return Err(Error::Unauthorized("Missing token".to_string())),
@@ -151,14 +151,14 @@ pub async fn auth_middleware(
         return Err(Error::Unauthorized("User does not exist".to_string()));
     };
 
-    Span::current().record("user_id", &user.id);
+    Span::current().record("user_id", user.id);
 
     if user.disabled {
         return Err(Error::Unauthorized("User is disabled".to_string()));
     }
 
     let action_log = models::action_logs::CreateActionLog {
-        user_id: user.id.clone(),
+        user_id: user.id,
         ip_address: addr.to_string(),
         user_agent: user_agent.to_string(),
         uri: request.uri().to_string(),
