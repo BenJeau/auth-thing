@@ -6,13 +6,38 @@ mod steps;
 pub use crypto::CryptoAlgorithm;
 pub use error::{Error, Result};
 
-#[derive(Debug)]
+#[derive(Debug, zeroize::Zeroize, zeroize::ZeroizeOnDrop)]
 pub struct Totp {
-    algorithm: CryptoAlgorithm,
+    /// Secret key used to generate the OTP, which is zeroized on drop
     secret: String,
+    /// Crytographic algorithm used to generate the OTP
+    #[zeroize(skip)]
+    algorithm: CryptoAlgorithm,
+    /// Number of digits of the OTP (from 1 to 9)
+    #[zeroize(skip)]
     digits: u8,
+    /// Length of a single time step in seconds
+    #[zeroize(skip)]
     period: u64,
+    /// Number of seconds before the current time that the OTP is valid
+    ///
+    /// **Note:** most OTP verifiers do not support this
+    #[zeroize(skip)]
     offset: u64,
+}
+
+pub struct BufferRange {
+    start: u64,
+    end: u64,
+}
+
+impl From<(u64, u64)> for BufferRange {
+    fn from(range: (u64, u64)) -> Self {
+        Self {
+            start: range.0,
+            end: range.1,
+        }
+    }
 }
 
 impl Totp {
@@ -32,11 +57,15 @@ impl Totp {
         }
     }
 
-    pub fn now(&self) -> Result<String> {
-        self.at(std::time::UNIX_EPOCH)
+    pub fn new_with_defaults(secret: &str) -> Self {
+        Self::new(secret, CryptoAlgorithm::Sha1, 6, 30, 0)
     }
 
-    pub fn at(&self, timestamp: impl steps::SystemTimeExt) -> Result<String> {
+    pub fn generate_otp_now(&self) -> Result<String> {
+        self.generate_otp_at(std::time::UNIX_EPOCH)
+    }
+
+    pub fn generate_otp_at(&self, timestamp: impl steps::SystemTimeExt) -> Result<String> {
         let steps = steps::get_number_of_steps(self.offset, self.period, timestamp);
         self.algorithm
             .generate_totp(&self.secret, steps, self.digits)
@@ -45,16 +74,15 @@ impl Totp {
     pub fn generate_otp_sequence(
         &self,
         timestamp: impl steps::SystemTimeExt,
-        before_count: u64,
-        after_count: u64,
+        buffer: &BufferRange,
     ) -> Result<Vec<String>> {
         let current_step = steps::get_number_of_steps(self.offset, self.period, timestamp);
 
-        if before_count > current_step {
-            return Err(Error::InvalidBeforeRange(before_count, current_step));
+        if buffer.start > current_step {
+            return Err(Error::InvalidBeforeRange(buffer.start, current_step));
         }
 
-        let step_range = (current_step - before_count)..=(current_step + after_count);
+        let step_range = (current_step - buffer.start)..=(current_step + buffer.end);
 
         step_range
             .map(|step| {
@@ -62,6 +90,16 @@ impl Totp {
                     .generate_totp(&self.secret, step, self.digits)
             })
             .collect()
+    }
+
+    pub fn validate_otp(
+        &self,
+        otp: &str,
+        timestamp: impl steps::SystemTimeExt,
+        buffer: &BufferRange,
+    ) -> Result<bool> {
+        self.generate_otp_sequence(timestamp, buffer)
+            .map(|otps| otps.iter().any(|o| o == otp))
     }
 
     /// Definition/format: https://github.com/google/google-authenticator/wiki/Key-Uri-Format
@@ -142,22 +180,22 @@ mod tests {
     }
 
     #[test]
-    fn test_now() {
+    fn test_generate_otp_now() {
         // Gets a period that is greater than the difference of the current time and the Unix epoch,
         // which will make the test deterministic regardless of the current time since the number of
         // steps will always be 0
         let period = std::time::UNIX_EPOCH.elapsed().unwrap().as_secs() + 1;
         let secret = "testing_secret";
         let totp = Totp::new(secret, CryptoAlgorithm::Sha1, 8, period, 0);
-        let code = totp.now().unwrap();
+        let code = totp.generate_otp_now().unwrap();
         assert_eq!(code, "41553593");
     }
 
     #[test]
-    fn test_at() {
+    fn test_generate_otp_at() {
         let secret = "testing_secret";
         let totp = Totp::new(secret, CryptoAlgorithm::Sha1, 8, 30, 0);
-        let code = totp.at(MockSystemTime(59)).unwrap();
+        let code = totp.generate_otp_at(MockSystemTime(59)).unwrap();
         assert_eq!(code, "61456674");
     }
 
@@ -166,7 +204,7 @@ mod tests {
         let secret = "testing_secret";
         let totp = Totp::new(secret, CryptoAlgorithm::Sha1, 8, 30, 0);
         let sequence = totp
-            .generate_otp_sequence(MockSystemTime(59), 0, 0)
+            .generate_otp_sequence(MockSystemTime(59), &(0, 0).into())
             .unwrap();
         assert_eq!(sequence, vec!["61456674"]);
     }
@@ -176,7 +214,7 @@ mod tests {
         let secret = "testing_secret";
         let totp = Totp::new(secret, CryptoAlgorithm::Sha1, 8, 30, 0);
         let sequence = totp
-            .generate_otp_sequence(MockSystemTime(59), 1, 0)
+            .generate_otp_sequence(MockSystemTime(59), &(1, 0).into())
             .unwrap();
         assert_eq!(sequence, vec!["41553593", "61456674"]);
     }
@@ -186,7 +224,7 @@ mod tests {
         let secret = "testing_secret";
         let totp = Totp::new(secret, CryptoAlgorithm::Sha1, 8, 30, 0);
         let sequence = totp
-            .generate_otp_sequence(MockSystemTime(59), 0, 1)
+            .generate_otp_sequence(MockSystemTime(59), &(0, 1).into())
             .unwrap();
         assert_eq!(sequence, vec!["61456674", "49594351"]);
     }
@@ -196,7 +234,7 @@ mod tests {
     ) {
         let secret = "testing_secret";
         let totp = Totp::new(secret, CryptoAlgorithm::Sha1, 8, 30, 0);
-        let result = totp.generate_otp_sequence(MockSystemTime(59), 2, 0);
+        let result = totp.generate_otp_sequence(MockSystemTime(59), &(2, 0).into());
         assert_eq!(result, Err(Error::InvalidBeforeRange(2, 1)));
     }
 
@@ -205,12 +243,28 @@ mod tests {
         let secret = "testing_secret";
         let totp = Totp::new(secret, CryptoAlgorithm::Sha1, 8, 30, 0);
         let sequence = totp
-            .generate_otp_sequence(MockSystemTime(89), 2, 3)
+            .generate_otp_sequence(MockSystemTime(89), &(2, 3).into())
             .unwrap();
         assert_eq!(
             sequence,
             vec!["41553593", "61456674", "49594351", "73533374", "19509204", "11802581"]
         );
+    }
+
+    #[test]
+    fn test_validate_otp_with_correct_otp() {
+        let secret = "testing_secret";
+        let totp = Totp::new(secret, CryptoAlgorithm::Sha1, 8, 30, 0);
+        let result = totp.validate_otp("73533374", MockSystemTime(59), &(1, 2).into());
+        assert_eq!(result, Ok(true));
+    }
+
+    #[test]
+    fn test_validate_otp_with_incorrect_otp() {
+        let secret = "testing_secret";
+        let totp = Totp::new(secret, CryptoAlgorithm::Sha1, 8, 30, 0);
+        let result = totp.validate_otp("61456675", MockSystemTime(59), &(0, 0).into());
+        assert_eq!(result, Ok(false));
     }
 
     #[test]
