@@ -46,10 +46,12 @@ pub async fn signup(
         return Err(Error::NotFound("Application not found".to_string()));
     };
 
-    let verification_code = if state.mailer.is_some() {
-        Some(state.crypto.generate_random_numeric_string(8))
+    let (verification_code, hashed_verification_code) = if state.mailer.is_some() {
+        let code = state.crypto.generate_random_numeric_string(8);
+        let hashed_code = hash_password(&code)?;
+        (Some(code), Some(hashed_code))
     } else {
-        None
+        (None, None)
     };
 
     let verification_code_created_at = if state.mailer.is_some() {
@@ -67,7 +69,7 @@ pub async fn signup(
             disabled: false,
         },
         email_verified: state.mailer.is_none(),
-        verification_code,
+        verification_code: hashed_verification_code,
         verification_code_created_at,
         two_factor_enabled: false,
         two_factor_secret: None,
@@ -85,7 +87,7 @@ pub async fn signup(
     let maybe_send_email = async {
         if let Some(mailer) = state.mailer {
             crate::emails::send_verification_email(
-                &create_user.verification_code.unwrap(),
+                &verification_code.unwrap(),
                 &create_user.modify_user.email,
                 &mailer,
             )

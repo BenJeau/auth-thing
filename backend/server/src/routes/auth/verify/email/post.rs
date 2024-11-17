@@ -7,7 +7,7 @@ use database::{logic, models::users::User};
 use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
 
-use crate::{error::Result, ServerState};
+use crate::{crypto::verify_password, error::Result, ServerState};
 
 #[derive(Debug, Deserialize)]
 pub struct VerifyEmailRequest {
@@ -41,7 +41,18 @@ pub async fn verify_email(
         return Ok(Json(VerifyEmailResponse { success: true }));
     }
 
-    let success = logic::users::verify_email(&state.pool, user.id, &payload.token).await?;
+    let verification_code_hash =
+        logic::users::get_verification_code_hash(&state.pool, user.id).await?;
+
+    let success = if let Some(hash) = verification_code_hash {
+        verify_password(&payload.token, &hash)?
+    } else {
+        false
+    };
+
+    if success {
+        logic::users::set_email_verified(&state.pool, user.id).await?;
+    }
 
     Ok(Json(VerifyEmailResponse { success }))
 }

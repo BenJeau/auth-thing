@@ -1,0 +1,20 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT verification_code FROM users WHERE id = ?",
+  "describe": {
+    "columns": [
+      {
+        "name": "verification_code",
+        "ordinal": 0,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      true
+    ]
+  },
+  "hash": "122fc25776a5e18d4aa785942bc5ca5938898cde5ac1143ac53ae5dbc4c6251a"
+}

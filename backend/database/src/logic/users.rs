@@ -103,13 +103,18 @@ pub async fn get_two_factor_secret(pool: &SqlitePool, user_id: i64) -> Result<Op
         .await
 }
 
-pub async fn verify_email(pool: &SqlitePool, user_id: i64, token: &str) -> Result<bool> {
-    sqlx::query_scalar!(
-        "UPDATE users SET email_verified = true WHERE id = ? AND verification_code = ?",
-        user_id,
-        token
+pub async fn get_verification_code_hash(pool: &SqlitePool, user_id: i64) -> Result<Option<String>> {
+    sqlx::query_scalar!("SELECT verification_code FROM users WHERE id = ?", user_id)
+        .fetch_one(pool)
+        .await
+}
+
+pub async fn set_email_verified(pool: &SqlitePool, user_id: i64) -> Result<u64> {
+    sqlx::query!(
+        "UPDATE users SET email_verified = true WHERE id = ?",
+        user_id
     )
     .execute(pool)
     .await
-    .map(|row| row.rows_affected() > 0)
+    .map(|row| row.rows_affected())
 }

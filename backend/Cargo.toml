@@ -3,7 +3,7 @@ lto = true
 strip = true
 
 [workspace]
-members = ["database", "email", "server", "totp"]
+members = ["database", "email", "server", "tools", "totp"]
 resolver = "2"
 
 [workspace.dependencies]

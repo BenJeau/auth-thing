@@ -1,0 +1,11 @@
+[package]
+edition = "2021"
+name = "tools"
+version = "0.1.0"
+
+[[bin]]
+name = "argon2-hash"
+path = "./src/argon2_hash.rs"
+
+[dependencies]
+argon2 = { workspace = true }
