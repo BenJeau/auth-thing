@@ -55,3 +55,9 @@ pub struct ModifyUser {
     #[serde(default)]
     pub verified: bool,
 }
+
+pub struct InnerModifyUser {
+    pub modify_user: ModifyUser,
+    pub verification_code: Option<String>,
+    pub verification_code_created_at: Option<NaiveDateTime>,
+}

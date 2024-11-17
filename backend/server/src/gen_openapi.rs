@@ -3,6 +3,7 @@
 mod auth_middlewares;
 mod config;
 mod crypto;
+mod emails;
 mod error;
 mod jwt;
 mod layers;

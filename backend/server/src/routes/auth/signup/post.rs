@@ -10,6 +10,7 @@ use database::{logic, models};
 use http::StatusCode;
 use std::net::SocketAddr;
 use tokio::join;
+use tracing::warn;
 
 use crate::{crypto::hash_password, schemas::SignupUserRequest, Error, Result, ServerState};
 
@@ -45,15 +46,31 @@ pub async fn signup(
         return Err(Error::NotFound("Application not found".to_string()));
     };
 
-    let create_user = models::users::ModifyUser {
-        email: data.email,
-        name: data.name,
-        username: data.username,
-        picture: None,
-        disabled: false,
-        verified: false,
+    let verification_code = if state.mailer.is_some() {
+        Some(state.crypto.generate_random_numeric_string(8))
+    } else {
+        None
     };
-    let user_id = logic::users::create_user(&state.pool, create_user).await?;
+
+    let verification_code_created_at = if state.mailer.is_some() {
+        Some(chrono::Utc::now().naive_utc())
+    } else {
+        None
+    };
+
+    let create_user = models::users::InnerModifyUser {
+        modify_user: models::users::ModifyUser {
+            email: data.email.clone(),
+            name: data.name,
+            username: data.username,
+            picture: None,
+            disabled: false,
+            verified: state.mailer.is_none(),
+        },
+        verification_code,
+        verification_code_created_at,
+    };
+    let user_id = logic::users::create_user(&state.pool, &create_user).await?;
 
     let action_log = models::action_logs::CreateActionLog {
         user_id,
@@ -63,7 +80,23 @@ pub async fn signup(
         method: "GET".to_string(),
     };
 
-    let (action_log, application) = join!(
+    let maybe_send_email = async {
+        if let Some(mailer) = state.mailer {
+            crate::emails::send_verification_email(
+                &create_user.verification_code.unwrap(),
+                &create_user.modify_user.email,
+                &mailer,
+            )
+            .await?;
+        } else {
+            warn!("No mailer configured, skipping email confirmation, defaulting to verifying the user");
+        }
+
+        Result::Ok(())
+    };
+
+    let (result, action_log, application) = join!(
+        maybe_send_email,
         logic::action_logs::create_action_log(&state.pool, action_log),
         logic::applications::create_application_password(
             &state.pool,
@@ -73,6 +106,7 @@ pub async fn signup(
         )
     );
 
+    result?;
     action_log?;
     application?;
 

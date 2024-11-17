@@ -8,6 +8,8 @@ CREATE TABLE users (
     picture TEXT,
     disabled BOOLEAN DEFAULT FALSE NOT NULL,
     verified BOOLEAN DEFAULT FALSE NOT NULL,
+    verification_code TEXT,
+    verification_code_created_at DATETIME,
     preferred_locale TEXT
 );
 

@@ -8,7 +8,7 @@ use chacha20poly1305::{
     aead::{generic_array::GenericArray, Aead},
     AeadCore, KeyInit, XChaCha20Poly1305,
 };
-use rand::{distributions::Alphanumeric, thread_rng, Rng};
+use rand::{thread_rng, Rng};
 use tracing::instrument;
 
 use crate::{Error, Result};
@@ -51,11 +51,11 @@ impl Crypto {
     }
 
     #[instrument(skip_all)]
-    pub fn generate_random_alphanumeric_string(&self, length: usize) -> String {
+    pub fn generate_random_numeric_string(&self, length: usize) -> String {
         let mut rng = thread_rng();
 
         std::iter::repeat(())
-            .map(|()| rng.sample(Alphanumeric))
+            .map(|()| rng.gen_range(0..=9))
             .map(char::from)
             .take(length)
             .collect()

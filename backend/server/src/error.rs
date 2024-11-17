@@ -15,6 +15,7 @@ pub enum Error {
     ChaChaSecretLength,
     Argon2PasswordHash(argon2::password_hash::Error),
     DisabledUser,
+    NotVerified,
     InvalidCredentials,
     Jsonwebtoken(jsonwebtoken::errors::Error),
     SerdeJson(serde_json::Error),
@@ -93,6 +94,9 @@ impl IntoResponse for Error {
             }
             Self::DisabledUser => {
                 (StatusCode::UNAUTHORIZED, "Your account is disabled").into_response()
+            }
+            Self::NotVerified => {
+                (StatusCode::UNAUTHORIZED, "Your account is not verified").into_response()
             }
             Self::Forbidden => StatusCode::FORBIDDEN.into_response(),
             Self::Database(database::Error::Database(err)) if err.code() == Some("2067".into()) => {

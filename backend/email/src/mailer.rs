@@ -5,6 +5,7 @@ use lettre::{
 
 #[derive(Clone)]
 pub struct Mailer {
+    pub username: String,
     smtp: AsyncSmtpTransport<Tokio1Executor>,
 }
 
@@ -16,7 +17,10 @@ impl Mailer {
             .credentials(creds)
             .build();
 
-        Ok(Self { smtp })
+        Ok(Self {
+            username: username.to_owned(),
+            smtp,
+        })
     }
 
     pub async fn send(&self, message: lettre::Message) -> crate::error::Result<Response> {
