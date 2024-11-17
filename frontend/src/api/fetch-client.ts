@@ -42,7 +42,10 @@ export const fetchClient = createFetchClient<paths>({
 
       const parsedUrl = new URL(request.url);
 
-      if (response.status === 401 && !parsedUrl.pathname.startsWith("/auth")) {
+      if (
+        response.status === 401 &&
+        !parsedUrl.pathname.match(/^\/api\/[^/]+\/auth/)
+      ) {
         store.set(userAtom, undefined);
         toast(
           languages[language].file["authentication.expired.title"] as string,
