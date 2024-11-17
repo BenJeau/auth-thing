@@ -2,7 +2,7 @@ import createFetchClient from "openapi-fetch";
 import { notFound } from "@tanstack/react-router";
 import { toast } from "sonner";
 
-import { BASE_API_URL } from "@/lib/config";
+import config from "@/lib/config";
 import type { paths } from "@/api/openapi-client";
 import { store } from "@/atoms";
 import { userAtom } from "@/atoms/auth";
@@ -12,7 +12,7 @@ import { router } from "@/navigation";
 import { anySignal } from "@/lib/utils";
 
 export const fetchClient = createFetchClient<paths>({
-  baseUrl: BASE_API_URL,
+  baseUrl: config.rest_server_base_url,
   fetch: async (request) => {
     const language = store.get(languageAtom);
     const token = store.get(userAtom)?.token;

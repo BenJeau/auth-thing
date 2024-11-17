@@ -11,7 +11,7 @@ const getSystemTheme = () => {
 };
 
 type SystemTheme = "dark" | "light";
-type Theme = SystemTheme | "system";
+export type Theme = SystemTheme | "system";
 
 export const themeAtom = atomWithLocalStorage<Theme>("theme", "system");
 export const systemThemeAtom = atom<SystemTheme>(getSystemTheme());
@@ -25,12 +25,6 @@ export const computedTheme = atom((get) => {
 
   return get(systemThemeAtom);
 });
-
-export const ThemeCycle: { [key in Theme]: Theme } = {
-  dark: "light",
-  light: "system",
-  system: "dark",
-};
 
 export const ThemeIcon: { [key in Theme]: LucideIcon } = {
   dark: Moon,

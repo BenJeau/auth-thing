@@ -13,7 +13,7 @@
   "logged.out.description": "You have been logged out",
   "login": "Login",
   "login.alternative.description": "or using email authentication",
-  "login.description": "Discover a unified platform where you can query, correlate, and enrich your threat data in real-time, with seamless access to multiple sources and a flexible framework for custom integrations.",
+  "login.description": "Discover a platform that unifies and manages authentication for you, your users, and your applications. Supports multiple authentication methods, password resets, email verification, and more.",
   "login.here": "login here",
   "login.image.alt": "Random image for login",
   "login.image.blurry.alt": "Random blurry image for login",
@@ -39,5 +39,11 @@
   "error.stack": "Error stack",
   "this.is.fine.image.alt": "Animated picture of a dog sitting in a fire",
   "version.mismatch.description": "Frontend and backend versions differ. Please {refresh} the page.",
-  "version.mismatch.title": "Version mismatch"
+  "version.mismatch.title": "Version mismatch",
+  "toggle.theme": "Toggle theme",
+  "tagline": "Secure and seamless authentication made simple",
+  "login.subsection.documentation.title": "Documentation",
+  "login.subsection.documentation.description": "Learn more about the platform, API, and how to integrate it within your application",
+  "login.subsection.code.title": "{name} Project",
+  "login.subsection.code.description": "View the source code and contribute to the project on GitHub"
 }

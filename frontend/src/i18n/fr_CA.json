@@ -13,7 +13,7 @@
   "logged.out.description": "Vous avez été déconnecté de votre compte",
   "login": "Connexion",
   "login.alternative.description": "ou en utilisant votre courriel",
-  "login.description": "Découvrez une plateforme unifiée où vous pouvez interroger, corréler et enrichir vos données sur les menaces en temps réel, avec un accès transparent à de multiples sources et un cadre flexible pour des intégrations personnalisées",
+  "login.description": "Découvrez une plateforme qui unifie et gère l'authentification pour vous, vos utilisateurs et vos applications. Prise en charge de plusieurs méthodes d'authentification, de réinitialisations de mots de passe, de vérifications par courriel, etc.",
   "login.here": "connectez-vous ici",
   "login.image.alt": "Image de l'authentification",
   "login.image.blurry.alt": "Image floue de l'authentification",
@@ -39,5 +39,11 @@
   "error.toggle": "Basculer les détails de l'erreur",
   "this.is.fine.image.alt": "Photo animée d'un chien couchant dans un feu",
   "version.mismatch.description": "Les versions du frontend et du backend diffèrent. Veuillez {refresh} la page.",
-  "version.mismatch.title": "Incompatibilité de version"
+  "version.mismatch.title": "Incompatibilité de version",
+  "toggle.theme": "Basculer le thème",
+  "tagline": "Authentification sécurisée et simple",
+  "login.subsection.documentation.title": "Documentation",
+  "login.subsection.documentation.description": "En savoir plus sur la plateforme, l'API et comment l'intégrer dans votre application",
+  "login.subsection.code.title": "Projet {name}",
+  "login.subsection.code.description": "Accédez au code source et contribuez au projet sur GitHub"
 }

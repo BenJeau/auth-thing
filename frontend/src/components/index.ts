@@ -11,3 +11,4 @@ export { default as AutoAnimate } from "./auto-animate";
 export { default as RawContent } from "./raw-content";
 export { default as CopyButton } from "./copy-button";
 export { default as Error } from "./error";
+export { default as ApplicationVersion } from "./application-version";
