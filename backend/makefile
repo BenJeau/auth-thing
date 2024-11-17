@@ -26,3 +26,6 @@ mutation-test:
 coverage:
 	cargo llvm-cov nextest
 	cargo llvm-cov report --html
+
+db-prepare:
+	cd database && cargo sqlx prepare

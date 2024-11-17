@@ -1,6 +1,6 @@
 {
   "db_name": "SQLite",
-  "query": "SELECT * FROM users WHERE email = ?",
+  "query": "SELECT id, created_at, updated_at, email, name, username, picture, disabled, email_verified, two_factor_enabled, preferred_locale FROM users",
   "describe": {
     "columns": [
       {
@@ -44,18 +44,23 @@
         "type_info": "Bool"
       },
       {
-        "name": "verified",
+        "name": "email_verified",
         "ordinal": 8,
         "type_info": "Bool"
       },
       {
-        "name": "preferred_locale",
+        "name": "two_factor_enabled",
         "ordinal": 9,
+        "type_info": "Bool"
+      },
+      {
+        "name": "preferred_locale",
+        "ordinal": 10,
         "type_info": "Text"
       }
     ],
     "parameters": {
-      "Right": 1
+      "Right": 0
     },
     "nullable": [
       false,
@@ -67,8 +72,9 @@
       true,
       false,
       false,
+      false,
       true
     ]
   },
-  "hash": "3e4e5c4be44ef130a6e886ed815bdf3e8d3d3f61e17713aa10f9912522cd84ca"
+  "hash": "7b9b48eda70c9af237c2c23522f61e3a29e2f698ad6d7cd9be92705854126c8b"
 }

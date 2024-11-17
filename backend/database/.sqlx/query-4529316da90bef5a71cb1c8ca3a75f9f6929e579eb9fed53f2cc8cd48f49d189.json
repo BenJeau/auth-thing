@@ -1,0 +1,20 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT two_factor_secret FROM users WHERE id = ?",
+  "describe": {
+    "columns": [
+      {
+        "name": "two_factor_secret",
+        "ordinal": 0,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      true
+    ]
+  },
+  "hash": "4529316da90bef5a71cb1c8ca3a75f9f6929e579eb9fed53f2cc8cd48f49d189"
+}
