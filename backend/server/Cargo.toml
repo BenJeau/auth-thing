@@ -35,3 +35,4 @@ utoipa-axum = { workspace = true }
 
 database = { path = "../database" }
 email = { path = "../email" }
+totp = { path = "../totp" }

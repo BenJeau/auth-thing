@@ -45,5 +45,17 @@
   "login.subsection.documentation.title": "Documentation",
   "login.subsection.documentation.description": "Learn more about the platform, API, and how to integrate it within your application",
   "login.subsection.code.title": "{name} Project",
-  "login.subsection.code.description": "View the source code and contribute to the project on GitHub"
+  "login.subsection.code.description": "View the source code and contribute to the project on GitHub",
+  "auth.verify.error.noToken": "No verification token provided",
+  "auth.verify.error.invalid": "Invalid verification token",
+  "auth.verify.success": "Email verified successfully",
+  "auth.verify.verifying": "Verifying your email...",
+  "auth.verify.email.title": "Email Verification",
+  "auth.verify.email.description": "Please enter the verification code that was sent to your email address",
+  "auth.otp.error.invalid": "Invalid verification code",
+  "auth.otp.title": "Two-Factor Authentication",
+  "auth.otp.description": "Please enter the verification code from your authenticator app",
+  "auth.otp.code": "Verification Code",
+  "auth.otp.verifying": "Verifying...",
+  "auth.otp.verify": "Verify"
 }

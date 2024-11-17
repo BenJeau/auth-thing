@@ -6,11 +6,13 @@ CREATE TABLE users (
     name TEXT,
     username TEXT,
     picture TEXT,
-    disabled BOOLEAN DEFAULT FALSE NOT NULL,
-    verified BOOLEAN DEFAULT FALSE NOT NULL,
+    disabled BOOLEAN NOT NULL DEFAULT FALSE,
+    email_verified BOOLEAN NOT NULL DEFAULT FALSE,
     verification_code TEXT,
     verification_code_created_at DATETIME,
-    preferred_locale TEXT
+    preferred_locale TEXT,
+    two_factor_enabled BOOLEAN NOT NULL DEFAULT FALSE,
+    two_factor_secret TEXT
 );
 
 CREATE TABLE applications (

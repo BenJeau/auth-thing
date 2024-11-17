@@ -28,7 +28,7 @@ pub fn openapi_router(state: ServerState) -> OpenApiRouter {
             auth_middlewares::auth_middleware,
         ))
         .nest("/health", health::router())
-        .nest("/auth/applications/:slug", auth::router())
+        .nest("/auth/applications/:slug", auth::router(state.clone()))
         .with_state(state);
 
     openapi::axum_openapi_router().merge(stateful_router)

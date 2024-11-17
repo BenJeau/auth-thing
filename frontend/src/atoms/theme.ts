@@ -1,5 +1,5 @@
 import { Computer, LucideIcon, Moon, Sun } from "lucide-react";
-import { atom, useAtomValue, useSetAtom } from "jotai";
+import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useEffect } from "react";
 
 import { atomWithLocalStorage } from "@/atoms";
@@ -35,7 +35,7 @@ export const ThemeIcon: { [key in Theme]: LucideIcon } = {
 export const useUpdateTheme = () => {
   const rawTheme = useAtomValue(themeAtom);
   const theme = useAtomValue(computedTheme);
-  const setSystemTheme = useSetAtom(systemThemeAtom);
+  const [systemTheme, setSystemTheme] = useAtom(systemThemeAtom);
 
   useEffect(() => {
     window
@@ -54,6 +54,14 @@ export const useUpdateTheme = () => {
     root.classList.remove("light", "dark");
     root.classList.add(theme);
   }, [theme]);
+
+  useEffect(() => {
+    const icon: HTMLLinkElement | null =
+      document.querySelector("link[rel='icon']");
+    if (icon) {
+      icon.href = `/logo-${systemTheme}.svg`;
+    }
+  }, [systemTheme]);
 
   return null;
 };

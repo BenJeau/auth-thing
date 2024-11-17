@@ -93,6 +93,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/auth/applications/{slug}/verify/email": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Verify email */
+        post: operations["verify_email"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/applications/{slug}/verify/otp": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Verify a one-time password (OTP) for two-factor authentication */
+        post: operations["verify_otp"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/health": {
         parameters: {
             query?: never;
@@ -193,8 +227,7 @@ export interface paths {
         /** Get all users */
         get: operations["get_users"];
         put?: never;
-        /** Create a new user */
-        post: operations["create_user"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -328,8 +361,6 @@ export interface components {
             picture?: string | null;
             /** @description Whether the user is enabled or not, if they are able to login/access the platform */
             disabled?: boolean;
-            /** @description Whether the user has verified their email or not */
-            verified?: boolean;
         };
         Provider: {
             /** Format: int64 */
@@ -396,10 +427,19 @@ export interface components {
             picture?: string | null;
             /** @description Whether the user is enabled or not, if they are able to login/access the platform */
             disabled: boolean;
-            /** @description Whether the user has verified their email or not */
-            verified: boolean;
             /** @description Language and general location (locale) of the user */
             preferredLocale?: string | null;
+            /** @description Whether the user has verified their email address */
+            emailVerified: boolean;
+            /** @description Whether two-factor authentication is enabled for this user */
+            twoFactorEnabled: boolean;
+        };
+        VerifyEmailResponse: {
+            success: boolean;
+        };
+        VerifyOtpResponse: {
+            success: boolean;
+            redirect?: string | null;
         };
     };
     responses: never;
@@ -640,6 +680,78 @@ export interface operations {
         responses: {
             /** @description User created successfully */
             201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    verify_email: {
+        parameters: {
+            query: {
+                /** @description Verification token */
+                token: string;
+            };
+            header?: never;
+            path: {
+                /** @description Application slug */
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VerifyEmailResponse"];
+                };
+            };
+        };
+    };
+    verify_otp: {
+        parameters: {
+            query: {
+                /** @description One-time password to verify */
+                otp: string;
+            };
+            header?: never;
+            path: {
+                /** @description Application slug */
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OTP verification successful */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VerifyOtpResponse"];
+                };
+            };
+            /** @description Invalid OTP provided */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description 2FA is not enabled for this user */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description TOTP secret not found for user */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -926,30 +1038,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["User"][];
-                };
-            };
-        };
-    };
-    create_user: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ModifyUser"];
-            };
-        };
-        responses: {
-            /** @description User created successfully */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "text/plain": string;
                 };
             };
         };

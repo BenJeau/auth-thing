@@ -9,6 +9,7 @@ export interface User {
   roles: string[];
   token: string;
   initials: string;
+  emailVerified: boolean;
 }
 
 export const userAtom = atomWithLocalStorage<User | undefined>(

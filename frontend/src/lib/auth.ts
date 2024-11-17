@@ -31,12 +31,18 @@ export const beforeLoadAuthenticated: BeforeLoadFn =
     const user = store.get(userAtom);
 
     if (!user) {
+      console.log("HOOK - no user");
       throw redirect({
         to: "/auth/login",
         search: {
           next: location.pathname !== "/" ? location.pathname : undefined,
         },
       });
+    }
+
+    if (!user.emailVerified) {
+      console.log("HOOK - no email verified", user.emailVerified);
+      throw redirect({ to: "/auth/verify-email" });
     }
 
     if (roles && roles.length > 0) {

@@ -1,17 +1,21 @@
+use axum::middleware::from_fn_with_state;
 use utoipa_axum::router::OpenApiRouter;
 
-use crate::ServerState;
-
-// pub mod get;
+use crate::{auth_middlewares, ServerState};
 
 mod login;
-// mod openid;
 mod signup;
+mod verify;
 
-pub fn router() -> OpenApiRouter<ServerState> {
-    OpenApiRouter::new()
-        // .route("/", get(get::get_enabled_auth))
+pub fn router(state: ServerState) -> OpenApiRouter<ServerState> {
+    let public_routes = OpenApiRouter::new()
         .nest("/login", login::router())
-        // .nest("/openid", openid::router())
-        .nest("/signup", signup::router())
+        .nest("/signup", signup::router());
+
+    // TODO: maybe clean this up better so that we don't have multiple auth middlewares declared
+    let protected_routes = OpenApiRouter::new()
+        .nest("/verify", verify::router())
+        .route_layer(from_fn_with_state(state, auth_middlewares::auth_middleware));
+
+    public_routes.merge(protected_routes)
 }

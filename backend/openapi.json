@@ -301,6 +301,88 @@
         }
       }
     },
+    "/auth/applications/{slug}/verify/email": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Verify email",
+        "operationId": "verify_email",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "description": "Application slug",
+            "required": true
+          },
+          {
+            "name": "token",
+            "in": "query",
+            "description": "Verification token",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerifyEmailResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/applications/{slug}/verify/otp": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Verify a one-time password (OTP) for two-factor authentication",
+        "operationId": "verify_otp",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "description": "Application slug",
+            "required": true
+          },
+          {
+            "name": "otp",
+            "in": "query",
+            "description": "One-time password to verify",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OTP verification successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerifyOtpResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid OTP provided"
+          },
+          "403": {
+            "description": "2FA is not enabled for this user"
+          },
+          "404": {
+            "description": "TOTP secret not found for user"
+          }
+        }
+      }
+    },
     "/health": {
       "get": {
         "tags": [
@@ -591,35 +673,6 @@
                   "items": {
                     "$ref": "#/components/schemas/User"
                   }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Users"
-        ],
-        "summary": "Create a new user",
-        "operationId": "create_user",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ModifyUser"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "User created successfully",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
                 }
               }
             }
@@ -1041,10 +1094,6 @@
           "disabled": {
             "type": "boolean",
             "description": "Whether the user is enabled or not, if they are able to login/access the platform"
-          },
-          "verified": {
-            "type": "boolean",
-            "description": "Whether the user has verified their email or not"
           }
         }
       },
@@ -1173,7 +1222,8 @@
           "updatedAt",
           "email",
           "disabled",
-          "verified"
+          "emailVerified",
+          "twoFactorEnabled"
         ],
         "properties": {
           "id": {
@@ -1220,16 +1270,48 @@
             "type": "boolean",
             "description": "Whether the user is enabled or not, if they are able to login/access the platform"
           },
-          "verified": {
-            "type": "boolean",
-            "description": "Whether the user has verified their email or not"
-          },
           "preferredLocale": {
             "type": [
               "string",
               "null"
             ],
             "description": "Language and general location (locale) of the user"
+          },
+          "emailVerified": {
+            "type": "boolean",
+            "description": "Whether the user has verified their email address"
+          },
+          "twoFactorEnabled": {
+            "type": "boolean",
+            "description": "Whether two-factor authentication is enabled for this user"
+          }
+        }
+      },
+      "VerifyEmailResponse": {
+        "type": "object",
+        "required": [
+          "success"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean"
+          }
+        }
+      },
+      "VerifyOtpResponse": {
+        "type": "object",
+        "required": [
+          "success"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "redirect": {
+            "type": [
+              "string",
+              "null"
+            ]
           }
         }
       }

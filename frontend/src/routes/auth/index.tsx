@@ -12,15 +12,18 @@ const SaveUserData: React.FC = () => {
 
   const search = new URLSearchParams(location.search);
   const token = search.get("token");
-  const disabled = search.get("disabled");
   const next = search.get("next");
 
   if (user) {
-    return <Navigate to="/" />;
+    if (user.emailVerified) {
+      return <Navigate to={next ?? "/"} />;
+    }
+    return <Navigate to="/auth/verify-email" params={{ next }} />;
   }
 
   let error = null;
   if (token) {
+    console.log("has token");
     const claims = parseJwt(token);
 
     if (claims.email && claims.sub) {
@@ -38,6 +41,7 @@ const SaveUserData: React.FC = () => {
       setUser({
         token,
         name: claims.name,
+        emailVerified: claims.email_verified ?? false,
         givenName: claims.given_name,
         familyName: claims.family_name,
         email: claims.email,
@@ -46,14 +50,18 @@ const SaveUserData: React.FC = () => {
         initials: initials.toUpperCase(),
       });
 
-      return <Navigate to={next ?? "/"} />;
+      if (claims.email_verified) {
+        return <Navigate to={next ?? "/"} />;
+      }
+      return <Navigate to="/auth/verify-email" />;
     } else {
+      console.log("mising fields in token");
       error = "invalidToken";
     }
   }
 
   if (error === null) {
-    error = disabled ? "disabled" : "missingToken";
+    error = "missingToken";
   }
 
   let description = t("auth.error.token.missing");
@@ -68,6 +76,8 @@ const SaveUserData: React.FC = () => {
     id: description,
     description,
   });
+
+  console.log("navigating to login", description);
 
   return <Navigate to="/auth/login" />;
 };

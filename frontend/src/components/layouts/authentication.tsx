@@ -1,12 +1,64 @@
 import { useMemo } from "react";
-import { BookOpenText, Code, Fingerprint, LucideIcon } from "lucide-react";
-import { useLocation } from "@tanstack/react-router";
+import {
+  BookOpenText,
+  Code,
+  DoorClosed,
+  Fingerprint,
+  LucideIcon,
+} from "lucide-react";
+import { Link, useLocation } from "@tanstack/react-router";
+import { useAtomValue } from "jotai";
 
 import { AutoAnimate, Layouts, Trans } from "@/components";
 import { getRandomBackground } from "@/assets/background";
 import { TransId, useTranslation } from "@/i18n";
 import { cn } from "@/lib/utils";
 import config from "@/lib/config";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { userAtom } from "@/atoms/auth";
+
+const UserAvatar = () => {
+  const user = useAtomValue(userAtom);
+
+  if (!user) {
+    return null;
+  }
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger className="absolute top-10 right-10 flex items-center gap-2">
+        <div className="flex flex-col text-right">
+          <span className="text-sm font-semibold">{user.name}</span>
+          <span className="text-xs">{user.email}</span>
+        </div>
+        <Avatar className="shadow-md select-none">
+          <AvatarFallback>{user.initials}</AvatarFallback>
+        </Avatar>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel>Manage account</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          asChild
+          className="focus:bg-destructive focus:text-destructive-foreground text-destructive"
+        >
+          <Link to="/auth/logout" className="flex gap-2 items-center">
+            <DoorClosed size={16} />
+            <span>Logout</span>
+          </Link>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
 
 export const Authentication: React.FC<React.PropsWithChildren> = ({
   children,
@@ -100,7 +152,8 @@ export const Authentication: React.FC<React.PropsWithChildren> = ({
           {config.name}
         </div>
       </div>
-      <div className="lg:relative lg:col-span-2 lg:p-8">
+      <div className="lg:relative lg:col-span-2 lg:p-8 relative h-full">
+        <UserAvatar />
         <AutoAnimate
           key={location.pathname}
           slideIn

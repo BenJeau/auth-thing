@@ -14,6 +14,8 @@ import { Route as rootRoute } from "./../routes/__root";
 import { Route as AuthRouteImport } from "./../routes/auth/route";
 import { Route as IndexImport } from "./../routes/index";
 import { Route as AuthIndexImport } from "./../routes/auth/index";
+import { Route as AuthVerifyOtpImport } from "./../routes/auth/verify-otp";
+import { Route as AuthVerifyEmailImport } from "./../routes/auth/verify-email";
 import { Route as AuthSignupImport } from "./../routes/auth/signup";
 import { Route as AuthLogoutImport } from "./../routes/auth/logout";
 import { Route as AuthLoginImport } from "./../routes/auth/login";
@@ -37,6 +39,18 @@ const IndexRoute = IndexImport.update({
 const AuthIndexRoute = AuthIndexImport.update({
   id: "/",
   path: "/",
+  getParentRoute: () => AuthRouteRoute,
+} as any);
+
+const AuthVerifyOtpRoute = AuthVerifyOtpImport.update({
+  id: "/verify-otp",
+  path: "/verify-otp",
+  getParentRoute: () => AuthRouteRoute,
+} as any);
+
+const AuthVerifyEmailRoute = AuthVerifyEmailImport.update({
+  id: "/verify-email",
+  path: "/verify-email",
   getParentRoute: () => AuthRouteRoute,
 } as any);
 
@@ -116,6 +130,20 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthSignupImport;
       parentRoute: typeof AuthRouteImport;
     };
+    "/auth/verify-email": {
+      id: "/auth/verify-email";
+      path: "/verify-email";
+      fullPath: "/auth/verify-email";
+      preLoaderRoute: typeof AuthVerifyEmailImport;
+      parentRoute: typeof AuthRouteImport;
+    };
+    "/auth/verify-otp": {
+      id: "/auth/verify-otp";
+      path: "/verify-otp";
+      fullPath: "/auth/verify-otp";
+      preLoaderRoute: typeof AuthVerifyOtpImport;
+      parentRoute: typeof AuthRouteImport;
+    };
     "/auth/": {
       id: "/auth/";
       path: "/";
@@ -139,6 +167,8 @@ interface AuthRouteRouteChildren {
   AuthLoginRoute: typeof AuthLoginRoute;
   AuthLogoutRoute: typeof AuthLogoutRoute;
   AuthSignupRoute: typeof AuthSignupRoute;
+  AuthVerifyEmailRoute: typeof AuthVerifyEmailRoute;
+  AuthVerifyOtpRoute: typeof AuthVerifyOtpRoute;
   AuthIndexRoute: typeof AuthIndexRoute;
 }
 
@@ -146,6 +176,8 @@ const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthLoginRoute: AuthLoginRoute,
   AuthLogoutRoute: AuthLogoutRoute,
   AuthSignupRoute: AuthSignupRoute,
+  AuthVerifyEmailRoute: AuthVerifyEmailRoute,
+  AuthVerifyOtpRoute: AuthVerifyOtpRoute,
   AuthIndexRoute: AuthIndexRoute,
 };
 
@@ -160,6 +192,8 @@ export interface FileRoutesByFullPath {
   "/auth/login": typeof AuthLoginRoute;
   "/auth/logout": typeof AuthLogoutRoute;
   "/auth/signup": typeof AuthSignupRoute;
+  "/auth/verify-email": typeof AuthVerifyEmailRoute;
+  "/auth/verify-otp": typeof AuthVerifyOtpRoute;
   "/auth/": typeof AuthIndexRoute;
   "/apps/create": typeof AppsCreateIndexRoute;
 }
@@ -170,6 +204,8 @@ export interface FileRoutesByTo {
   "/auth/login": typeof AuthLoginRoute;
   "/auth/logout": typeof AuthLogoutRoute;
   "/auth/signup": typeof AuthSignupRoute;
+  "/auth/verify-email": typeof AuthVerifyEmailRoute;
+  "/auth/verify-otp": typeof AuthVerifyOtpRoute;
   "/auth": typeof AuthIndexRoute;
   "/apps/create": typeof AppsCreateIndexRoute;
 }
@@ -182,6 +218,8 @@ export interface FileRoutesById {
   "/auth/login": typeof AuthLoginRoute;
   "/auth/logout": typeof AuthLogoutRoute;
   "/auth/signup": typeof AuthSignupRoute;
+  "/auth/verify-email": typeof AuthVerifyEmailRoute;
+  "/auth/verify-otp": typeof AuthVerifyOtpRoute;
   "/auth/": typeof AuthIndexRoute;
   "/apps/create/": typeof AppsCreateIndexRoute;
 }
@@ -195,6 +233,8 @@ export interface FileRouteTypes {
     | "/auth/login"
     | "/auth/logout"
     | "/auth/signup"
+    | "/auth/verify-email"
+    | "/auth/verify-otp"
     | "/auth/"
     | "/apps/create";
   fileRoutesByTo: FileRoutesByTo;
@@ -204,6 +244,8 @@ export interface FileRouteTypes {
     | "/auth/login"
     | "/auth/logout"
     | "/auth/signup"
+    | "/auth/verify-email"
+    | "/auth/verify-otp"
     | "/auth"
     | "/apps/create";
   id:
@@ -214,6 +256,8 @@ export interface FileRouteTypes {
     | "/auth/login"
     | "/auth/logout"
     | "/auth/signup"
+    | "/auth/verify-email"
+    | "/auth/verify-otp"
     | "/auth/"
     | "/apps/create/";
   fileRoutesById: FileRoutesById;
@@ -258,6 +302,8 @@ export const routeTree = rootRoute
         "/auth/login",
         "/auth/logout",
         "/auth/signup",
+        "/auth/verify-email",
+        "/auth/verify-otp",
         "/auth/"
       ]
     },
@@ -274,6 +320,14 @@ export const routeTree = rootRoute
     },
     "/auth/signup": {
       "filePath": "auth/signup.tsx",
+      "parent": "/auth"
+    },
+    "/auth/verify-email": {
+      "filePath": "auth/verify-email.tsx",
+      "parent": "/auth"
+    },
+    "/auth/verify-otp": {
+      "filePath": "auth/verify-otp.tsx",
       "parent": "/auth"
     },
     "/auth/": {

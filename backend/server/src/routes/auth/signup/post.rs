@@ -65,10 +65,12 @@ pub async fn signup(
             username: data.username,
             picture: None,
             disabled: false,
-            verified: state.mailer.is_none(),
         },
+        email_verified: state.mailer.is_none(),
         verification_code,
         verification_code_created_at,
+        two_factor_enabled: false,
+        two_factor_secret: None,
     };
     let user_id = logic::users::create_user(&state.pool, &create_user).await?;
 

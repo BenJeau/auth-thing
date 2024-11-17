@@ -23,10 +23,12 @@ pub struct User {
     pub picture: Option<String>,
     /// Whether the user is enabled or not, if they are able to login/access the platform
     pub disabled: bool,
-    /// Whether the user has verified their email or not
-    pub verified: bool,
     /// Language and general location (locale) of the user
     pub preferred_locale: Option<String>,
+    /// Whether the user has verified their email address
+    pub email_verified: bool,
+    /// Whether two-factor authentication is enabled for this user
+    pub two_factor_enabled: bool,
 }
 
 #[derive(FromRow)]
@@ -51,13 +53,13 @@ pub struct ModifyUser {
     /// Whether the user is enabled or not, if they are able to login/access the platform
     #[serde(default)]
     pub disabled: bool,
-    /// Whether the user has verified their email or not
-    #[serde(default)]
-    pub verified: bool,
 }
 
 pub struct InnerModifyUser {
-    pub modify_user: ModifyUser,
+    pub email_verified: bool,
     pub verification_code: Option<String>,
     pub verification_code_created_at: Option<NaiveDateTime>,
+    pub two_factor_enabled: bool,
+    pub two_factor_secret: Option<String>,
+    pub modify_user: ModifyUser,
 }

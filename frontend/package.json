@@ -27,6 +27,7 @@
     "@tanstack/valibot-form-adapter": "^0.34.4",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "input-otp": "^1.4.1",
     "jotai": "^2.10.2",
     "lucide-react": "^0.456.0",
     "openapi-fetch": "^0.13.0",

@@ -45,5 +45,17 @@
   "login.subsection.documentation.title": "Documentation",
   "login.subsection.documentation.description": "En savoir plus sur la plateforme, l'API et comment l'intégrer dans votre application",
   "login.subsection.code.title": "Projet {name}",
-  "login.subsection.code.description": "Accédez au code source et contribuez au projet sur GitHub"
+  "login.subsection.code.description": "Accédez au code source et contribuez au projet sur GitHub",
+  "auth.verify.error.noToken": "Aucun jeton de vérification fourni",
+  "auth.verify.error.invalid": "Jeton de vérification invalide",
+  "auth.verify.success": "Courriel vérifié avec succès",
+  "auth.verify.verifying": "Vérification de votre courriel...",
+  "auth.verify.email.title": "Vérification du courriel",
+  "auth.verify.email.description": "Veuillez entrer le code de vérification qui a été envoyé à votre adresse courriel",
+  "auth.otp.error.invalid": "Code de vérification invalide",
+  "auth.otp.title": "Authentification à deux facteurs",
+  "auth.otp.description": "Veuillez entrer le code de vérification de votre application d'authentification",
+  "auth.otp.code": "Code de vérification",
+  "auth.otp.verifying": "Vérification...",
+  "auth.otp.verify": "Vérifier"
 }

@@ -6,21 +6,30 @@ pub type Result<T> = std::result::Result<T, Error>;
 
 #[derive(Debug, strum::Display)]
 pub enum Error {
+    // Generic errors
+    NotFound(String),
+    Forbidden,
+    Unauthorized(String),
+    // Database errors
     Database(database::Error),
     DatabaseMigration(database::MigrateError),
     Io(std::io::Error),
     AddrParse(std::net::AddrParseError),
-    NotFound(String),
+    // Crypto errors
     ChaCha(chacha20poly1305::Error),
     ChaChaSecretLength,
     Argon2PasswordHash(argon2::password_hash::Error),
+    // Auth/User errors
     DisabledUser,
     NotVerified,
     InvalidCredentials,
+    TotpDisabled,
+    TotpSecretNotFound,
+    TotpInvalid,
+    Totp(totp::Error),
+    // Other errors
     Jsonwebtoken(jsonwebtoken::errors::Error),
     SerdeJson(serde_json::Error),
-    Forbidden,
-    Unauthorized(String),
     MissingHeader(String),
     Email(email::Error),
 }
@@ -81,6 +90,12 @@ impl From<email::Error> for Error {
     }
 }
 
+impl From<totp::Error> for Error {
+    fn from(e: totp::Error) -> Self {
+        Self::Totp(e)
+    }
+}
+
 impl IntoResponse for Error {
     #[tracing::instrument(skip_all)]
     fn into_response(self) -> Response {
@@ -99,6 +114,13 @@ impl IntoResponse for Error {
                 (StatusCode::UNAUTHORIZED, "Your account is not verified").into_response()
             }
             Self::Forbidden => StatusCode::FORBIDDEN.into_response(),
+            Self::TotpInvalid => (StatusCode::BAD_REQUEST, "Invalid OTP provided").into_response(),
+            Self::TotpDisabled => {
+                (StatusCode::FORBIDDEN, "2FA is not enabled for this user").into_response()
+            }
+            Self::TotpSecretNotFound => {
+                (StatusCode::NOT_FOUND, "TOTP secret not found for user").into_response()
+            }
             Self::Database(database::Error::Database(err)) if err.code() == Some("2067".into()) => {
                 StatusCode::CONFLICT.into_response()
             }

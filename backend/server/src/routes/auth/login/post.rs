@@ -64,10 +64,6 @@ pub async fn login(
         return Err(Error::DisabledUser);
     }
 
-    if !user.user.verified {
-        return Err(Error::NotVerified);
-    }
-
     let action_log = models::action_logs::CreateActionLog {
         user_id: user.user.id,
         ip_address: addr.to_string(),
@@ -80,7 +76,7 @@ pub async fn login(
     let claims = CreateClaims {
         sub: user.user.id,
         email: user.user.email,
-        email_verified: Some(user.user.verified),
+        email_verified: Some(user.user.email_verified),
         name: user.user.name,
         given_name: None,
         family_name: None,

@@ -12,8 +12,8 @@ const Layout = () => {
   const user = useAtomValue(userAtom);
   useUpdateTheme();
 
-  if (user) {
-    return <Authenticated.Layout />;
+  if (user && user.emailVerified) {
+    return <Authenticated.Layout user={user} />;
   } else {
     return <Public.Layout />;
   }
