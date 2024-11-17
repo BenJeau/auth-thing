@@ -33,30 +33,35 @@ const UserAvatar = () => {
   }
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger className="absolute top-10 right-10 flex items-center gap-2">
-        <div className="flex flex-col text-right">
-          <span className="text-sm font-semibold">{user.name}</span>
-          <span className="text-xs">{user.email}</span>
-        </div>
-        <Avatar className="shadow-md select-none">
-          <AvatarFallback>{user.initials}</AvatarFallback>
-        </Avatar>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuLabel>Manage account</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          asChild
-          className="focus:bg-destructive focus:text-destructive-foreground text-destructive"
-        >
-          <Link to="/auth/logout" className="flex gap-2 items-center">
-            <DoorClosed size={16} />
-            <span>Logout</span>
-          </Link>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <AutoAnimate
+      slideIn
+      className="absolute top-5 right-4 lg:top-10 lg:right-10"
+    >
+      <DropdownMenu>
+        <DropdownMenuTrigger className="flex items-center gap-2">
+          <div className="flex flex-col text-right">
+            <span className="text-sm font-semibold">{user.name}</span>
+            <span className="text-xs">{user.email}</span>
+          </div>
+          <Avatar className="shadow-md select-none">
+            <AvatarFallback>{user.initials}</AvatarFallback>
+          </Avatar>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuLabel>Manage account</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            asChild
+            className="focus:bg-destructive focus:text-destructive-foreground text-destructive"
+          >
+            <Link to="/auth/logout" className="flex gap-2 items-center">
+              <DoorClosed size={16} />
+              <span>Logout</span>
+            </Link>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </AutoAnimate>
   );
 };
 
@@ -152,8 +157,7 @@ export const Authentication: React.FC<React.PropsWithChildren> = ({
           {config.name}
         </div>
       </div>
-      <div className="lg:relative lg:col-span-2 lg:p-8 relative h-full">
-        <UserAvatar />
+      <div className="lg:col-span-2 lg:p-8 lg:relative h-full">
         <AutoAnimate
           key={location.pathname}
           slideIn
@@ -161,6 +165,7 @@ export const Authentication: React.FC<React.PropsWithChildren> = ({
         >
           {children}
         </AutoAnimate>
+        <UserAvatar />
       </div>
       <div className="absolute bottom-0 left-4 right-4 mt-8 flex flex-wrap items-center justify-between gap-4 lg:hidden">
         <Layouts.Public.Footer />
