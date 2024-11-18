@@ -48,6 +48,7 @@ const SaveUserData: React.FC = () => {
         id: claims.sub,
         roles: claims.roles,
         initials: initials.toUpperCase(),
+        emailCodeCreatedAt: claims.email_code_created_at,
       });
 
       if (claims.email_verified) {

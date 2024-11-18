@@ -10,6 +10,7 @@ export interface User {
   token: string;
   initials: string;
   emailVerified: boolean;
+  emailCodeCreatedAt?: string;
 }
 
 export const userAtom = atomWithLocalStorage<User | undefined>(

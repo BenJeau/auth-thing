@@ -51,6 +51,17 @@ pub struct Frontend {
 }
 
 #[derive(Deserialize, Clone)]
+pub struct EmailAuth {
+    pub resend_min_seconds: u64,
+    pub code_length: usize,
+}
+
+#[derive(Deserialize, Clone)]
+pub struct Auth {
+    pub email: EmailAuth,
+}
+
+#[derive(Deserialize, Clone)]
 pub struct Config {
     pub database: Database,
     pub server: Server,
@@ -60,6 +71,7 @@ pub struct Config {
     pub email: Option<Email>,
     #[serde(default)]
     pub frontend: Frontend,
+    pub auth: Auth,
 }
 
 impl Config {

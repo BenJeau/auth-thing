@@ -4,10 +4,6 @@ use crate::ServerState;
 
 mod post;
 
-mod resend;
-
 pub fn router() -> OpenApiRouter<ServerState> {
-    OpenApiRouter::new()
-        .routes(routes!(post::verify_email))
-        .nest("/resend", resend::router())
+    OpenApiRouter::new().routes(routes!(post::resend_verification_code))
 }

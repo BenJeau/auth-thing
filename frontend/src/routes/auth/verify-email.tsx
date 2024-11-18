@@ -2,10 +2,12 @@ import { useAtom } from "jotai";
 import { createFileRoute, Navigate, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 
+import { Button } from "@/components/ui/button";
 import { userAtom } from "@/atoms/auth";
 import { api } from "@/api";
 import { Trans, Forms } from "@/components";
 import { useTranslation } from "@/i18n";
+import { useResendTimer } from "@/hooks/use-resend-timer";
 
 const VerifyEmail = () => {
   const [user, setUser] = useAtom(userAtom);
@@ -19,6 +21,15 @@ const VerifyEmail = () => {
   const verifyEmailMutation = api.useMutation(
     "post",
     "/auth/applications/{slug}/verify/email"
+  );
+
+  const resendMutation = api.useMutation(
+    "post",
+    "/auth/applications/{slug}/verify/email/resend"
+  );
+
+  const { canResend, timeLeft, setCanResend } = useResendTimer(
+    user?.emailCodeCreatedAt
   );
 
   const handleSubmit = async (
@@ -41,7 +52,18 @@ const VerifyEmail = () => {
     return true;
   };
 
-  console.log("verify page - verified?", user?.emailVerified);
+  const handleResend = async () => {
+    try {
+      await resendMutation.mutateAsync({
+        params: { path: { slug: "example" } },
+      });
+      toast.success(t("auth.verify.resend.success"));
+      setCanResend(false);
+    } catch {
+      toast.error(t("auth.verify.resend.error"), { id: "resend-error" });
+    }
+  };
+
   if (user?.emailVerified) {
     return <Navigate to={next ?? "/"} />;
   }
@@ -52,7 +74,7 @@ const VerifyEmail = () => {
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight">
           <Trans id="auth.verify.email.title" />
         </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
+        <p className="mt-2 text-center text-sm">
           <Trans id="auth.verify.email.description" />
         </p>
 
@@ -63,6 +85,22 @@ const VerifyEmail = () => {
             loading={verifyEmailMutation.isPending}
             withSeparator={false}
           />
+
+          <div className="mt-4 text-center">
+            {canResend ? (
+              <Button
+                variant="link"
+                onClick={handleResend}
+                disabled={resendMutation.isPending}
+              >
+                <Trans id="auth.verify.resend.button" />
+              </Button>
+            ) : timeLeft > 0 ? (
+              <p className="text-sm text-gray-500">
+                <Trans id="auth.verify.resend.countdown" seconds={timeLeft} />
+              </p>
+            ) : null}
+          </div>
         </div>
       </div>
     </div>

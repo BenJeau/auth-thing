@@ -57,5 +57,9 @@
   "auth.otp.description": "Please enter the verification code from your authenticator app",
   "auth.otp.code": "Verification Code",
   "auth.otp.verifying": "Verifying...",
-  "auth.otp.verify": "Verify"
+  "auth.otp.verify": "Verify",
+  "auth.verify.resend.button": "Resend verification code",
+  "auth.verify.resend.countdown": "You can request a new code in {seconds} seconds",
+  "auth.verify.resend.success": "New verification code sent",
+  "auth.verify.resend.error": "Failed to send new verification code"
 }

@@ -10,6 +10,7 @@ pub enum Error {
     NotFound(String),
     Forbidden,
     Unauthorized(String),
+    TooManyRequests,
     // Database errors
     Database(database::Error),
     DatabaseMigration(database::MigrateError),
@@ -22,7 +23,9 @@ pub enum Error {
     // Auth/User errors
     DisabledUser,
     NotVerified,
+    AlreadyVerified,
     InvalidCredentials,
+    MailerNotConfigured,
     TotpDisabled,
     TotpSecretNotFound,
     TotpInvalid,
@@ -103,7 +106,9 @@ impl IntoResponse for Error {
 
         match self {
             Self::Database(database::Error::RowNotFound) => StatusCode::NOT_FOUND.into_response(),
+            Self::TooManyRequests => StatusCode::TOO_MANY_REQUESTS.into_response(),
             Self::NotFound(message) => (StatusCode::NOT_FOUND, message).into_response(),
+            Self::AlreadyVerified => StatusCode::BAD_REQUEST.into_response(),
             Self::InvalidCredentials => {
                 (StatusCode::UNAUTHORIZED, "Invalid credentials").into_response()
             }

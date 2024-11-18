@@ -1,3 +1,4 @@
+use chrono::NaiveDateTime;
 use jsonwebtoken::{Algorithm, DecodingKey, EncodingKey, Validation};
 use serde::{Deserialize, Serialize};
 
@@ -78,6 +79,8 @@ pub struct CreateClaims {
     pub roles: Vec<String>,
     /// Provider of the user
     pub provider: String,
+    /// Time when the verification code was created
+    pub email_code_created_at: Option<NaiveDateTime>,
 }
 
 #[derive(Serialize, Deserialize)]

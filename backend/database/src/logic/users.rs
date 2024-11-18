@@ -3,7 +3,7 @@ use chrono::NaiveDateTime;
 use sqlx::{Result, SqlitePool};
 
 pub async fn get_user(pool: &SqlitePool, id: i64) -> Result<Option<User>> {
-    sqlx::query_as!(User, "SELECT id, created_at, updated_at, email, name, username, picture, disabled, email_verified, two_factor_enabled, preferred_locale FROM users WHERE id = ?", id)
+    sqlx::query_as!(User, "SELECT id, created_at, updated_at, email, name, username, picture, disabled, email_verified, two_factor_enabled, preferred_locale, verification_code_created_at FROM users WHERE id = ?", id)
         .fetch_optional(pool)
         .await
 }
@@ -14,7 +14,7 @@ pub async fn get_user_from_email_with_latest_password(
     application_id: i64,
 ) -> Result<Option<UserWithLatestPassword>> {
     sqlx::query_as(
-        "SELECT users.id, users.created_at, users.updated_at, users.email, users.name, users.username, users.picture, users.disabled, users.email_verified, users.two_factor_enabled, users.preferred_locale, password FROM users INNER JOIN application_passwords ON users.id = application_passwords.user_id INNER JOIN applications ON applications.id = ? WHERE users.email = ? ORDER BY users.created_at DESC"
+        "SELECT users.id, users.created_at, users.updated_at, users.email, users.name, users.username, users.picture, users.disabled, users.email_verified, users.two_factor_enabled, users.preferred_locale, users.verification_code_created_at, password FROM users INNER JOIN application_passwords ON users.id = application_passwords.user_id INNER JOIN applications ON applications.id = ? WHERE users.email = ? ORDER BY users.created_at DESC"
     )
     .bind(application_id)
     .bind(email)
@@ -23,13 +23,13 @@ pub async fn get_user_from_email_with_latest_password(
 }
 
 pub async fn get_user_from_email(pool: &SqlitePool, email: &str) -> Result<Option<User>> {
-    sqlx::query_as!(User, "SELECT id, created_at, updated_at, email, name, username, picture, disabled, email_verified, two_factor_enabled, preferred_locale FROM users WHERE email = ?", email)
+    sqlx::query_as!(User, "SELECT id, created_at, updated_at, email, name, username, picture, disabled, email_verified, two_factor_enabled, preferred_locale, verification_code_created_at FROM users WHERE email = ?", email)
         .fetch_optional(pool)
         .await
 }
 
 pub async fn get_users(pool: &SqlitePool) -> Result<Vec<User>> {
-    sqlx::query_as!(User, "SELECT id, created_at, updated_at, email, name, username, picture, disabled, email_verified, two_factor_enabled, preferred_locale FROM users")
+    sqlx::query_as!(User, "SELECT id, created_at, updated_at, email, name, username, picture, disabled, email_verified, two_factor_enabled, preferred_locale, verification_code_created_at FROM users")
         .fetch_all(pool)
         .await
 }
@@ -40,7 +40,7 @@ pub async fn get_users_by_application_id(
 ) -> Result<Vec<User>> {
     sqlx::query_as!(
         User,
-        "SELECT users.id, users.created_at, users.updated_at, users.email, users.name, users.username, users.picture, users.disabled, users.email_verified, users.two_factor_enabled, users.preferred_locale FROM users INNER JOIN users_roles ON users.id = users_roles.user_id INNER JOIN roles ON users_roles.role_id = roles.id WHERE roles.application_id = ?",
+        "SELECT users.id, users.created_at, users.updated_at, users.email, users.name, users.username, users.picture, users.disabled, users.email_verified, users.two_factor_enabled, users.preferred_locale, users.verification_code_created_at FROM users INNER JOIN users_roles ON users.id = users_roles.user_id INNER JOIN roles ON users_roles.role_id = roles.id WHERE roles.application_id = ?",
         application_id
     )
     .fetch_all(pool)
@@ -83,7 +83,7 @@ pub async fn update_user(pool: &SqlitePool, id: i64, user: ModifyUser) -> Result
 pub async fn update_user_verification_code(
     pool: &SqlitePool,
     id: i64,
-    verification_code: String,
+    verification_code: &str,
     verification_code_created_at: NaiveDateTime,
 ) -> Result<u64> {
     sqlx::query!(

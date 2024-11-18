@@ -110,6 +110,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/auth/applications/{slug}/verify/email/resend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Resend email verification code */
+        post: operations["resend_verification_code"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/auth/applications/{slug}/verify/otp": {
         parameters: {
             query?: never;
@@ -400,6 +417,10 @@ export interface components {
             /** @description The password of the user to authenticate */
             password: string;
         };
+        SuccessResponse: {
+            success: boolean;
+            message?: string | null;
+        };
         /** @description A user of the platform */
         User: {
             /**
@@ -433,6 +454,11 @@ export interface components {
             emailVerified: boolean;
             /** @description Whether two-factor authentication is enabled for this user */
             twoFactorEnabled: boolean;
+            /**
+             * Format: date-time
+             * @description Time when the verification code was created
+             */
+            verificationCodeCreatedAt?: string | null;
         };
         VerifyEmailResponse: {
             success: boolean;
@@ -709,6 +735,49 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["VerifyEmailResponse"];
                 };
+            };
+        };
+    };
+    resend_verification_code: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Application slug */
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessResponse"];
+                };
+            };
+            /** @description User already verified */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Too many requests - must wait before requesting new code */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Email service not configured */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

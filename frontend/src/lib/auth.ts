@@ -19,6 +19,7 @@ type Claims = {
   locale?: string;
   roles: string[];
   provider: string;
+  email_code_created_at?: string;
 };
 
 export type BeforeLoadFn = (

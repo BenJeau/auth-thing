@@ -57,5 +57,9 @@
   "auth.otp.description": "Veuillez entrer le code de vérification de votre application d'authentification",
   "auth.otp.code": "Code de vérification",
   "auth.otp.verifying": "Vérification...",
-  "auth.otp.verify": "Vérifier"
+  "auth.otp.verify": "Vérifier",
+  "auth.verify.resend.button": "Renvoyer le code de vérification",
+  "auth.verify.resend.countdown": "Vous pourrez demander un nouveau code dans {seconds} secondes",
+  "auth.verify.resend.success": "Nouveau code de vérification envoyé",
+  "auth.verify.resend.error": "Échec de l'envoi du nouveau code de vérification"
 }

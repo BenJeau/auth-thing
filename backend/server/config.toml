@@ -15,3 +15,7 @@ audience = "http://localhost:5173"
 expiration = 3600
 issuer = "http://localhost:3456"
 secret = "totally_super_secure_encrypted_password"
+
+[auth.email]
+code_length = 8
+resend_min_seconds = 60

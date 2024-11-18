@@ -77,6 +77,7 @@ pub async fn login(
         sub: user.user.id,
         email: user.user.email,
         email_verified: Some(user.user.email_verified),
+        email_code_created_at: user.user.verification_code_created_at,
         name: user.user.name,
         given_name: None,
         family_name: None,

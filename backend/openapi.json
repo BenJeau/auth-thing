@@ -336,6 +336,47 @@
         }
       }
     },
+    "/auth/applications/{slug}/verify/email/resend": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Resend email verification code",
+        "operationId": "resend_verification_code",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "description": "Application slug",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User already verified"
+          },
+          "429": {
+            "description": "Too many requests - must wait before requesting new code"
+          },
+          "500": {
+            "description": "Email service not configured"
+          }
+        }
+      }
+    },
     "/auth/applications/{slug}/verify/otp": {
       "post": {
         "tags": [
@@ -1213,6 +1254,23 @@
           }
         }
       },
+      "SuccessResponse": {
+        "type": "object",
+        "required": [
+          "success"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
       "User": {
         "type": "object",
         "description": "A user of the platform",
@@ -1284,6 +1342,14 @@
           "twoFactorEnabled": {
             "type": "boolean",
             "description": "Whether two-factor authentication is enabled for this user"
+          },
+          "verificationCodeCreatedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "Time when the verification code was created"
           }
         }
       },

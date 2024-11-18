@@ -47,7 +47,9 @@ pub async fn signup(
     };
 
     let (verification_code, hashed_verification_code) = if state.mailer.is_some() {
-        let code = state.crypto.generate_random_numeric_string(8);
+        let code = state
+            .crypto
+            .generate_random_numeric_string(state.config.auth.email.code_length);
         let hashed_code = hash_password(&code)?;
         (Some(code), Some(hashed_code))
     } else {

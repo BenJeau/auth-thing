@@ -29,6 +29,8 @@ pub struct User {
     pub email_verified: bool,
     /// Whether two-factor authentication is enabled for this user
     pub two_factor_enabled: bool,
+    /// Time when the verification code was created
+    pub verification_code_created_at: Option<NaiveDateTime>,
 }
 
 #[derive(FromRow)]

@@ -1,7 +1,7 @@
-INSERT INTO users (id, email, name, email_verified, verification_code)
+INSERT INTO users (id, email, name, email_verified, verification_code, verification_code_created_at)
 VALUES
-  ('1', 'admin@admin.com', 'John Doe', true, null),
-  ('2', 'user@user.com', 'Jane Doe', false, '$argon2id$v=19$m=19456,t=2,p=1$ylgx6jpeHPpbgGaq0UT/AQ$/NVMxZXJX6O+SFNZEt78i5FJYlvX2i7yElOvx4aRdwo'); --- Code: 12345678
+  ('1', 'admin@admin.com', 'John Doe', true, null, null),
+  ('2', 'user@user.com', 'Jane Doe', false, '$argon2id$v=19$m=19456,t=2,p=1$ylgx6jpeHPpbgGaq0UT/AQ$/NVMxZXJX6O+SFNZEt78i5FJYlvX2i7yElOvx4aRdwo', DATETIME('now')); --- Code: 12345678
 
 INSERT INTO applications (id, slug, name, description, website, creator_id)
 VALUES
