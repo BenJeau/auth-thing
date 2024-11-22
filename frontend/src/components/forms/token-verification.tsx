@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Loader } from "lucide-react";
 import { useForm } from "@tanstack/react-form";
 import * as v from "valibot";
@@ -10,7 +11,6 @@ import {
   InputOTPSeparator,
 } from "@/components/ui/input-otp";
 import { AutoAnimate, Form, Trans } from "@/components";
-import { useState } from "react";
 
 const formSchema = v.object({
   token: v.pipe(v.string(), v.length(8)),
@@ -63,45 +63,55 @@ const TokenVerification: React.FC<Props> = ({
         e.stopPropagation();
         form.handleSubmit();
       }}
-      className="flex h-full flex-col items-center gap-4 relative"
     >
       <form.Field name="token">
         {(field) => (
-          <div className="grid gap-2">
-            <InputOTP
-              maxLength={8}
-              disabled={loading}
-              value={field.state.value}
-              className={loading ? "opacity-50" : ""}
-              onChange={(value) => {
-                field.handleChange(value);
-                if (isWrongCode) {
-                  setIsWrongCode(false);
-                }
-                if (value.length === 8) {
-                  form.handleSubmit();
-                }
-              }}
-            >
-              <InputOTPGroup>
-                <InputOTPSlot index={0} />
-                <InputOTPSlot index={1} />
-                <InputOTPSlot index={2} />
-                <InputOTPSlot index={3} />
-                {!withSeparator && secondSetOfSlots}
-              </InputOTPGroup>
-              {withSeparator && (
-                <>
-                  <InputOTPSeparator />
-                  <InputOTPGroup>{secondSetOfSlots}</InputOTPGroup>
-                </>
+          <div className="flex flex-col items-center gap-2">
+            <div className="relative">
+              <InputOTP
+                maxLength={8}
+                disabled={loading}
+                value={field.state.value}
+                onChange={(value) => {
+                  field.handleChange(value);
+                  if (isWrongCode) {
+                    setIsWrongCode(false);
+                  }
+                  if (value.length === 8) {
+                    form.handleSubmit();
+                  }
+                }}
+              >
+                <InputOTPGroup>
+                  <InputOTPSlot index={0} />
+                  <InputOTPSlot index={1} />
+                  <InputOTPSlot index={2} />
+                  <InputOTPSlot index={3} />
+                  {!withSeparator && secondSetOfSlots}
+                </InputOTPGroup>
+                {withSeparator && (
+                  <>
+                    <InputOTPSeparator />
+                    <InputOTPGroup>{secondSetOfSlots}</InputOTPGroup>
+                  </>
+                )}
+              </InputOTP>
+              {loading && (
+                <AutoAnimate className="flex items-center gap-2 text-sm font-semibold absolute top-0 left-0 right-0 bottom-0 backdrop-blur-sm -m-4 justify-center">
+                  <Loader
+                    size={20}
+                    strokeWidth={2.5}
+                    className="animate-spin"
+                  />
+                  <Trans id="auth.verify.verifying" />
+                </AutoAnimate>
               )}
-            </InputOTP>
+            </div>
             <Form.FieldErrors
               field={{
                 state: {
                   meta: {
-                    errors: isWrongCode ? ["Wrong verification code"] : [],
+                    errors: isWrongCode ? ["Wrong verification code"] : [""],
                   },
                 },
               }}
@@ -109,12 +119,6 @@ const TokenVerification: React.FC<Props> = ({
           </div>
         )}
       </form.Field>
-      {loading && (
-        <AutoAnimate className="flex items-center gap-2 absolute top-0 left-0 right-0 bottom-0 backdrop-blur-sm -m-4">
-          <Loader size={16} className="animate-spin" />
-          <Trans id="auth.verify.verifying" />
-        </AutoAnimate>
-      )}
     </form>
   );
 };

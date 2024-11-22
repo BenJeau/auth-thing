@@ -8,7 +8,7 @@ export const FieldErrors: React.FC<{
   }
 
   return (
-    <p className="text-sm text-destructive">
+    <p className="text-sm text-destructive min-h-[20px]">
       {field.state.meta.errors.join(", ")}
     </p>
   );

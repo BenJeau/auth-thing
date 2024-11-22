@@ -9,7 +9,7 @@ import { Trans, Forms } from "@/components";
 import { useTranslation } from "@/i18n";
 import { useResendTimer } from "@/hooks/use-resend-timer";
 
-const VerifyEmail = () => {
+const VerifyEmail: React.FC = () => {
   const [user, setUser] = useAtom(userAtom);
   const navigate = useNavigate();
   const { t } = useTranslation();
