@@ -3,9 +3,10 @@ use axum::{
     response::IntoResponse,
     Json,
 };
-use database::logic;
+use database::{logic, models::providers::MinimalProviderInfo};
 use password::PasswordRequirementsBuilder;
 use serde::Serialize;
+use tokio::join;
 use utoipa::ToSchema;
 
 use crate::{Error, Result, ServerState};
@@ -16,7 +17,7 @@ pub struct AuthConfigResponse {
     password: PasswordConfig,
     api_token: ApiTokenConfig,
     basic: BasicConfig,
-    providers: Vec<ProviderConfig>,
+    providers: Vec<MinimalProviderInfo>,
 }
 
 #[derive(Serialize, ToSchema)]
@@ -39,15 +40,6 @@ pub struct BasicConfig {
     enabled: bool,
 }
 
-#[derive(Serialize, ToSchema)]
-#[serde(rename_all = "camelCase")]
-pub struct ProviderConfig {
-    id: String,
-    name: String,
-    icon: String,
-    auth_url: String,
-}
-
 /// Get authentication configuration for an application
 #[utoipa::path(
     get,
@@ -62,9 +54,16 @@ pub async fn auth_config(
     State(state): State<ServerState>,
     Path(application_slug): Path<String>,
 ) -> Result<impl IntoResponse> {
-    let app = logic::applications::get_application_from_slug(&state.pool, &application_slug)
-        .await?
-        .ok_or(Error::NotFound("Application not found".to_string()))?;
+    let (app, providers) = join!(
+        logic::applications::get_application_from_slug(&state.pool, &application_slug),
+        logic::applications::get_application_providers_by_slug(&state.pool, &application_slug),
+    );
+
+    let app = app?.ok_or(Error::NotFound("Application not found".to_string()))?;
+    let providers = providers?
+        .into_iter()
+        .map(MinimalProviderInfo::from)
+        .collect();
 
     Ok(Json(AuthConfigResponse {
         password: PasswordConfig {
@@ -80,6 +79,6 @@ pub async fn auth_config(
         basic: BasicConfig {
             enabled: app.basic_auth_enabled,
         },
-        providers: vec![],
+        providers,
     }))
 }

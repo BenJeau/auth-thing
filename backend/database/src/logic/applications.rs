@@ -1,5 +1,8 @@
 use crate::{
-    models::applications::{Application, ModifyApplication},
+    models::{
+        applications::{Application, ModifyApplication},
+        providers::Provider,
+    },
     slug::slugify,
 };
 use sqlx::{Result, SqlitePool};
@@ -94,4 +97,17 @@ pub async fn create_application_password(
     .execute(pool)
     .await
     .map(|row| row.rows_affected())
+}
+
+pub async fn get_application_providers_by_slug(
+    pool: &SqlitePool,
+    application_slug: &str,
+) -> Result<Vec<Provider>> {
+    sqlx::query_as!(
+        Provider,
+        "SELECT providers.* FROM application_providers JOIN providers ON application_providers.provider_id = providers.id WHERE application_providers.application_id = (SELECT id FROM applications WHERE slug = ?)",
+        application_slug
+    )
+    .fetch_all(pool)
+    .await
 }

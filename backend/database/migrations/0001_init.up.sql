@@ -92,6 +92,7 @@ CREATE TABLE providers (
     client_id TEXT NOT NULL,
     client_secret TEXT NOT NULL,
     redirect_uri TEXT NOT NULL,
+    auth_url TEXT NOT NULL,
     UNIQUE (name, kind)
 );
 
