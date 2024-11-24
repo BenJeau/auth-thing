@@ -33,7 +33,8 @@ CREATE TABLE applications (
     password_min_number INTEGER DEFAULT 0 NOT NULL,
     password_min_special INTEGER DEFAULT 0 NOT NULL,
     password_unique BOOLEAN DEFAULT FALSE NOT NULL,
-    password_min_strength TEXT,
+    password_min_strength TEXT NOT NULL DEFAULT 'weak'
+        CHECK (password_min_strength IN ('weak', 'medium', 'strong')),
     verification_required BOOLEAN DEFAULT FALSE NOT NULL,
     verification_method TEXT,
     verification_code TEXT,
