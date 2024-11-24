@@ -8,7 +8,6 @@ name = "gen-openapi"
 path = "./src/gen_openapi.rs"
 
 [dependencies]
-argon2 = { workspace = true }
 axum = { workspace = true }
 axum-extra = { workspace = true }
 base64 = { workspace = true }
@@ -35,4 +34,5 @@ utoipa-axum = { workspace = true }
 
 database = { path = "../database" }
 email = { path = "../email" }
+password = { path = "../password" }
 totp = { path = "../totp" }

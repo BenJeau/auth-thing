@@ -4,10 +4,11 @@ use axum::{
     Json,
 };
 use database::{logic, models::users::User};
+use password::verify_password;
 use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
 
-use crate::{crypto::verify_password, error::Result, ServerState};
+use crate::{error::Result, ServerState};
 
 #[derive(Debug, Deserialize)]
 pub struct VerifyEmailRequest {

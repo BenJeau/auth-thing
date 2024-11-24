@@ -5,10 +5,10 @@ use axum::{
 };
 use axum_extra::{headers::UserAgent, TypedHeader};
 use database::{logic, models};
+use password::verify_password;
 use std::net::SocketAddr;
 
 use crate::{
-    crypto::verify_password,
     jwt::CreateClaims,
     schemas::{LoginUserRequest, LoginUserResponse},
     Error, Result, ServerState,

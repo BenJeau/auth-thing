@@ -5,11 +5,12 @@ use axum::{
 };
 use chrono::{Duration, Utc};
 use database::{logic, models::users::User};
+use password::hash_password;
 use serde::Serialize;
 use tokio::join;
 use utoipa::ToSchema;
 
-use crate::{crypto::hash_password, emails::send_verification_email, Error, ServerState};
+use crate::{emails::send_verification_email, Error, ServerState};
 
 #[derive(Debug, Serialize, ToSchema)]
 pub struct SuccessResponse {

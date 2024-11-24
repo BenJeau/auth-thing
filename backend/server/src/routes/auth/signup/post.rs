@@ -8,11 +8,12 @@ use axum::{
 use axum_extra::{headers::UserAgent, TypedHeader};
 use database::{logic, models};
 use http::StatusCode;
+use password::hash_password;
 use std::net::SocketAddr;
 use tokio::join;
 use tracing::warn;
 
-use crate::{crypto::hash_password, schemas::SignupUserRequest, Error, Result, ServerState};
+use crate::{schemas::SignupUserRequest, Error, Result, ServerState};
 
 /// Signup to create a new user
 #[utoipa::path(

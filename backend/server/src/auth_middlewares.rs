@@ -12,10 +12,11 @@ use axum_extra::{
 };
 use database::{logic, models};
 use http::HeaderValue;
+use password::verify_password;
 use std::net::SocketAddr;
 use tracing::Span;
 
-use crate::{crypto::verify_password, Error, Result, ServerState};
+use crate::{Error, Result, ServerState};
 
 #[derive(Clone, PartialEq, Debug)]
 pub struct Token(String);

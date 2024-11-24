@@ -19,7 +19,7 @@ pub enum Error {
     // Crypto errors
     ChaCha(chacha20poly1305::Error),
     ChaChaSecretLength,
-    Argon2PasswordHash(argon2::password_hash::Error),
+    PasswordHash(password::PasswordHashError),
     // Auth/User errors
     DisabledUser,
     NotVerified,
@@ -69,9 +69,9 @@ impl From<chacha20poly1305::Error> for Error {
     }
 }
 
-impl From<argon2::password_hash::Error> for Error {
-    fn from(e: argon2::password_hash::Error) -> Self {
-        Self::Argon2PasswordHash(e)
+impl From<password::PasswordHashError> for Error {
+    fn from(e: password::PasswordHashError) -> Self {
+        Self::PasswordHash(e)
     }
 }
 
