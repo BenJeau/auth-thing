@@ -141,9 +141,6 @@ impl IntoResponse for Error {
             Self::TotpSecretNotFound => {
                 (StatusCode::NOT_FOUND, "TOTP secret not found for user").into_response()
             }
-            Self::Database(database::Error::Database(err)) if err.code() == Some("2067".into()) => {
-                StatusCode::CONFLICT.into_response()
-            }
             Self::Unauthorized(_) => StatusCode::UNAUTHORIZED.into_response(),
             Self::MissingHeader(header) => {
                 (StatusCode::BAD_REQUEST, format!("Missing header: {header}")).into_response()
