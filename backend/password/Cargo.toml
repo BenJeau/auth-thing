@@ -1,0 +1,9 @@
+[package]
+edition = "2021"
+name = "password"
+version = "0.1.0"
+
+[dependencies]
+argon2 = { workspace = true }
+tracing = { workspace = true }
+zxcvbn = { workspace = true }
