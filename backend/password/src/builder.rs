@@ -4,6 +4,7 @@ use crate::requirements::{PasswordRequirements, PasswordStrength};
 
 pub struct PasswordRequirementsBuilder(PasswordRequirements);
 
+#[derive(Debug)]
 pub enum PasswordRequirementsBuilderError {
     MinGreaterThanMax,
     SumOfMinRequirementsGreaterThanMinLength,

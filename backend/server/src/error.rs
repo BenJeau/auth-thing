@@ -30,6 +30,9 @@ pub enum Error {
     TotpSecretNotFound,
     TotpInvalid,
     Totp(totp::Error),
+    // Password errors
+    PasswordRequirements(password::PasswordRequirementsBuilderError),
+    PasswordValidation(Vec<password::PasswordError>),
     // Other errors
     Jsonwebtoken(jsonwebtoken::errors::Error),
     SerdeJson(serde_json::Error),
@@ -99,6 +102,18 @@ impl From<totp::Error> for Error {
     }
 }
 
+impl From<password::PasswordRequirementsBuilderError> for Error {
+    fn from(e: password::PasswordRequirementsBuilderError) -> Self {
+        Self::PasswordRequirements(e)
+    }
+}
+
+impl From<Vec<password::PasswordError>> for Error {
+    fn from(e: Vec<password::PasswordError>) -> Self {
+        Self::PasswordValidation(e)
+    }
+}
+
 impl IntoResponse for Error {
     #[tracing::instrument(skip_all)]
     fn into_response(self) -> Response {
@@ -132,6 +147,9 @@ impl IntoResponse for Error {
             Self::Unauthorized(_) => StatusCode::UNAUTHORIZED.into_response(),
             Self::MissingHeader(header) => {
                 (StatusCode::BAD_REQUEST, format!("Missing header: {header}")).into_response()
+            }
+            Self::PasswordValidation(requirements) => {
+                (StatusCode::BAD_REQUEST, format!("{requirements:?}")).into_response()
             }
             _ => StatusCode::INTERNAL_SERVER_ERROR.into_response(),
         }

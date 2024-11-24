@@ -8,7 +8,7 @@ use axum::{
 use axum_extra::{headers::UserAgent, TypedHeader};
 use database::{logic, models};
 use http::StatusCode;
-use password::hash_password;
+use password::{hash_password, PasswordRequirementsBuilder};
 use std::net::SocketAddr;
 use tokio::join;
 use tracing::warn;
@@ -41,11 +41,28 @@ pub async fn signup(
     Path(application_slug): Path<String>,
     Json(data): Json<SignupUserRequest>,
 ) -> Result<impl IntoResponse> {
-    let Some(application_id) =
-        logic::applications::get_application_id(&state.pool, &application_slug).await?
+    let Some(application_data) =
+        logic::applications::get_application_id_with_password_requirements(
+            &state.pool,
+            &application_slug,
+        )
+        .await?
     else {
         return Err(Error::NotFound("Application not found".to_string()));
     };
+
+    let validator = PasswordRequirementsBuilder::from(&application_data).build()?;
+
+    let previous_passwords = if application_data.password_unique {
+        logic::users::get_user_passwords(&state.pool, &data.email).await?
+    } else {
+        vec![]
+    };
+
+    let validation_errors = validator.validate(&data.password, &previous_passwords);
+    if !validation_errors.is_empty() {
+        return Err(Error::PasswordValidation(validation_errors));
+    }
 
     let (verification_code, hashed_verification_code) = if state.mailer.is_some() {
         let code = state
@@ -107,7 +124,7 @@ pub async fn signup(
         logic::action_logs::create_action_log(&state.pool, action_log),
         logic::applications::create_application_password(
             &state.pool,
-            application_id,
+            application_data.id,
             user_id,
             hash_password(&data.password)?,
         )

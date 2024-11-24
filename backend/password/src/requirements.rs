@@ -1,4 +1,4 @@
-use tracing::instrument;
+use tracing::{instrument, warn};
 
 use crate::validator::PasswordValidator;
 
@@ -33,6 +33,20 @@ pub enum PasswordStrength {
     Weak,
     Medium,
     Strong,
+}
+
+impl From<&str> for PasswordStrength {
+    fn from(strength: &str) -> Self {
+        match strength {
+            "weak" => PasswordStrength::Weak,
+            "medium" => PasswordStrength::Medium,
+            "strong" => PasswordStrength::Strong,
+            _ => {
+                warn!("Invalid password strength: {}", strength);
+                PasswordStrength::Weak
+            }
+        }
+    }
 }
 
 impl From<zxcvbn::Score> for PasswordStrength {

@@ -17,13 +17,13 @@ pub struct Application {
     pub icon: Option<String>,
     pub password_auth: bool,
     pub password_min_length: i64,
-    pub password_max_length: Option<i64>,
+    pub password_max_length: i64,
     pub password_min_lowercase: i64,
     pub password_min_uppercase: i64,
     pub password_min_number: i64,
     pub password_min_special: i64,
     pub password_unique: bool,
-    pub password_min_strength: Option<String>,
+    pub password_min_strength: String,
     pub verification_required: bool,
     pub verification_method: Option<String>,
     pub verification_code: Option<String>,
@@ -35,4 +35,31 @@ pub struct ModifyApplication {
     pub description: Option<String>,
     pub website: Option<String>,
     pub icon: Option<String>,
+}
+
+#[derive(Debug)]
+pub struct PasswordRequirements {
+    pub id: i64,
+    pub password_min_length: i64,
+    pub password_max_length: i64,
+    pub password_min_lowercase: i64,
+    pub password_min_uppercase: i64,
+    pub password_min_number: i64,
+    pub password_min_special: i64,
+    pub password_unique: bool,
+    pub password_min_strength: String,
+}
+
+impl From<&PasswordRequirements> for password::PasswordRequirementsBuilder {
+    fn from(value: &PasswordRequirements) -> Self {
+        password::PasswordRequirementsBuilder::new()
+            .min(value.password_min_length.max(0) as usize)
+            .max(value.password_max_length.max(0) as usize)
+            .min_lowercase(value.password_min_lowercase.max(0) as usize)
+            .min_uppercase(value.password_min_uppercase.max(0) as usize)
+            .min_number(value.password_min_number.max(0) as usize)
+            .min_special(value.password_min_special.max(0) as usize)
+            .unique(value.password_unique)
+            .min_strength(value.password_min_strength.as_str().into())
+    }
 }

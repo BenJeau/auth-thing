@@ -514,6 +514,7 @@ name = "database"
 version = "0.1.0"
 dependencies = [
  "chrono",
+ "password",
  "regex",
  "serde",
  "sqlx",

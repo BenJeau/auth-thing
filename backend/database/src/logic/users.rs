@@ -118,3 +118,12 @@ pub async fn set_email_verified(pool: &SqlitePool, user_id: i64) -> Result<u64> 
     .await
     .map(|row| row.rows_affected())
 }
+
+pub async fn get_user_passwords(pool: &SqlitePool, email: &str) -> Result<Vec<String>> {
+    sqlx::query_scalar!(
+        "SELECT password FROM application_passwords WHERE user_id = ?",
+        email
+    )
+    .fetch_all(pool)
+    .await
+}
