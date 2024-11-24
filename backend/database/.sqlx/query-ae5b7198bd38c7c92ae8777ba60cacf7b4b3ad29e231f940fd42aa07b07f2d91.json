@@ -1,6 +1,6 @@
 {
   "db_name": "SQLite",
-  "query": "SELECT id, created_at, updated_at, email, name, username, picture, disabled, email_verified, two_factor_enabled, preferred_locale FROM users WHERE id = ?",
+  "query": "SELECT id, created_at, updated_at, email, name, username, picture, disabled, email_verified, two_factor_enabled, preferred_locale, verification_code_created_at FROM users WHERE email = ?",
   "describe": {
     "columns": [
       {
@@ -57,6 +57,11 @@
         "name": "preferred_locale",
         "ordinal": 10,
         "type_info": "Text"
+      },
+      {
+        "name": "verification_code_created_at",
+        "ordinal": 11,
+        "type_info": "Datetime"
       }
     ],
     "parameters": {
@@ -73,8 +78,9 @@
       false,
       false,
       false,
+      true,
       true
     ]
   },
-  "hash": "1b50d282997c6b78d89576fa04b3b94b721616d3cae481cff30356d68fd959e2"
+  "hash": "ae5b7198bd38c7c92ae8777ba60cacf7b4b3ad29e231f940fd42aa07b07f2d91"
 }

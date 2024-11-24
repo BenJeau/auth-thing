@@ -64,34 +64,34 @@
         "type_info": "Integer"
       },
       {
-        "name": "password_requires_lowercase",
+        "name": "password_min_lowercase",
         "ordinal": 12,
-        "type_info": "Bool"
+        "type_info": "Integer"
       },
       {
-        "name": "password_requires_uppercase",
+        "name": "password_min_uppercase",
         "ordinal": 13,
-        "type_info": "Bool"
+        "type_info": "Integer"
       },
       {
-        "name": "password_requires_number",
+        "name": "password_min_number",
         "ordinal": 14,
-        "type_info": "Bool"
+        "type_info": "Integer"
       },
       {
-        "name": "password_requires_special",
+        "name": "password_min_special",
         "ordinal": 15,
-        "type_info": "Bool"
+        "type_info": "Integer"
       },
       {
-        "name": "password_requires_unique",
+        "name": "password_unique",
         "ordinal": 16,
         "type_info": "Bool"
       },
       {
-        "name": "password_requires_non_common",
+        "name": "password_min_strength",
         "ordinal": 17,
-        "type_info": "Bool"
+        "type_info": "Text"
       },
       {
         "name": "verification_required",
@@ -130,7 +130,7 @@
       false,
       false,
       false,
-      false,
+      true,
       false,
       true,
       true

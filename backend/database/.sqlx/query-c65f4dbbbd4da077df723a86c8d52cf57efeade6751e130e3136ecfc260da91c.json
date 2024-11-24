@@ -1,6 +1,6 @@
 {
   "db_name": "SQLite",
-  "query": "SELECT users.id, users.created_at, users.updated_at, users.email, users.name, users.username, users.picture, users.disabled, users.email_verified, users.two_factor_enabled, users.preferred_locale FROM users INNER JOIN users_roles ON users.id = users_roles.user_id INNER JOIN roles ON users_roles.role_id = roles.id WHERE roles.application_id = ?",
+  "query": "SELECT id, created_at, updated_at, email, name, username, picture, disabled, email_verified, two_factor_enabled, preferred_locale, verification_code_created_at FROM users",
   "describe": {
     "columns": [
       {
@@ -57,10 +57,15 @@
         "name": "preferred_locale",
         "ordinal": 10,
         "type_info": "Text"
+      },
+      {
+        "name": "verification_code_created_at",
+        "ordinal": 11,
+        "type_info": "Datetime"
       }
     ],
     "parameters": {
-      "Right": 1
+      "Right": 0
     },
     "nullable": [
       false,
@@ -73,8 +78,9 @@
       false,
       false,
       false,
+      true,
       true
     ]
   },
-  "hash": "f415ea1d1d85f7e86ab00463a4fc37d64713580c8fdca477d433db8a139f9e5c"
+  "hash": "c65f4dbbbd4da077df723a86c8d52cf57efeade6751e130e3136ecfc260da91c"
 }
