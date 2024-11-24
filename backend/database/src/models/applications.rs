@@ -18,6 +18,7 @@ pub struct Application {
     pub api_token_auth_enabled: bool,
     pub basic_auth_enabled: bool,
     pub password_auth_enabled: bool,
+    pub password_auth_signup_enabled: bool,
     pub password_min_length: i64,
     pub password_max_length: i64,
     pub password_min_lowercase: i64,

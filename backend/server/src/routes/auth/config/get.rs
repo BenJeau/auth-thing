@@ -11,11 +11,41 @@ use utoipa::ToSchema;
 use crate::{Error, Result, ServerState};
 
 #[derive(Serialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct AuthConfigResponse {
-    password_auth_enabled: bool,
-    api_token_auth_enabled: bool,
-    basic_auth_enabled: bool,
-    password_requirements: password::PasswordRequirements,
+    password: PasswordConfig,
+    api_token: ApiTokenConfig,
+    basic: BasicConfig,
+    providers: Vec<ProviderConfig>,
+}
+
+#[derive(Serialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct PasswordConfig {
+    enabled: bool,
+    signup_enabled: bool,
+    requirements: Option<password::PasswordRequirements>,
+}
+
+#[derive(Serialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct ApiTokenConfig {
+    enabled: bool,
+}
+
+#[derive(Serialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct BasicConfig {
+    enabled: bool,
+}
+
+#[derive(Serialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct ProviderConfig {
+    id: String,
+    name: String,
+    icon: String,
+    auth_url: String,
 }
 
 /// Get authentication configuration for an application
@@ -37,9 +67,19 @@ pub async fn auth_config(
         .ok_or(Error::NotFound("Application not found".to_string()))?;
 
     Ok(Json(AuthConfigResponse {
-        password_auth_enabled: app.password_auth_enabled,
-        api_token_auth_enabled: app.api_token_auth_enabled,
-        basic_auth_enabled: app.basic_auth_enabled,
-        password_requirements: PasswordRequirementsBuilder::from(&app).build()?,
+        password: PasswordConfig {
+            enabled: app.password_auth_enabled,
+            signup_enabled: app.password_auth_signup_enabled,
+            requirements: app
+                .password_auth_signup_enabled
+                .then_some(PasswordRequirementsBuilder::from(&app).build()?),
+        },
+        api_token: ApiTokenConfig {
+            enabled: app.api_token_auth_enabled,
+        },
+        basic: BasicConfig {
+            enabled: app.basic_auth_enabled,
+        },
+        providers: vec![],
     }))
 }

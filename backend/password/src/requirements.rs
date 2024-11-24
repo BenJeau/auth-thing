@@ -5,6 +5,7 @@ use utoipa::ToSchema;
 use crate::validator::PasswordValidator;
 
 #[derive(Serialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct PasswordRequirements {
     pub(crate) min_length: usize,
     pub(crate) max_length: usize,
