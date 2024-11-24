@@ -1,5 +1,5 @@
 use crate::{
-    models::applications::{Application, ModifyApplication, PasswordRequirements},
+    models::applications::{Application, ModifyApplication},
     slug::slugify,
 };
 use sqlx::{Result, SqlitePool};
@@ -25,13 +25,13 @@ pub async fn get_application_id(pool: &SqlitePool, slug: &str) -> Result<Option<
         .await
 }
 
-pub async fn get_application_id_with_password_requirements(
+pub async fn get_application_from_slug(
     pool: &SqlitePool,
     slug: &str,
-) -> Result<Option<PasswordRequirements>> {
+) -> Result<Option<Application>> {
     sqlx::query_as!(
-        PasswordRequirements,
-        "SELECT id, password_min_length, password_max_length, password_min_lowercase, password_min_uppercase, password_min_number, password_min_special, password_unique, password_min_strength FROM applications WHERE slug = ?",
+        Application,
+        "SELECT * FROM applications WHERE slug = ?",
         slug
     )
     .fetch_optional(pool)

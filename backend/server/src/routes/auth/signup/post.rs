@@ -41,15 +41,10 @@ pub async fn signup(
     Path(application_slug): Path<String>,
     Json(data): Json<SignupUserRequest>,
 ) -> Result<impl IntoResponse> {
-    let Some(application_data) =
-        logic::applications::get_application_id_with_password_requirements(
-            &state.pool,
-            &application_slug,
-        )
-        .await?
-    else {
-        return Err(Error::NotFound("Application not found".to_string()));
-    };
+    let application_data =
+        logic::applications::get_application_from_slug(&state.pool, &application_slug)
+            .await?
+            .ok_or(Error::NotFound("Application not found".to_string()))?;
 
     let validator = PasswordRequirementsBuilder::from(&application_data).build()?;
 

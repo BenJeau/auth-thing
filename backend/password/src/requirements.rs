@@ -1,7 +1,10 @@
+use serde::Serialize;
 use tracing::{instrument, warn};
+use utoipa::ToSchema;
 
 use crate::validator::PasswordValidator;
 
+#[derive(Serialize, ToSchema)]
 pub struct PasswordRequirements {
     pub(crate) min_length: usize,
     pub(crate) max_length: usize,
@@ -28,7 +31,7 @@ impl PasswordRequirements {
     }
 }
 
-#[derive(Ord, PartialOrd, Eq, PartialEq, Debug, Copy, Clone)]
+#[derive(Ord, PartialOrd, Eq, PartialEq, Debug, Copy, Clone, Serialize, ToSchema)]
 pub enum PasswordStrength {
     Weak,
     Medium,

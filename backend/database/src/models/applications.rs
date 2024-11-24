@@ -15,7 +15,9 @@ pub struct Application {
     pub description: Option<String>,
     pub website: Option<String>,
     pub icon: Option<String>,
-    pub password_auth: bool,
+    pub api_token_auth_enabled: bool,
+    pub basic_auth_enabled: bool,
+    pub password_auth_enabled: bool,
     pub password_min_length: i64,
     pub password_max_length: i64,
     pub password_min_lowercase: i64,
@@ -37,21 +39,8 @@ pub struct ModifyApplication {
     pub icon: Option<String>,
 }
 
-#[derive(Debug)]
-pub struct PasswordRequirements {
-    pub id: i64,
-    pub password_min_length: i64,
-    pub password_max_length: i64,
-    pub password_min_lowercase: i64,
-    pub password_min_uppercase: i64,
-    pub password_min_number: i64,
-    pub password_min_special: i64,
-    pub password_unique: bool,
-    pub password_min_strength: String,
-}
-
-impl From<&PasswordRequirements> for password::PasswordRequirementsBuilder {
-    fn from(value: &PasswordRequirements) -> Self {
+impl From<&Application> for password::PasswordRequirementsBuilder {
+    fn from(value: &Application) -> Self {
         password::PasswordRequirementsBuilder::new()
             .min(value.password_min_length.max(0) as usize)
             .max(value.password_max_length.max(0) as usize)

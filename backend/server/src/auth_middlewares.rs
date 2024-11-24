@@ -104,11 +104,11 @@ pub async fn auth_middleware(
         (None, Some(auth), None, None) => {
             let raw_token = auth.0 .0 .0.clone();
             let Some((id, value)) = raw_token.split_once('_') else {
-                return Err(Error::Unauthorized("Invalid API token".to_string()));
+                return Err(Error::Unauthorized("Invalid API token format".to_string()));
             };
 
             let Ok(id) = id.parse::<i64>() else {
-                return Err(Error::Unauthorized("Invalid API token".to_string()));
+                return Err(Error::Unauthorized("Invalid API token content".to_string()));
             };
 
             let Some(token) = logic::api_tokens::get_api_token(&state.pool, id).await? else {

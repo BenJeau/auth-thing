@@ -25,7 +25,9 @@ CREATE TABLE applications (
     description TEXT,
     website TEXT, -- unsure if this is needed...
     icon TEXT,
-    password_auth BOOLEAN DEFAULT FALSE NOT NULL,
+    api_token_auth_enabled BOOLEAN DEFAULT FALSE NOT NULL,
+    basic_auth_enabled BOOLEAN DEFAULT FALSE NOT NULL,
+    password_auth_enabled BOOLEAN DEFAULT FALSE NOT NULL,
     password_min_length INTEGER DEFAULT 0 NOT NULL,
     password_max_length INTEGER DEFAULT 2147483647 NOT NULL, -- 2^31 - 1, max value for INTEGER
     password_min_lowercase INTEGER DEFAULT 0 NOT NULL,
