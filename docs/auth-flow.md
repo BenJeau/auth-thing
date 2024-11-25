@@ -16,6 +16,7 @@ Flows:
 - OpenID connect
 - passwordless
 - request role change
+- major changes email notifications (+ login with diff location/ip)
 
 # Login
 
