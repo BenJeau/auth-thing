@@ -2,9 +2,12 @@ import path from "path";
 import react from "@vitejs/plugin-react-swc";
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import { defineConfig } from "vite";
+// @ts-expect-error - no TS types for beta test
+import reactCompiler from "babel-plugin-react-compiler";
 
 export default defineConfig({
   plugins: [
+    [reactCompiler],
     react(),
     TanStackRouterVite({
       quoteStyle: "double",
