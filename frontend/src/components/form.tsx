@@ -1,8 +1,14 @@
-import { FieldApi } from "@tanstack/react-form";
+interface FieldErrorsProps {
+  field: {
+    state: {
+      meta: {
+        errors: string[];
+      };
+    };
+  };
+}
 
-export const FieldErrors: React.FC<{
-  field: FieldApi<any, any, any, any, any>;
-}> = ({ field }) => {
+export const FieldErrors: React.FC<FieldErrorsProps> = ({ field }) => {
   if (!field.state.meta.errors.length) {
     return null;
   }

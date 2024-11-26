@@ -1,5 +1,5 @@
 import { Computer, LucideIcon, Moon, Sun } from "lucide-react";
-import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
+import { atom, useAtom, useAtomValue } from "jotai";
 import { useEffect } from "react";
 
 import { atomWithLocalStorage } from "@/atoms";
