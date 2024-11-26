@@ -40,7 +40,7 @@ export const Footer: React.FC<{ showHome?: boolean }> = ({ showHome }) => {
               data-selected={theme === key}
               disabled={theme === key}
               variant="link"
-              className="px-0 transition-all data-[selected=false]:hover:opacity-50 text-black dark:text-white data-[selected=true]:text-primary dark:data-[selected=true]:text-primary disabled:opacity-100"
+              className="px-0 text-black transition-all disabled:opacity-100 data-[selected=true]:text-primary data-[selected=false]:hover:opacity-50 dark:text-white dark:data-[selected=true]:text-primary"
               onClick={() => {
                 setTheme(key as Theme);
               }}

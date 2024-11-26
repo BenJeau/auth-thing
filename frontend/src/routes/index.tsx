@@ -43,7 +43,7 @@ export function DataTable<TData, TValue>({
   return (
     <div
       className={cn(
-        "rounded-xl border shadow-inner dark:bg-black/50 bg-white/50",
+        "rounded-xl border bg-white/50 shadow-inner dark:bg-black/50",
         className,
       )}
     >
@@ -114,7 +114,7 @@ const ApplicationCard: React.FC<{ application: models["Application"] }> = ({
   <Link
     to="/apps/$id"
     params={{ id: application.id.toString() }}
-    className="flex flex-col border border-emerald-500 p-4 rounded-xl shadow-inner  bg-white/50 dark:bg-black/30 dark:hover:bg-black/60 hover:bg-white transition-all cursor-pointer"
+    className="flex cursor-pointer flex-col rounded-xl border border-emerald-500 bg-white/50 p-4 shadow-inner transition-all hover:bg-white dark:bg-black/30 dark:hover:bg-black/60"
   >
     <h2 className="font-bold">{application.name}</h2>
     <p>{application.description || "-"}</p>
@@ -193,13 +193,13 @@ const IndexComponent: React.FC = () => {
           </div>
         }
       />
-      <div className="grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 grid gap-2">
+      <div className="grid grid-cols-1 gap-2 lg:grid-cols-2 2xl:grid-cols-3">
         {filteredApplications.map((application) => (
           <ApplicationCard key={application.id} application={application} />
         ))}
         <Link
           to="/apps/create"
-          className="items-center border border-emerald-400 border-dashed p-4 rounded-xl bg-white/50 dark:bg-black/30 dark:hover:bg-black/60 hover:bg-white transition-all cursor-pointer flex gap-2 shadow-inner"
+          className="flex cursor-pointer items-center gap-2 rounded-xl border border-dashed border-emerald-400 bg-white/50 p-4 shadow-inner transition-all hover:bg-white dark:bg-black/30 dark:hover:bg-black/60"
         >
           <Plus />
           <h2 className="text-md font-bold">Create a new application</h2>

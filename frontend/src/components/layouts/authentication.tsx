@@ -35,7 +35,7 @@ const UserAvatar = () => {
   return (
     <AutoAnimate
       slideIn
-      className="absolute top-5 right-4 lg:top-10 lg:right-10"
+      className="absolute right-4 top-5 lg:right-10 lg:top-10"
     >
       <DropdownMenu>
         <DropdownMenuTrigger className="flex items-center gap-2">
@@ -43,7 +43,7 @@ const UserAvatar = () => {
             <span className="text-sm font-semibold">{user.name}</span>
             <span className="text-xs">{user.email}</span>
           </div>
-          <Avatar className="shadow-md select-none">
+          <Avatar className="select-none shadow-md">
             <AvatarFallback>{user.initials}</AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
@@ -52,9 +52,9 @@ const UserAvatar = () => {
           <DropdownMenuSeparator />
           <DropdownMenuItem
             asChild
-            className="focus:bg-destructive focus:text-destructive-foreground text-destructive"
+            className="text-destructive focus:bg-destructive focus:text-destructive-foreground"
           >
-            <Link to="/auth/logout" className="flex gap-2 items-center">
+            <Link to="/auth/logout" className="flex items-center gap-2">
               <DoorClosed size={16} />
               <span>Logout</span>
             </Link>
@@ -73,10 +73,10 @@ export const Authentication: React.FC<React.PropsWithChildren> = ({
   const location = useLocation();
 
   return (
-    <div className="relative grid max-h-[850px] h-full flex-col items-center justify-center lg:max-w-none lg:grid-cols-5 lg:ps-4">
+    <div className="relative grid h-full max-h-[850px] flex-col items-center justify-center lg:max-w-none lg:grid-cols-5 lg:ps-4">
       <AutoAnimate
         slideIn
-        className="col-span-3 hidden h-full flex-col gap-4 lg:flex py-8"
+        className="col-span-3 hidden h-full flex-col gap-4 py-8 lg:flex"
       >
         <div className="relative h-full flex-grow overflow-hidden rounded-3xl bg-muted text-white shadow-lg shadow-primary/20 dark:shadow-primary/5">
           <img
@@ -89,7 +89,7 @@ export const Authentication: React.FC<React.PropsWithChildren> = ({
             id="login-img"
             src={bg.big}
             alt={t("login.image.alt")}
-            className="absolute h-full flex-1 w-full object-cover opacity-0 blur-xl transition duration-1000 ease-out"
+            className="absolute h-full w-full flex-1 object-cover opacity-0 blur-xl transition duration-1000 ease-out"
             style={{ transitionProperty: "filter" }}
             onLoad={() => {
               setTimeout(() => {
@@ -143,7 +143,7 @@ export const Authentication: React.FC<React.PropsWithChildren> = ({
             className="rounded-s-none"
           />
         </div>
-        <AutoAnimate slideIn className="flex items-center justify-between mt-2">
+        <AutoAnimate slideIn className="mt-2 flex items-center justify-between">
           <Layouts.Public.Footer />
         </AutoAnimate>
       </AutoAnimate>
@@ -157,7 +157,7 @@ export const Authentication: React.FC<React.PropsWithChildren> = ({
           {config.name}
         </div>
       </div>
-      <div className="lg:col-span-2 lg:p-8 lg:relative h-full">
+      <div className="h-full lg:relative lg:col-span-2 lg:p-8">
         <AutoAnimate
           key={location.pathname}
           slideIn
@@ -191,7 +191,7 @@ const SubAction: React.FC<SubActionProps> = ({
 }) => (
   <a
     className={cn(
-      "flex-1 flex-col flex gap-2 rounded-3xl bg-primary/50 dark:bg-primary text-black shadow-lg shadow-primary/20 dark:shadow-primary/5 p-5 transition-all hover:shadow-primary/30 active:shadow-primary/10 dark:hover:shadow-primary/10 cursor-pointer group dark:hover:bg-primary/90 hover:bg-primary/80",
+      "group flex flex-1 cursor-pointer flex-col gap-2 rounded-3xl bg-primary/50 p-5 text-black shadow-lg shadow-primary/20 transition-all hover:bg-primary/80 hover:shadow-primary/30 active:shadow-primary/10 dark:bg-primary dark:shadow-primary/5 dark:hover:bg-primary/90 dark:hover:shadow-primary/10",
       className,
     )}
     href={href}
@@ -199,7 +199,7 @@ const SubAction: React.FC<SubActionProps> = ({
   >
     <div className="flex items-center gap-2 group-hover:underline">
       <Icon />
-      <h2 className="font-semibold text-lg">{title}</h2>
+      <h2 className="text-lg font-semibold">{title}</h2>
     </div>
     <p className="text-sm">
       <Trans id={description} />

@@ -18,11 +18,11 @@ type Props = {
 
 export const Layout: React.FC<Props> = ({ user }) => {
   return (
-    <div className="container mx-auto flex flex-col gap-6 mt-6 px-4">
-      <div className="flex gap-4 items-center justify-between">
+    <div className="container mx-auto mt-6 flex flex-col gap-6 px-4">
+      <div className="flex items-center justify-between gap-4">
         <Link
           to="/"
-          className="flex gap-4 font-bold text-xl items-center hover:underline"
+          className="flex items-center gap-4 text-xl font-bold hover:underline"
         >
           <Fingerprint size={32} />
           Auth Thing
@@ -34,7 +34,7 @@ export const Layout: React.FC<Props> = ({ user }) => {
               <span className="text-sm font-semibold">{user.name}</span>
               <span className="text-xs">{user.email}</span>
             </div>
-            <Avatar className="shadow-md select-none">
+            <Avatar className="select-none shadow-md">
               <AvatarFallback>{user.initials}</AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
@@ -43,9 +43,9 @@ export const Layout: React.FC<Props> = ({ user }) => {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               asChild
-              className="focus:bg-destructive focus:text-destructive-foreground text-destructive"
+              className="text-destructive focus:bg-destructive focus:text-destructive-foreground"
             >
-              <Link to="/auth/logout" className="flex gap-2 items-center">
+              <Link to="/auth/logout" className="flex items-center gap-2">
                 <DoorClosed size={16} />
                 <span>Logout</span>
               </Link>
@@ -54,7 +54,7 @@ export const Layout: React.FC<Props> = ({ user }) => {
         </DropdownMenu>
       </div>
 
-      <main className="flex-1 flex flex-col">
+      <main className="flex flex-1 flex-col">
         <Outlet />
       </main>
     </div>

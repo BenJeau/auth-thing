@@ -97,7 +97,7 @@ const TokenVerification: React.FC<Props> = ({
                 )}
               </InputOTP>
               {loading && (
-                <AutoAnimate className="flex items-center gap-2 text-sm font-semibold absolute top-0 left-0 right-0 bottom-0 backdrop-blur-sm -m-4 justify-center">
+                <AutoAnimate className="absolute bottom-0 left-0 right-0 top-0 -m-4 flex items-center justify-center gap-2 text-sm font-semibold backdrop-blur-sm">
                   <Loader
                     size={20}
                     strokeWidth={2.5}

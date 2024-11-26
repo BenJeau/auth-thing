@@ -21,7 +21,7 @@ const SimpleError: React.FC<Props> = ({
   data,
 }) => (
   <div className="flex h-full w-full flex-1 items-center justify-center self-center p-4">
-    <div className="relative flex flex-col flex-wrap gap-4 min-w-[700px]">
+    <div className="relative flex min-w-[700px] flex-col flex-wrap gap-4">
       {emoji && (
         <div className="absolute right-0 top-0 ms-4 select-none font-serif text-7xl font-bold leading-5 text-primary/30 sm:text-8xl md:text-9xl">
           {emoji}

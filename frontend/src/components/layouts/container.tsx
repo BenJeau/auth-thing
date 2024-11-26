@@ -38,7 +38,7 @@ const Container: React.FC<Props> = ({
     duration={0.5}
     className={cn(containerVariants({ color, className }))}
   >
-    <div className="p-6 flex gap-4 flex-col sticky top-0">{children}</div>
+    <div className="sticky top-0 flex flex-col gap-4 p-6">{children}</div>
     {bottomContent}
   </AutoAnimate>
 );
