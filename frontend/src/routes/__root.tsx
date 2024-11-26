@@ -10,7 +10,7 @@ const TanStackRouterDevtools =
     : lazy(() =>
         import("@tanstack/router-devtools").then((res) => ({
           default: res.TanStackRouterDevtools,
-        }))
+        })),
       );
 
 const RouteComponent = () => (

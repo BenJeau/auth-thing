@@ -20,20 +20,20 @@ const VerifyEmail: React.FC = () => {
 
   const verifyEmailMutation = api.useMutation(
     "post",
-    "/auth/applications/{slug}/verify/email"
+    "/auth/applications/{slug}/verify/email",
   );
 
   const resendMutation = api.useMutation(
     "post",
-    "/auth/applications/{slug}/verify/email/resend"
+    "/auth/applications/{slug}/verify/email/resend",
   );
 
   const { canResend, timeLeft, setCanResend } = useResendTimer(
-    user?.emailCodeCreatedAt
+    user?.emailCodeCreatedAt,
   );
 
   const handleSubmit = async (
-    values: Forms.TokenVerification.FormSchema
+    values: Forms.TokenVerification.FormSchema,
   ): Promise<boolean> => {
     const response = await verifyEmailMutation.mutateAsync({
       params: {

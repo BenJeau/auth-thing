@@ -12,7 +12,7 @@ const VerifyOTP = () => {
 
   const verifyOTPMutation = api.useMutation(
     "post",
-    "/auth/applications/{slug}/verify/otp"
+    "/auth/applications/{slug}/verify/otp",
   );
 
   const handleSubmit = async (values: Forms.TokenVerification.FormSchema) => {

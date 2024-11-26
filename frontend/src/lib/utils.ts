@@ -21,7 +21,7 @@ export const anySignal = (signals: AbortSignal[]): AbortSignal => {
       },
       {
         signal: controller.signal,
-      }
+      },
     );
   }
 

@@ -18,7 +18,7 @@ const containerVariants = cva(
     defaultVariants: {
       color: "emerald",
     },
-  }
+  },
 );
 
 interface Props

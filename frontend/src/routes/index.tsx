@@ -44,7 +44,7 @@ export function DataTable<TData, TValue>({
     <div
       className={cn(
         "rounded-xl border shadow-inner dark:bg-black/50 bg-white/50",
-        className
+        className,
       )}
     >
       <Table>
@@ -58,7 +58,7 @@ export function DataTable<TData, TValue>({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 );
@@ -128,7 +128,7 @@ const IndexComponent: React.FC = () => {
   const [filterApplication, setFilterApplication] = useState("");
 
   const filteredApplications = applications.data.filter((application) =>
-    application.name.toLowerCase().includes(filterApplication.toLowerCase())
+    application.name.toLowerCase().includes(filterApplication.toLowerCase()),
   );
 
   const authenticationProvidersSection = (

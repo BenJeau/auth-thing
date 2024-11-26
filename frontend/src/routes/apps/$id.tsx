@@ -50,7 +50,7 @@ export const Route = createFileRoute("/apps/$id")({
         params: {
           path: { id: params.id },
         },
-      })
+      }),
     );
   },
 });

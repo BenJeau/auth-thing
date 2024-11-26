@@ -23,7 +23,7 @@ type Claims = {
 };
 
 export type BeforeLoadFn = (
-  roles?: string[]
+  roles?: string[],
 ) => (opts: { location: ParsedLocation; cause?: string }) => void;
 
 export const beforeLoadAuthenticated: BeforeLoadFn =
@@ -59,7 +59,7 @@ export const beforeLoadAuthenticated: BeforeLoadFn =
             {
               id: `no-roles${missingRoles}`,
               description: `Missing roles: ${missingRoles}`,
-            }
+            },
           );
         }
 
@@ -83,7 +83,7 @@ export function parseJwt(token: string): Claims {
       .map(function (c) {
         return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
       })
-      .join("")
+      .join(""),
   );
 
   return JSON.parse(jsonPayload) as Claims;

@@ -54,7 +54,7 @@ export const fetchClient = createFetchClient<paths>({
               "authentication.expired.description"
             ] as string,
             id: "expired.auth",
-          }
+          },
         );
         router.navigate({
           to: "/auth/login",

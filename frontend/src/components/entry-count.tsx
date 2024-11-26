@@ -10,7 +10,7 @@ const EntryCount: React.FC<Props> = ({ count, className }) => (
   <span
     className={cn(
       "whitespace-nowrap font-normal text-sm lowercase opacity-50",
-      className
+      className,
     )}
   >
     {count.toLocaleString()} <Trans id={count > 1 ? "entries" : "entry"} />

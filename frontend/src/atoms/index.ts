@@ -15,7 +15,7 @@ export const atomWithLocalStorage = <T>(key: string, initialValue: T) => {
       const nextValue =
         typeof update === "function"
           ? ((update as (prev: unknown) => unknown)(
-              get(baseAtom)
+              get(baseAtom),
             ) as SetStateAction<T>)
           : update;
       set(baseAtom, nextValue);
@@ -24,7 +24,7 @@ export const atomWithLocalStorage = <T>(key: string, initialValue: T) => {
       } else {
         localStorage.setItem(key, JSON.stringify(nextValue));
       }
-    }
+    },
   );
   return derivedAtom;
 };

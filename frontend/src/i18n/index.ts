@@ -33,7 +33,7 @@ export const useTranslation = () => {
         return part;
       });
     },
-    [lang]
+    [lang],
   );
   const toggle = useCallback(() => {
     setLang((prev) => languages[prev].other);

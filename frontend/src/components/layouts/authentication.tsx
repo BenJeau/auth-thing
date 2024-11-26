@@ -192,7 +192,7 @@ const SubAction: React.FC<SubActionProps> = ({
   <a
     className={cn(
       "flex-1 flex-col flex gap-2 rounded-3xl bg-primary/50 dark:bg-primary text-black shadow-lg shadow-primary/20 dark:shadow-primary/5 p-5 transition-all hover:shadow-primary/30 active:shadow-primary/10 dark:hover:shadow-primary/10 cursor-pointer group dark:hover:bg-primary/90 hover:bg-primary/80",
-      className
+      className,
     )}
     href={href}
     rel="noreferrer noopener"
