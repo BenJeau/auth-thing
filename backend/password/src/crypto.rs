@@ -1,9 +1,8 @@
 use argon2::{
-    password_hash::{
-        self, rand_core::OsRng, PasswordHash, PasswordHasher, PasswordVerifier, SaltString,
-    },
+    password_hash::{self, PasswordHash, PasswordHasher, PasswordVerifier, SaltString},
     Argon2,
 };
+use rand::rngs::OsRng;
 use tracing::instrument;
 
 #[instrument(skip_all)]
