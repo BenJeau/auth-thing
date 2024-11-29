@@ -1,6 +1,6 @@
 {
   "db_name": "SQLite",
-  "query": "SELECT * FROM providers",
+  "query": "SELECT jwt_configs.*, applications.name AS issuer FROM jwt_configs INNER JOIN applications ON jwt_configs.application_id = applications.id WHERE application_id = ? AND jwt_configs.id = applications.active_jwt_config_id",
   "describe": {
     "columns": [
       {
@@ -14,43 +14,43 @@
         "type_info": "Datetime"
       },
       {
-        "name": "updated_at",
+        "name": "application_id",
         "ordinal": 2,
-        "type_info": "Datetime"
+        "type_info": "Integer"
       },
       {
-        "name": "name",
+        "name": "algorithm",
         "ordinal": 3,
         "type_info": "Text"
       },
       {
-        "name": "kind",
+        "name": "private_key",
         "ordinal": 4,
-        "type_info": "Text"
+        "type_info": "Blob"
       },
       {
-        "name": "client_id",
+        "name": "public_key",
         "ordinal": 5,
-        "type_info": "Text"
+        "type_info": "Blob"
       },
       {
-        "name": "client_secret",
+        "name": "audience",
         "ordinal": 6,
-        "type_info": "Text"
+        "type_info": "Blob"
       },
       {
-        "name": "redirect_uri",
+        "name": "expiration",
         "ordinal": 7,
-        "type_info": "Text"
+        "type_info": "Integer"
       },
       {
-        "name": "auth_url",
+        "name": "issuer",
         "ordinal": 8,
         "type_info": "Text"
       }
     ],
     "parameters": {
-      "Right": 0
+      "Right": 1
     },
     "nullable": [
       false,
@@ -64,5 +64,5 @@
       false
     ]
   },
-  "hash": "0a6919de517b967f451fe226d7d999930788cb50a8b88470ad401bf386e9a77f"
+  "hash": "9c1c6c007e8a76fa47aeb64b2b6a67e44ca320f38fa2240e1fa67a27e49d6cec"
 }

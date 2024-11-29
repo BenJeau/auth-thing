@@ -1,0 +1,158 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT id, created_at, updated_at, creator_id, slug, name, description, website, icon, api_token_auth_enabled, basic_auth_enabled, password_auth_enabled, password_auth_signup_enabled, password_min_length, password_max_length, password_min_lowercase, password_min_uppercase, password_min_number, password_min_special, password_unique, password_min_strength, verification_required, verification_method, verification_code FROM applications WHERE slug = ?",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "created_at",
+        "ordinal": 1,
+        "type_info": "Datetime"
+      },
+      {
+        "name": "updated_at",
+        "ordinal": 2,
+        "type_info": "Datetime"
+      },
+      {
+        "name": "creator_id",
+        "ordinal": 3,
+        "type_info": "Integer"
+      },
+      {
+        "name": "slug",
+        "ordinal": 4,
+        "type_info": "Text"
+      },
+      {
+        "name": "name",
+        "ordinal": 5,
+        "type_info": "Text"
+      },
+      {
+        "name": "description",
+        "ordinal": 6,
+        "type_info": "Text"
+      },
+      {
+        "name": "website",
+        "ordinal": 7,
+        "type_info": "Text"
+      },
+      {
+        "name": "icon",
+        "ordinal": 8,
+        "type_info": "Text"
+      },
+      {
+        "name": "api_token_auth_enabled",
+        "ordinal": 9,
+        "type_info": "Bool"
+      },
+      {
+        "name": "basic_auth_enabled",
+        "ordinal": 10,
+        "type_info": "Bool"
+      },
+      {
+        "name": "password_auth_enabled",
+        "ordinal": 11,
+        "type_info": "Bool"
+      },
+      {
+        "name": "password_auth_signup_enabled",
+        "ordinal": 12,
+        "type_info": "Bool"
+      },
+      {
+        "name": "password_min_length",
+        "ordinal": 13,
+        "type_info": "Integer"
+      },
+      {
+        "name": "password_max_length",
+        "ordinal": 14,
+        "type_info": "Integer"
+      },
+      {
+        "name": "password_min_lowercase",
+        "ordinal": 15,
+        "type_info": "Integer"
+      },
+      {
+        "name": "password_min_uppercase",
+        "ordinal": 16,
+        "type_info": "Integer"
+      },
+      {
+        "name": "password_min_number",
+        "ordinal": 17,
+        "type_info": "Integer"
+      },
+      {
+        "name": "password_min_special",
+        "ordinal": 18,
+        "type_info": "Integer"
+      },
+      {
+        "name": "password_unique",
+        "ordinal": 19,
+        "type_info": "Bool"
+      },
+      {
+        "name": "password_min_strength",
+        "ordinal": 20,
+        "type_info": "Text"
+      },
+      {
+        "name": "verification_required",
+        "ordinal": 21,
+        "type_info": "Bool"
+      },
+      {
+        "name": "verification_method",
+        "ordinal": 22,
+        "type_info": "Text"
+      },
+      {
+        "name": "verification_code",
+        "ordinal": 23,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true
+    ]
+  },
+  "hash": "1e7ad43f19855eb1b964fe96352f3030921302bbe7f2d7bb24d1fe890a1e60de"
+}

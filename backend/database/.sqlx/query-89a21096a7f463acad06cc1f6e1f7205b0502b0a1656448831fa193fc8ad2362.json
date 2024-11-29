@@ -42,12 +42,18 @@
         "name": "redirect_uri",
         "ordinal": 7,
         "type_info": "Text"
+      },
+      {
+        "name": "auth_url",
+        "ordinal": 8,
+        "type_info": "Text"
       }
     ],
     "parameters": {
       "Right": 1
     },
     "nullable": [
+      false,
       false,
       false,
       false,

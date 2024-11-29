@@ -1,6 +1,6 @@
 {
   "db_name": "SQLite",
-  "query": "SELECT * FROM providers",
+  "query": "SELECT providers.* FROM application_providers JOIN providers ON application_providers.provider_id = providers.id WHERE application_providers.application_id = (SELECT id FROM applications WHERE slug = ?)",
   "describe": {
     "columns": [
       {
@@ -50,7 +50,7 @@
       }
     ],
     "parameters": {
-      "Right": 0
+      "Right": 1
     },
     "nullable": [
       false,
@@ -64,5 +64,5 @@
       false
     ]
   },
-  "hash": "0a6919de517b967f451fe226d7d999930788cb50a8b88470ad401bf386e9a77f"
+  "hash": "d17f2895bb99842bd9f254ecb680f5ed36bdbc056c961f7b0bb936733a323f64"
 }

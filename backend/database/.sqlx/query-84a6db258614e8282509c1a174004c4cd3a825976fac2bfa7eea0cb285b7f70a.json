@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "UPDATE providers SET name = ?, kind = ?, client_id = ?, client_secret = ?, redirect_uri = ?, auth_url = ? WHERE id = ?",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 7
+    },
+    "nullable": []
+  },
+  "hash": "84a6db258614e8282509c1a174004c4cd3a825976fac2bfa7eea0cb285b7f70a"
+}
