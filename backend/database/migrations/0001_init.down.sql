@@ -5,5 +5,6 @@ DROP TABLE providers;
 DROP TABLE users_roles;
 DROP TABLE roles;
 DROP TABLE application_passwords;
+DROP TABLE jwt_configs;
 DROP TABLE applications;
 DROP TABLE users;

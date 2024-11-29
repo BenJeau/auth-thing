@@ -41,7 +41,22 @@ CREATE TABLE applications (
     verification_required BOOLEAN DEFAULT FALSE NOT NULL,
     verification_method TEXT,
     verification_code TEXT,
-    FOREIGN KEY (creator_id) REFERENCES users(id)
+    active_jwt_config_id INTEGER,
+    FOREIGN KEY (creator_id) REFERENCES users(id),
+    FOREIGN KEY (active_jwt_config_id) REFERENCES jwt_configs(id)
+);
+
+CREATE TABLE jwt_configs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    application_id INTEGER NOT NULL,
+    algorithm TEXT NOT NULL DEFAULT 'ES256'
+        CHECK (algorithm IN ('HS256', 'HS384', 'HS512', 'RS256', 'RS384', 'RS512', 'ES256', 'ES384', 'EdDSA')),
+    private_key BLOB NOT NULL,
+    public_key BLOB NOT NULL,
+    audience BLOB NOT NULL,
+    expiration INTEGER NOT NULL,
+    FOREIGN KEY (application_id) REFERENCES applications(id) ON DELETE CASCADE
 );
 
 CREATE TABLE application_passwords (
