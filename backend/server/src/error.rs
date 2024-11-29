@@ -30,6 +30,9 @@ pub enum Error {
     TotpSecretNotFound,
     TotpInvalid,
     Totp(totp::Error),
+    Ring(ring::error::Unspecified),
+    UnableToValidateToken,
+    UnableToCreateToken,
     // Password errors
     PasswordRequirements(password::PasswordRequirementsBuilderError),
     PasswordValidation(Vec<password::PasswordError>),
@@ -111,6 +114,12 @@ impl From<password::PasswordRequirementsBuilderError> for Error {
 impl From<Vec<password::PasswordError>> for Error {
     fn from(e: Vec<password::PasswordError>) -> Self {
         Self::PasswordValidation(e)
+    }
+}
+
+impl From<ring::error::Unspecified> for Error {
+    fn from(e: ring::error::Unspecified) -> Self {
+        Self::Ring(e)
     }
 }
 

@@ -48,7 +48,7 @@ pub struct BasicConfig {
         (status = 200, description = "Successfully retrieved auth config", body = AuthConfigResponse),
         (status = 404, description = "Application not found"),
     ),
-    tag = "auth"
+    tag = "Auth"
 )]
 pub async fn auth_config(
     State(state): State<ServerState>,

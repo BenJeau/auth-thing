@@ -9,7 +9,7 @@ use password::verify_password;
 use std::net::SocketAddr;
 
 use crate::{
-    jwt::CreateClaims,
+    jwt::{generate_jwt, CreateClaims},
     schemas::{LoginUserRequest, LoginUserResponse},
     Error, Result, ServerState,
 };
@@ -86,7 +86,12 @@ pub async fn login(
         provider: "this thing".to_string(),
     };
 
-    let jwt_token = state.jwt_manager.generate_jwt(claims)?;
+    let jwt_config =
+        database::logic::jwt_configs::get_active_jwt_config(&state.pool, application_id)
+            .await?
+            .ok_or(Error::UnableToCreateToken)?;
+
+    let jwt_token = generate_jwt(claims, jwt_config, &state.crypto)?;
 
     Ok(Json(LoginUserResponse { jwt_token }).into_response())
 }

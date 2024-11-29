@@ -31,14 +31,6 @@ pub struct Encryption {
 }
 
 #[derive(Deserialize, Clone)]
-pub struct Jwt {
-    pub secret: String,
-    pub issuer: String,
-    pub audience: String,
-    pub expiration: u64,
-}
-
-#[derive(Deserialize, Clone)]
 pub struct Email {
     pub relay: String,
     pub username: String,
@@ -66,7 +58,6 @@ pub struct Config {
     pub database: Database,
     pub server: Server,
     pub encryption: Encryption,
-    pub jwt: Jwt,
     #[serde(default)]
     pub email: Option<Email>,
     #[serde(default)]

@@ -22,10 +22,10 @@ impl Crypto {
     }
 
     #[instrument(skip_all, err)]
-    pub fn encrypt<D: Into<String>>(&self, data: D) -> Result<Vec<u8>> {
+    pub fn encrypt(&self, data: &[u8]) -> Result<Vec<u8>> {
         let nonce = XChaCha20Poly1305::generate_nonce(&mut OsRng);
 
-        let ciphertext = self.chacha_cipher.encrypt(&nonce, data.into().as_bytes())?;
+        let ciphertext = self.chacha_cipher.encrypt(&nonce, data)?;
 
         let mut encrypted_data = Vec::with_capacity(nonce.len() + ciphertext.len());
         encrypted_data.extend_from_slice(&nonce);
@@ -66,7 +66,7 @@ mod tests {
 
         let data = "super_secret_data_to_save";
 
-        let encrypted_data = crypto.encrypt(data).unwrap();
+        let encrypted_data = crypto.encrypt(data.as_bytes()).unwrap();
         let decrypted_data = crypto.decrypt(&encrypted_data.clone()).unwrap();
 
         assert_eq!(decrypted_data, data);

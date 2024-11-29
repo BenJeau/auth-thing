@@ -16,7 +16,7 @@ use password::verify_password;
 use std::net::SocketAddr;
 use tracing::Span;
 
-use crate::{Error, Result, ServerState};
+use crate::{jwt::jwt_validation, Error, Result, ServerState};
 
 #[derive(Clone, PartialEq, Debug)]
 pub struct Token(String);
@@ -89,9 +89,8 @@ pub async fn auth_middleware(
 ) -> Result<Response> {
     let user = match (bearer_auth, token_auth, basic_auth, realm) {
         (Some(auth), None, None, None) => {
-            let id = state
-                .jwt_manager
-                .get_claims(auth.token())
+            let id = jwt_validation(&state.pool, &state.crypto, auth.token())
+                .await
                 .map_err(|err| {
                     tracing::error!(?err, "Failed to get claims from token");
                     Error::Unauthorized("Invalid token".to_string())

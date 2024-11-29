@@ -18,6 +18,7 @@ headers = { workspace = true }
 http = { workspace = true }
 jsonwebtoken = { workspace = true }
 rand = { workspace = true }
+ring = { workspace = true }
 sentry = { workspace = true }
 sentry-tower = { workspace = true }
 sentry-tracing = { workspace = true }

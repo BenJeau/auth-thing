@@ -3,7 +3,7 @@ use database::SqlitePool;
 use email::Mailer;
 use tracing::instrument;
 
-use crate::{config::Config, crypto::Crypto, jwt::JwtManager, Result};
+use crate::{config::Config, crypto::Crypto, Result};
 
 #[derive(Clone)]
 pub struct ServerState {
@@ -11,7 +11,6 @@ pub struct ServerState {
     pub config: Config,
     pub version: Version,
     pub crypto: Crypto,
-    pub jwt_manager: JwtManager,
     pub mailer: Option<Mailer>,
 }
 
@@ -66,8 +65,6 @@ impl ServerState {
 
         let crypto = Crypto::new(&config.encryption.server_key)?;
 
-        let jwt_manager = JwtManager::new(&config.jwt);
-
         let mailer = if let Some(email) = &config.email {
             Some(Mailer::new(&email.relay, &email.username, &email.password)?)
         } else {
@@ -79,7 +76,6 @@ impl ServerState {
             config,
             version,
             crypto,
-            jwt_manager,
             mailer,
         })
     }
