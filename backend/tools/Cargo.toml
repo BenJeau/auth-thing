@@ -7,5 +7,16 @@ version = "0.1.0"
 name = "argon2-hash"
 path = "./src/argon2_hash.rs"
 
+[[bin]]
+name = "gen-key-pair"
+path = "./src/gen_key_pair.rs"
+
 [dependencies]
 argon2 = { workspace = true }
+chacha20poly1305 = { workspace = true }
+hex = { workspace = true }
+jsonwebtoken = { workspace = true }
+rand = { workspace = true }
+ring = { workspace = true }
+rsa = { workspace = true }
+serde = { workspace = true }

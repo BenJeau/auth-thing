@@ -3,14 +3,17 @@ lto = true
 strip = true
 
 [profile.dev.package.argon2]
-opt-level = 2
+opt-level = 3
+
+[profile.dev.package.num-bigint-dig]
+opt-level = 3
 
 [workspace]
 members = ["database", "email", "password", "server", "tools", "totp"]
 resolver = "2"
 
 [workspace.dependencies]
-argon2 = { version = "0.5.3", features = ["password-hash"] }
+argon2 = "0.5.3"
 axum = "0.7.9"
 axum-extra = { version = "0.9.6", features = ["typed-header"] }
 base32 = "0.5.1"
@@ -19,12 +22,15 @@ chacha20poly1305 = "0.10.1"
 chrono = { version = "0.4.38", features = ["serde"] }
 figment = { version = "0.10.19", features = ["env", "toml"] }
 headers = "0.4.0"
+hex = "0.4.3"
 hmac = "0.12.1"
 http = "1.1.0"
 jsonwebtoken = "9.3.0"
 lettre = { version = "0.11.10", features = ["builder", "hostname", "pool", "smtp-transport", "tokio1-rustls-tls", "tracing"], default-features = false }
 rand = "0.8.5"
 regex = "1.11.1"
+ring = "0.17.8"
+rsa = "0.9.7"
 sentry = { version = "0.34.0", features = ["backtrace", "contexts", "debug-images", "panic", "reqwest", "rustls"], default-features = false }
 sentry-tower = { version = "0.34.0", features = ["http"] }
 sentry-tracing = "0.34.0"
