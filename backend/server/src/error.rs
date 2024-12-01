@@ -30,14 +30,13 @@ pub enum Error {
     TotpSecretNotFound,
     TotpInvalid,
     Totp(totp::Error),
-    Ring(ring::error::Unspecified),
     UnableToValidateToken,
     UnableToCreateToken,
+    Jwt(jwt::Error),
     // Password errors
     PasswordRequirements(password::PasswordRequirementsBuilderError),
     PasswordValidation(Vec<password::PasswordError>),
     // Other errors
-    Jsonwebtoken(jsonwebtoken::errors::Error),
     SerdeJson(serde_json::Error),
     MissingHeader(String),
     Email(email::Error),
@@ -81,12 +80,6 @@ impl From<password::PasswordHashError> for Error {
     }
 }
 
-impl From<jsonwebtoken::errors::Error> for Error {
-    fn from(e: jsonwebtoken::errors::Error) -> Self {
-        Self::Jsonwebtoken(e)
-    }
-}
-
 impl From<serde_json::Error> for Error {
     fn from(e: serde_json::Error) -> Self {
         Self::SerdeJson(e)
@@ -117,9 +110,9 @@ impl From<Vec<password::PasswordError>> for Error {
     }
 }
 
-impl From<ring::error::Unspecified> for Error {
-    fn from(e: ring::error::Unspecified) -> Self {
-        Self::Ring(e)
+impl From<jwt::Error> for Error {
+    fn from(e: jwt::Error) -> Self {
+        Self::Jwt(e)
     }
 }
 

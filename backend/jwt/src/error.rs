@@ -5,6 +5,7 @@ pub enum Error {
     RingUnspecified(ring::error::Unspecified),
     RingKeyRejected(ring::error::KeyRejected),
     Jwt(jsonwebtoken::errors::Error),
+    InvalidAlgorithm(String),
 }
 
 impl std::fmt::Display for Error {

@@ -1,7 +1,10 @@
-use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, TokenData, Validation};
+use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Validation};
 use serde::{de::DeserializeOwned, Serialize};
+use std::sync::LazyLock;
 
 use crate::{Algorithm, Result};
+
+const DUMMY_KEY: LazyLock<DecodingKey> = LazyLock::new(|| DecodingKey::from_secret(&[]));
 
 pub(crate) fn encode_jwt<T: Serialize>(
     encoding_key: &EncodingKey,
@@ -17,8 +20,8 @@ pub(crate) fn encode_jwt<T: Serialize>(
 pub(crate) fn decode_jwt<T: DeserializeOwned>(
     decoding_key: &DecodingKey,
     algorithm: Algorithm,
-    issuer: &[&str],
-    audience: &[&str],
+    issuer: &[String],
+    audience: &[String],
     token: &str,
 ) -> Result<T> {
     let mut validation = Validation::new(algorithm.into());
@@ -27,6 +30,17 @@ pub(crate) fn decode_jwt<T: DeserializeOwned>(
     let token_data = decode::<T>(token, &decoding_key, &validation)?;
 
     Ok(token_data.claims)
+}
+
+pub fn get_claims_without_validation<T: DeserializeOwned>(token: &str) -> Result<T> {
+    let header = jsonwebtoken::decode_header(token)?;
+
+    let mut validation = Validation::new(header.alg);
+    validation.insecure_disable_signature_validation();
+
+    let claims = jsonwebtoken::decode::<T>(token, &DUMMY_KEY, &validation)?.claims;
+
+    Ok(claims)
 }
 
 #[cfg(test)]
@@ -80,8 +94,8 @@ mod tests {
         let token_data = decode_jwt::<Claims>(
             &DECODING_KEY,
             Algorithm::HS256,
-            &["iss"],
-            &["aud"],
+            &["iss".to_string()],
+            &["aud".to_string()],
             &VALID_HS256_TOKEN,
         )
         .unwrap();
@@ -97,8 +111,8 @@ mod tests {
         let result = decode_jwt::<Claims>(
             &DECODING_KEY,
             Algorithm::HS256,
-            &["iss"],
-            &["aud"],
+            &["iss".to_string()],
+            &["aud".to_string()],
             &EXPIRED_TOKEN,
         );
 
@@ -110,8 +124,8 @@ mod tests {
         let result = decode_jwt::<Claims>(
             &DECODING_KEY,
             Algorithm::HS256,
-            &["iss"],
-            &["invalid_audience"],
+            &["iss".to_string()],
+            &["invalid_audience".to_string()],
             &VALID_HS256_TOKEN,
         );
 
@@ -123,8 +137,8 @@ mod tests {
         let result = decode_jwt::<Claims>(
             &DECODING_KEY,
             Algorithm::HS256,
-            &["invalid_issuer"],
-            &["aud"],
+            &["invalid_issuer".to_string()],
+            &["aud".to_string()],
             &VALID_HS256_TOKEN,
         );
 
@@ -136,8 +150,8 @@ mod tests {
         let result = decode_jwt::<Claims>(
             &DECODING_KEY,
             Algorithm::ES256,
-            &["iss"],
-            &["aud"],
+            &["iss".to_string()],
+            &["aud".to_string()],
             &VALID_HS256_TOKEN,
         );
 
@@ -149,8 +163,8 @@ mod tests {
         let result = decode_jwt::<Claims>(
             &DECODING_KEY,
             Algorithm::HS256,
-            &["iss"],
-            &["aud"],
+            &["iss".to_string()],
+            &["aud".to_string()],
             &"token",
         );
 

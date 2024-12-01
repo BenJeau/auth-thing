@@ -4,10 +4,10 @@ use serde::{de::DeserializeOwned, Serialize};
 use crate::{
     claims::{decode_jwt, encode_jwt},
     keys::{
-        generate_ed25519_keys, generate_esdca_keys, generate_hmac_keys, generate_rsa_keys, RawKey,
+        generate_ed25519_keys, generate_esdca_keys, generate_hmac_keys, generate_rsa_keys, RawKeys,
         ES256_SIGNING_ALG, ES384_SIGNING_ALG,
     },
-    Result,
+    Error, Result,
 };
 
 #[derive(Copy, Clone)]
@@ -46,7 +46,7 @@ impl Algorithm {
         }
     }
 
-    pub fn generate_key(&self) -> Result<RawKey> {
+    pub fn generate_keys(&self) -> Result<RawKeys> {
         match self {
             Algorithm::EdDSA => generate_ed25519_keys(),
             Algorithm::ES256 => generate_esdca_keys(ES256_SIGNING_ALG),
@@ -65,8 +65,8 @@ impl Algorithm {
     pub fn decode_jwt<T: DeserializeOwned>(
         &self,
         key: &[u8],
-        issuer: &[&str],
-        audience: &[&str],
+        issuer: &[String],
+        audience: &[String],
         token: &str,
     ) -> Result<T> {
         decode_jwt(&self.jwt_decoding_key(key), *self, issuer, audience, token)
@@ -90,9 +90,9 @@ impl From<Algorithm> for jsonwebtoken::Algorithm {
 }
 
 impl TryFrom<String> for Algorithm {
-    type Error = String;
+    type Error = Error;
 
-    fn try_from(algorithm: String) -> std::result::Result<Self, Self::Error> {
+    fn try_from(algorithm: String) -> Result<Self> {
         match algorithm.as_str() {
             "EdDSA" => Ok(Algorithm::EdDSA),
             "ES256" => Ok(Algorithm::ES256),
@@ -103,7 +103,7 @@ impl TryFrom<String> for Algorithm {
             "HS256" => Ok(Algorithm::HS256),
             "HS384" => Ok(Algorithm::HS384),
             "HS512" => Ok(Algorithm::HS512),
-            _ => Err(format!("Invalid algorithm: {}", algorithm)),
+            _ => Err(Error::InvalidAlgorithm(algorithm)),
         }
     }
 }

@@ -16,9 +16,7 @@ chrono = { workspace = true }
 figment = { workspace = true }
 headers = { workspace = true }
 http = { workspace = true }
-jsonwebtoken = { workspace = true }
 rand = { workspace = true }
-ring = { workspace = true }
 sentry = { workspace = true }
 sentry-tower = { workspace = true }
 sentry-tracing = { workspace = true }
@@ -35,5 +33,6 @@ utoipa-axum = { workspace = true }
 
 database = { path = "../database" }
 email = { path = "../email" }
+jwt = { path = "../jwt" }
 password = { path = "../password" }
 totp = { path = "../totp" }

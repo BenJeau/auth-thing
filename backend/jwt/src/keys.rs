@@ -16,46 +16,46 @@ static RNG: LazyLock<ring::rand::SystemRandom> = LazyLock::new(ring::rand::Syste
 pub static ES256_SIGNING_ALG: &EcdsaSigningAlgorithm = &ECDSA_P256_SHA256_ASN1_SIGNING;
 pub static ES384_SIGNING_ALG: &EcdsaSigningAlgorithm = &ECDSA_P384_SHA384_ASN1_SIGNING;
 
-pub struct RawKey {
+pub struct RawKeys {
     pub private_key: Vec<u8>,
     pub public_key: Vec<u8>,
 }
 
-pub(crate) fn generate_rsa_keys(bits: usize) -> Result<RawKey> {
+pub(crate) fn generate_rsa_keys(bits: usize) -> Result<RawKeys> {
     let priv_key = rsa::RsaPrivateKey::new(&mut rand::thread_rng(), bits)?;
     let pub_key = rsa::RsaPublicKey::from(&priv_key);
 
-    Ok(RawKey {
+    Ok(RawKeys {
         private_key: priv_key.to_pkcs1_der()?.as_bytes().to_vec(),
         public_key: pub_key.to_pkcs1_der()?.as_bytes().to_vec(),
     })
 }
 
-pub(crate) fn generate_hmac_keys() -> Result<RawKey> {
+pub(crate) fn generate_hmac_keys() -> Result<RawKeys> {
     let mut secret_key = vec![0u8; HMAC_KEY_SIZE];
     RNG.fill(&mut secret_key)?;
 
-    Ok(RawKey {
+    Ok(RawKeys {
         private_key: secret_key.clone(),
         public_key: secret_key,
     })
 }
 
-pub(crate) fn generate_ed25519_keys() -> Result<RawKey> {
+pub(crate) fn generate_ed25519_keys() -> Result<RawKeys> {
     let document = Ed25519KeyPair::generate_pkcs8(&RNG.to_owned())?;
     let key_pair = Ed25519KeyPair::from_pkcs8(document.as_ref())?;
 
-    Ok(RawKey {
+    Ok(RawKeys {
         private_key: document.as_ref().to_vec(),
         public_key: key_pair.public_key().as_ref().to_vec(),
     })
 }
 
-pub(crate) fn generate_esdca_keys(signing_alg: &'static EcdsaSigningAlgorithm) -> Result<RawKey> {
+pub(crate) fn generate_esdca_keys(signing_alg: &'static EcdsaSigningAlgorithm) -> Result<RawKeys> {
     let document = EcdsaKeyPair::generate_pkcs8(signing_alg, &RNG.to_owned())?;
     let key_pair = EcdsaKeyPair::from_pkcs8(signing_alg, document.as_ref(), &RNG.to_owned())?;
 
-    Ok(RawKey {
+    Ok(RawKeys {
         private_key: document.as_ref().to_vec(),
         public_key: key_pair.public_key().as_ref().to_vec(),
     })
