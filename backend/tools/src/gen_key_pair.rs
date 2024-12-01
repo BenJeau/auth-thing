@@ -157,5 +157,9 @@ fn print_data(private_key: &[u8], public_key: &[u8], secret_key: &[u8]) {
         "Private key: {}",
         hex::encode(encrypt(private_key, secret_key))
     );
-    println!("Public key: {}", hex::encode(public_key));
+    println!("Unencrypted public key: {}", hex::encode(public_key));
+    println!(
+        "Public key: {}",
+        hex::encode(encrypt(public_key, secret_key))
+    );
 }
