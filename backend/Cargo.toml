@@ -9,7 +9,7 @@ opt-level = 3
 opt-level = 3
 
 [workspace]
-members = ["database", "email", "password", "server", "tools", "totp"]
+members = ["database", "email", "jwt", "password", "server", "tools", "totp"]
 resolver = "2"
 
 [workspace.dependencies]
