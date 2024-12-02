@@ -27,6 +27,10 @@ pub(crate) fn decode_jwt<T: DeserializeOwned>(
     let mut validation = Validation::new(algorithm.into());
     validation.set_audience(audience);
     validation.set_issuer(issuer);
+    validation.validate_aud = true;
+    validation.validate_exp = true;
+    validation.validate_nbf = true;
+
     let token_data = decode::<T>(token, &decoding_key, &validation)?;
 
     Ok(token_data.claims)
@@ -36,6 +40,7 @@ pub fn get_claims_without_validation<T: DeserializeOwned>(token: &str) -> Result
     let header = jsonwebtoken::decode_header(token)?;
 
     let mut validation = Validation::new(header.alg);
+    validation.validate_aud = false;
     validation.insecure_disable_signature_validation();
 
     let claims = jsonwebtoken::decode::<T>(token, &DUMMY_KEY, &validation)?.claims;

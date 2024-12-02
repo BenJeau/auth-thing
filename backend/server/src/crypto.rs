@@ -35,13 +35,12 @@ impl Crypto {
     }
 
     #[instrument(skip_all, err)]
-    pub fn decrypt(&self, data: &[u8]) -> Result<String> {
+    pub fn decrypt(&self, data: &[u8]) -> Result<Vec<u8>> {
         let (raw_nonce, ciphertext) = data.split_at(24);
         let nonce = GenericArray::from_slice(raw_nonce);
-
         let decrypted_data = self.chacha_cipher.decrypt(nonce, ciphertext)?;
 
-        Ok(String::from_utf8_lossy(&decrypted_data).into())
+        Ok(decrypted_data)
     }
 
     #[instrument(skip_all)]
@@ -67,8 +66,8 @@ mod tests {
         let data = "super_secret_data_to_save";
 
         let encrypted_data = crypto.encrypt(data.as_bytes()).unwrap();
-        let decrypted_data = crypto.decrypt(&encrypted_data.clone()).unwrap();
+        let decrypted_data = crypto.decrypt(&encrypted_data).unwrap();
 
-        assert_eq!(decrypted_data, data);
+        assert_eq!(decrypted_data, data.as_bytes());
     }
 }

@@ -26,8 +26,8 @@ pub enum Algorithm {
 impl Algorithm {
     pub fn jwt_encoding_key(&self, key: &[u8]) -> EncodingKey {
         match self {
-            Algorithm::EdDSA => EncodingKey::from_ec_der(key),
-            Algorithm::ES256 | Algorithm::ES384 => EncodingKey::from_ed_der(key),
+            Algorithm::EdDSA => EncodingKey::from_ed_der(key),
+            Algorithm::ES256 | Algorithm::ES384 => EncodingKey::from_ec_der(key),
             Algorithm::RS256 | Algorithm::RS384 | Algorithm::RS512 => {
                 EncodingKey::from_rsa_der(key)
             }
@@ -37,8 +37,8 @@ impl Algorithm {
 
     pub fn jwt_decoding_key(&self, key: &[u8]) -> DecodingKey {
         match self {
-            Algorithm::EdDSA => DecodingKey::from_ec_der(key),
-            Algorithm::ES256 | Algorithm::ES384 => DecodingKey::from_ed_der(key),
+            Algorithm::EdDSA => DecodingKey::from_ed_der(key),
+            Algorithm::ES256 | Algorithm::ES384 => DecodingKey::from_ec_der(key),
             Algorithm::RS256 | Algorithm::RS384 | Algorithm::RS512 => {
                 DecodingKey::from_rsa_der(key)
             }

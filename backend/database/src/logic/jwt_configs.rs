@@ -26,7 +26,7 @@ pub async fn create_jwt_config(
 pub async fn get_jwt_configs(pool: &SqlitePool, application_id: i64) -> Result<Vec<JwtConfig>> {
     Ok(sqlx::query_as!(
         DbJwtConfig,
-        "SELECT jwt_configs.*, applications.name AS issuer FROM jwt_configs INNER JOIN applications ON jwt_configs.application_id = applications.id WHERE application_id = ?",
+        "SELECT jwt_configs.*, applications.slug AS issuer FROM jwt_configs INNER JOIN applications ON jwt_configs.application_id = applications.id WHERE application_id = ?",
         application_id
     )
     .fetch_all(pool)
@@ -42,7 +42,7 @@ pub async fn get_active_jwt_config(
 ) -> Result<Option<JwtConfig>> {
     Ok(sqlx::query_as!(
         DbJwtConfig,
-        "SELECT jwt_configs.*, applications.name AS issuer FROM jwt_configs INNER JOIN applications ON jwt_configs.application_id = applications.id WHERE application_id = ? AND jwt_configs.id = applications.active_jwt_config_id",
+        "SELECT jwt_configs.*, applications.slug AS issuer FROM jwt_configs INNER JOIN applications ON jwt_configs.application_id = applications.id WHERE application_id = ? AND jwt_configs.id = applications.active_jwt_config_id",
         application_id
     )
     .fetch_optional(pool)

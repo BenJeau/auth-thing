@@ -19,7 +19,7 @@ pub async fn jwt_validation(
         let decrypted_public_key = crypto.decrypt(&config.public_key)?;
 
         let Ok(claims) = algorithm.decode_jwt(
-            decrypted_public_key.as_bytes(),
+            &decrypted_public_key,
             &[config.issuer.clone()],
             &config.audience,
             token,
@@ -75,7 +75,7 @@ pub fn generate_jwt(
     let all_claims = Claims::new(claims, &config.issuer, &config.audience, config.expiration);
     let decrypted_private_key = crypto.decrypt(&config.private_key)?;
     let algorithm = jwt::Algorithm::try_from(config.algorithm.clone())?;
-    let token = algorithm.encode_jwt(decrypted_private_key.as_bytes(), &all_claims)?;
+    let token = algorithm.encode_jwt(&decrypted_private_key, &all_claims)?;
 
     Ok(token)
 }
