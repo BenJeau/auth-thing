@@ -50,7 +50,7 @@ CREATE TABLE jwt_configs (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     application_id INTEGER NOT NULL,
-    algorithm TEXT NOT NULL DEFAULT 'ES256'
+    algorithm TEXT NOT NULL
         CHECK (algorithm IN ('HS256', 'HS384', 'HS512', 'RS256', 'RS384', 'RS512', 'ES256', 'ES384', 'EdDSA')),
     private_key BLOB NOT NULL,
     public_key BLOB NOT NULL,
