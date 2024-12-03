@@ -228,6 +228,67 @@
         }
       }
     },
+    "/auth/applications/{slug}/.well-known/jwks.json": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "get_jwks",
+        "parameters": [
+          {
+            "name": "application_slug",
+            "in": "path",
+            "description": "Application slug",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON Web Key Set",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Jwks"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Application not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/auth/applications/{slug}/config": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Get authentication configuration for an application",
+        "operationId": "auth_config",
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved auth config",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthConfigResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Application not found"
+          }
+        }
+      }
+    },
     "/auth/applications/{slug}/login": {
       "post": {
         "tags": [
@@ -887,6 +948,17 @@
   },
   "components": {
     "schemas": {
+      "ApiTokenConfig": {
+        "type": "object",
+        "required": [
+          "enabled"
+        ],
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          }
+        }
+      },
       "Application": {
         "type": "object",
         "required": [
@@ -896,14 +968,18 @@
           "creatorId",
           "slug",
           "name",
-          "passwordAuth",
+          "apiTokenAuthEnabled",
+          "basicAuthEnabled",
+          "passwordAuthEnabled",
+          "passwordAuthSignupEnabled",
           "passwordMinLength",
-          "passwordRequiresLowercase",
-          "passwordRequiresUppercase",
-          "passwordRequiresNumber",
-          "passwordRequiresSpecial",
-          "passwordRequiresUnique",
-          "passwordRequiresNonCommon",
+          "passwordMaxLength",
+          "passwordMinLowercase",
+          "passwordMinUppercase",
+          "passwordMinNumber",
+          "passwordMinSpecial",
+          "passwordUnique",
+          "passwordMinStrength",
           "verificationRequired"
         ],
         "properties": {
@@ -947,7 +1023,16 @@
               "null"
             ]
           },
-          "passwordAuth": {
+          "apiTokenAuthEnabled": {
+            "type": "boolean"
+          },
+          "basicAuthEnabled": {
+            "type": "boolean"
+          },
+          "passwordAuthEnabled": {
+            "type": "boolean"
+          },
+          "passwordAuthSignupEnabled": {
             "type": "boolean"
           },
           "passwordMinLength": {
@@ -955,29 +1040,30 @@
             "format": "int64"
           },
           "passwordMaxLength": {
-            "type": [
-              "integer",
-              "null"
-            ],
+            "type": "integer",
             "format": "int64"
           },
-          "passwordRequiresLowercase": {
+          "passwordMinLowercase": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "passwordMinUppercase": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "passwordMinNumber": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "passwordMinSpecial": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "passwordUnique": {
             "type": "boolean"
           },
-          "passwordRequiresUppercase": {
-            "type": "boolean"
-          },
-          "passwordRequiresNumber": {
-            "type": "boolean"
-          },
-          "passwordRequiresSpecial": {
-            "type": "boolean"
-          },
-          "passwordRequiresUnique": {
-            "type": "boolean"
-          },
-          "passwordRequiresNonCommon": {
-            "type": "boolean"
+          "passwordMinStrength": {
+            "type": "string"
           },
           "verificationRequired": {
             "type": "boolean"
@@ -993,6 +1079,95 @@
               "string",
               "null"
             ]
+          }
+        }
+      },
+      "AuthConfigResponse": {
+        "type": "object",
+        "required": [
+          "password",
+          "apiToken",
+          "basic",
+          "providers"
+        ],
+        "properties": {
+          "password": {
+            "$ref": "#/components/schemas/PasswordConfig"
+          },
+          "apiToken": {
+            "$ref": "#/components/schemas/ApiTokenConfig"
+          },
+          "basic": {
+            "$ref": "#/components/schemas/BasicConfig"
+          },
+          "providers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MinimalProviderInfo"
+            }
+          }
+        }
+      },
+      "BasicConfig": {
+        "type": "object",
+        "required": [
+          "enabled"
+        ],
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "JwkKey": {
+        "type": "object",
+        "required": [
+          "kty",
+          "use",
+          "kid",
+          "alg"
+        ],
+        "properties": {
+          "kty": {
+            "type": "string"
+          },
+          "use": {
+            "type": "string"
+          },
+          "kid": {
+            "type": "string"
+          },
+          "alg": {
+            "type": "string"
+          },
+          "crv": {
+            "type": "string"
+          },
+          "x": {
+            "type": "string"
+          },
+          "y": {
+            "type": "string"
+          },
+          "n": {
+            "type": "string"
+          },
+          "e": {
+            "type": "string"
+          }
+        }
+      },
+      "Jwks": {
+        "type": "object",
+        "required": [
+          "keys"
+        ],
+        "properties": {
+          "keys": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JwkKey"
+            }
           }
         }
       },
@@ -1024,6 +1199,38 @@
           "jwtToken": {
             "type": "string",
             "description": "The JWT token created from login request that can be used to authenticate yourself"
+          }
+        }
+      },
+      "MinimalProviderInfo": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "kind",
+          "clientId",
+          "redirectUri",
+          "authUrl"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "clientId": {
+            "type": "string"
+          },
+          "redirectUri": {
+            "type": "string"
+          },
+          "authUrl": {
+            "type": "string"
           }
         }
       },
@@ -1063,7 +1270,8 @@
           "kind",
           "client_id",
           "client_secret",
-          "redirect_uri"
+          "redirect_uri",
+          "auth_url"
         ],
         "properties": {
           "name": {
@@ -1079,6 +1287,9 @@
             "type": "string"
           },
           "redirect_uri": {
+            "type": "string"
+          },
+          "auth_url": {
             "type": "string"
           }
         }
@@ -1138,6 +1349,84 @@
           }
         }
       },
+      "PasswordConfig": {
+        "type": "object",
+        "required": [
+          "enabled",
+          "signupEnabled"
+        ],
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "signupEnabled": {
+            "type": "boolean"
+          },
+          "requirements": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/PasswordRequirements"
+              }
+            ]
+          }
+        }
+      },
+      "PasswordRequirements": {
+        "type": "object",
+        "required": [
+          "minLength",
+          "maxLength",
+          "minLowercase",
+          "minUppercase",
+          "minNumber",
+          "minSpecial",
+          "unique",
+          "minStrength"
+        ],
+        "properties": {
+          "minLength": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "maxLength": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "minLowercase": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "minUppercase": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "minNumber": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "minSpecial": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "unique": {
+            "type": "boolean"
+          },
+          "minStrength": {
+            "$ref": "#/components/schemas/PasswordStrength"
+          }
+        }
+      },
+      "PasswordStrength": {
+        "type": "string",
+        "enum": [
+          "Weak",
+          "Medium",
+          "Strong"
+        ]
+      },
       "Provider": {
         "type": "object",
         "required": [
@@ -1148,7 +1437,8 @@
           "kind",
           "clientId",
           "clientSecret",
-          "redirectUri"
+          "redirectUri",
+          "authUrl"
         ],
         "properties": {
           "id": {
@@ -1176,6 +1466,9 @@
             "type": "string"
           },
           "redirectUri": {
+            "type": "string"
+          },
+          "authUrl": {
             "type": "string"
           }
         }

@@ -59,6 +59,39 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/auth/applications/{slug}/.well-known/jwks.json": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations["get_jwks"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/auth/applications/{slug}/config": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get authentication configuration for an application */
+    get: operations["auth_config"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/auth/applications/{slug}/login": {
     parameters: {
       query?: never;
@@ -308,6 +341,9 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
+    ApiTokenConfig: {
+      enabled: boolean;
+    };
     Application: {
       /** Format: int64 */
       id: number;
@@ -322,20 +358,50 @@ export interface components {
       description?: string | null;
       website?: string | null;
       icon?: string | null;
-      passwordAuth: boolean;
+      apiTokenAuthEnabled: boolean;
+      basicAuthEnabled: boolean;
+      passwordAuthEnabled: boolean;
+      passwordAuthSignupEnabled: boolean;
       /** Format: int64 */
       passwordMinLength: number;
       /** Format: int64 */
-      passwordMaxLength?: number | null;
-      passwordRequiresLowercase: boolean;
-      passwordRequiresUppercase: boolean;
-      passwordRequiresNumber: boolean;
-      passwordRequiresSpecial: boolean;
-      passwordRequiresUnique: boolean;
-      passwordRequiresNonCommon: boolean;
+      passwordMaxLength: number;
+      /** Format: int64 */
+      passwordMinLowercase: number;
+      /** Format: int64 */
+      passwordMinUppercase: number;
+      /** Format: int64 */
+      passwordMinNumber: number;
+      /** Format: int64 */
+      passwordMinSpecial: number;
+      passwordUnique: boolean;
+      passwordMinStrength: string;
       verificationRequired: boolean;
       verificationMethod?: string | null;
       verificationCode?: string | null;
+    };
+    AuthConfigResponse: {
+      password: components["schemas"]["PasswordConfig"];
+      apiToken: components["schemas"]["ApiTokenConfig"];
+      basic: components["schemas"]["BasicConfig"];
+      providers: components["schemas"]["MinimalProviderInfo"][];
+    };
+    BasicConfig: {
+      enabled: boolean;
+    };
+    JwkKey: {
+      kty: string;
+      use: string;
+      kid: string;
+      alg: string;
+      crv?: string;
+      x?: string;
+      y?: string;
+      n?: string;
+      e?: string;
+    };
+    Jwks: {
+      keys: components["schemas"]["JwkKey"][];
     };
     /** @description Data needed to login a user */
     LoginUserRequest: {
@@ -349,6 +415,15 @@ export interface components {
       /** @description The JWT token created from login request that can be used to authenticate yourself */
       jwtToken: string;
     };
+    MinimalProviderInfo: {
+      /** Format: int64 */
+      id: number;
+      name: string;
+      kind: string;
+      clientId: string;
+      redirectUri: string;
+      authUrl: string;
+    };
     ModifyApplication: {
       name: string;
       description?: string | null;
@@ -361,6 +436,7 @@ export interface components {
       client_id: string;
       client_secret: string;
       redirect_uri: string;
+      auth_url: string;
     };
     ModifyRole: {
       name: string;
@@ -379,6 +455,23 @@ export interface components {
       /** @description Whether the user is enabled or not, if they are able to login/access the platform */
       disabled?: boolean;
     };
+    PasswordConfig: {
+      enabled: boolean;
+      signupEnabled: boolean;
+      requirements?: null | components["schemas"]["PasswordRequirements"];
+    };
+    PasswordRequirements: {
+      minLength: number;
+      maxLength: number;
+      minLowercase: number;
+      minUppercase: number;
+      minNumber: number;
+      minSpecial: number;
+      unique: boolean;
+      minStrength: components["schemas"]["PasswordStrength"];
+    };
+    /** @enum {string} */
+    PasswordStrength: "Weak" | "Medium" | "Strong";
     Provider: {
       /** Format: int64 */
       id: number;
@@ -391,6 +484,7 @@ export interface components {
       clientId: string;
       clientSecret: string;
       redirectUri: string;
+      authUrl: string;
     };
     Role: {
       /** Format: int64 */
@@ -656,6 +750,70 @@ export interface operations {
         content: {
           "text/plain": string;
         };
+      };
+    };
+  };
+  get_jwks: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description Application slug */
+        application_slug: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description JSON Web Key Set */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Jwks"];
+        };
+      };
+      /** @description Application not found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  auth_config: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successfully retrieved auth config */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AuthConfigResponse"];
+        };
+      };
+      /** @description Application not found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
       };
     };
   };
