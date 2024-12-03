@@ -11,7 +11,7 @@ pub(crate) struct PasswordValidator<'a> {
     pub previous_hashed_passwords: &'a [String],
 }
 
-impl<'a> PasswordValidator<'a> {
+impl PasswordValidator<'_> {
     pub(crate) fn validate(&self) -> Vec<PasswordError> {
         self.validate_length()
             .into_iter()
@@ -54,7 +54,7 @@ impl<'a> PasswordValidator<'a> {
                 lowercase_count += 1;
             } else if c.is_uppercase() {
                 uppercase_count += 1;
-            } else if c.is_digit(10) {
+            } else if c.is_ascii_digit() {
                 number_count += 1;
             } else {
                 special_count += 1;
@@ -113,9 +113,9 @@ impl<'a> PasswordValidator<'a> {
 
         if self
             .previous_hashed_passwords
-            .into_iter()
+            .iter()
             .any(|previous_hashed_password| {
-                verify_password(self.password, &previous_hashed_password).unwrap()
+                verify_password(self.password, previous_hashed_password).unwrap()
             })
         {
             vec![PasswordError::Reused]

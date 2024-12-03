@@ -4,7 +4,7 @@ use std::sync::LazyLock;
 
 use crate::{Algorithm, Result};
 
-const DUMMY_KEY: LazyLock<DecodingKey> = LazyLock::new(|| DecodingKey::from_secret(&[]));
+static DUMMY_KEY: LazyLock<DecodingKey> = LazyLock::new(|| DecodingKey::from_secret(&[]));
 
 pub(crate) fn encode_jwt<T: Serialize>(
     encoding_key: &EncodingKey,
@@ -12,7 +12,7 @@ pub(crate) fn encode_jwt<T: Serialize>(
     claims: &T,
 ) -> Result<String> {
     let token_header = jsonwebtoken::Header::new(algorithm.into());
-    let token = encode(&token_header, claims, &encoding_key)?;
+    let token = encode(&token_header, claims, encoding_key)?;
 
     Ok(token)
 }
@@ -31,7 +31,7 @@ pub(crate) fn decode_jwt<T: DeserializeOwned>(
     validation.validate_exp = true;
     validation.validate_nbf = true;
 
-    let token_data = decode::<T>(token, &decoding_key, &validation)?;
+    let token_data = decode::<T>(token, decoding_key, &validation)?;
 
     Ok(token_data.claims)
 }

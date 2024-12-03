@@ -83,3 +83,9 @@ impl PasswordRequirementsBuilder {
         Ok(self.0)
     }
 }
+
+impl Default for PasswordRequirementsBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
