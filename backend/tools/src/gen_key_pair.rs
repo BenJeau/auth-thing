@@ -97,10 +97,11 @@ fn get_keys_from_algorithm(
             Ok((encoding_key, decoding_key))
         }
         Algorithm::HS256 | Algorithm::HS384 | Algorithm::HS512 => {
-            let mut secret_key = vec![0u8; 32];
-            rng.fill(&mut secret_key)?;
-            let encoding_key = EncodingKey::from_secret(&secret_key);
-            let decoding_key = DecodingKey::from_secret(&secret_key);
+            let mut secret = vec![0u8; 32];
+            rng.fill(&mut secret)?;
+            print_data(&secret, &secret, secret_key);
+            let encoding_key = EncodingKey::from_secret(&secret);
+            let decoding_key = DecodingKey::from_secret(&secret);
             Ok((encoding_key, decoding_key))
         }
         Algorithm::RS256 | Algorithm::RS384 | Algorithm::RS512 => {
