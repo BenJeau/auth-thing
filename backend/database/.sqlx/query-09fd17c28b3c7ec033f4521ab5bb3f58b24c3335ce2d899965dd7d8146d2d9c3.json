@@ -1,6 +1,6 @@
 {
   "db_name": "SQLite",
-  "query": "SELECT jwt_configs.*, applications.name AS issuer FROM jwt_configs INNER JOIN applications ON jwt_configs.application_id = applications.id WHERE application_id = ? AND jwt_configs.id = applications.active_jwt_config_id",
+  "query": "SELECT jwt_configs.*, applications.slug AS issuer FROM jwt_configs INNER JOIN applications ON jwt_configs.application_id = applications.id WHERE application_id = ? AND jwt_configs.id = applications.active_jwt_config_id",
   "describe": {
     "columns": [
       {
@@ -64,5 +64,5 @@
       false
     ]
   },
-  "hash": "9c1c6c007e8a76fa47aeb64b2b6a67e44ca320f38fa2240e1fa67a27e49d6cec"
+  "hash": "09fd17c28b3c7ec033f4521ab5bb3f58b24c3335ce2d899965dd7d8146d2d9c3"
 }
