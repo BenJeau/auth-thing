@@ -51,7 +51,7 @@ pub(crate) fn generate_ed25519_keys() -> Result<RawKeys> {
     })
 }
 
-pub(crate) fn generate_esdca_keys(signing_alg: &'static EcdsaSigningAlgorithm) -> Result<RawKeys> {
+pub(crate) fn generate_ecdsa_keys(signing_alg: &'static EcdsaSigningAlgorithm) -> Result<RawKeys> {
     let document = EcdsaKeyPair::generate_pkcs8(signing_alg, &RNG.to_owned())?;
     let key_pair = EcdsaKeyPair::from_pkcs8(signing_alg, document.as_ref(), &RNG.to_owned())?;
 
@@ -59,6 +59,24 @@ pub(crate) fn generate_esdca_keys(signing_alg: &'static EcdsaSigningAlgorithm) -
         private_key: document.as_ref().to_vec(),
         public_key: key_pair.public_key().as_ref().to_vec(),
     })
+}
+
+pub fn get_es384_coordinates(public_key: &[u8]) -> (Vec<u8>, Vec<u8>) {
+    let key_pair =
+        EcdsaKeyPair::from_pkcs8(ES384_SIGNING_ALG, public_key, &RNG.to_owned()).unwrap();
+    let public_key = key_pair.public_key();
+    let x = public_key.as_ref()[0..48].to_vec();
+    let y = public_key.as_ref()[48..].to_vec();
+    (x, y)
+}
+
+pub fn get_es256_coordinates(public_key: &[u8]) -> (Vec<u8>, Vec<u8>) {
+    let key_pair =
+        EcdsaKeyPair::from_pkcs8(ES256_SIGNING_ALG, public_key, &RNG.to_owned()).unwrap();
+    let public_key = key_pair.public_key();
+    let x = public_key.as_ref()[0..32].to_vec();
+    let y = public_key.as_ref()[32..].to_vec();
+    (x, y)
 }
 
 #[cfg(test)]
@@ -114,7 +132,7 @@ mod tests {
 
     #[test]
     fn test_when_generating_esdca_keys_then_able_to_reconstruct_public_key_from_private_key() {
-        let key = generate_esdca_keys(ES256_SIGNING_ALG).unwrap();
+        let key = generate_ecdsa_keys(ES256_SIGNING_ALG).unwrap();
 
         let private_key =
             EcdsaKeyPair::from_pkcs8(ES256_SIGNING_ALG, &key.private_key, &RNG.to_owned()).unwrap();

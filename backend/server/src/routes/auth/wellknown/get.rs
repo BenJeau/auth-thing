@@ -5,6 +5,7 @@ use axum::{
 };
 use base64::{engine::general_purpose::STANDARD, Engine};
 use serde::Serialize;
+use sha1::{Digest, Sha1};
 use utoipa::ToSchema;
 
 use crate::{Result, ServerState};
@@ -14,7 +15,7 @@ struct Jwks {
     keys: Vec<JwkKey>,
 }
 
-#[derive(Serialize, ToSchema)]
+#[derive(Serialize, ToSchema, Default)]
 struct JwkKey {
     kty: String,
     #[serde(rename = "use")]
@@ -61,7 +62,15 @@ pub async fn get_jwks(
     let keys = jwt_configs
         .into_iter()
         .flat_map(|config| {
-            let kid = STANDARD.encode(format!("{}{}", application_slug, config.id));
+            let public_key = state.crypto.decrypt(&config.public_key).unwrap();
+
+            let kid = {
+                let mut hasher = Sha1::new();
+                hasher.update(&public_key);
+                STANDARD.encode(hex::encode(hasher.finalize()))
+            };
+
+            let encoded_public_key = STANDARD.encode(&public_key);
 
             match config.algorithm.as_str() {
                 "RS256" => Some(JwkKey {
@@ -69,34 +78,66 @@ pub async fn get_jwks(
                     key_use: "sig".to_string(),
                     kid,
                     alg: "RS256".to_string(),
-                    n: STANDARD.encode(&config.public_key),
+                    n: encoded_public_key.clone(),
                     e: "AQAB".to_string(),
-                    crv: String::new(),
-                    x: String::new(),
-                    y: String::new(),
+                    ..Default::default()
                 }),
-                "ES256" => Some(JwkKey {
-                    kty: "EC".to_string(),
+                "RS384" => Some(JwkKey {
+                    kty: "RSA".to_string(),
                     key_use: "sig".to_string(),
                     kid,
-                    alg: "ES256".to_string(),
-                    crv: "P-256".to_string(),
-                    x: STANDARD.encode(&config.public_key),
-                    // TODO: double check this field
-                    y: String::new(),
-                    n: String::new(),
-                    e: String::new(),
+                    alg: "RS384".to_string(),
+                    n: encoded_public_key.clone(),
+                    e: "AQAB".to_string(),
+                    ..Default::default()
                 }),
+                "RS512" => Some(JwkKey {
+                    kty: "RSA".to_string(),
+                    key_use: "sig".to_string(),
+                    kid,
+                    alg: "RS512".to_string(),
+                    n: encoded_public_key.clone(),
+                    e: "AQAB".to_string(),
+                    ..Default::default()
+                }),
+                "ES256" => {
+                    let private_key = state.crypto.decrypt(&config.private_key).unwrap();
+                    let (x, y) = jwt::get_es256_coordinates(&private_key);
+
+                    Some(JwkKey {
+                        kty: "EC".to_string(),
+                        key_use: "sig".to_string(),
+                        kid,
+                        alg: "ES256".to_string(),
+                        crv: "P-256".to_string(),
+                        x: STANDARD.encode(x),
+                        y: STANDARD.encode(y),
+                        ..Default::default()
+                    })
+                }
+                "ES384" => {
+                    let private_key = state.crypto.decrypt(&config.private_key).unwrap();
+                    let (x, y) = jwt::get_es384_coordinates(&private_key);
+
+                    Some(JwkKey {
+                        kty: "EC".to_string(),
+                        key_use: "sig".to_string(),
+                        kid,
+                        alg: "ES384".to_string(),
+                        crv: "P-384".to_string(),
+                        x: STANDARD.encode(x),
+                        y: STANDARD.encode(y),
+                        ..Default::default()
+                    })
+                }
                 "EdDSA" => Some(JwkKey {
                     kty: "OKP".to_string(),
                     key_use: "sig".to_string(),
                     kid,
                     alg: "EdDSA".to_string(),
                     crv: "Ed25519".to_string(),
-                    x: STANDARD.encode(&config.public_key),
-                    y: String::new(),
-                    n: String::new(),
-                    e: String::new(),
+                    x: encoded_public_key,
+                    ..Default::default()
                 }),
                 _ => None,
             }

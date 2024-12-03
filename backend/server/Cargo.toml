@@ -15,6 +15,7 @@ chacha20poly1305 = { workspace = true }
 chrono = { workspace = true }
 figment = { workspace = true }
 headers = { workspace = true }
+hex = { workspace = true }
 http = { workspace = true }
 rand = { workspace = true }
 sentry = { workspace = true }
@@ -22,6 +23,7 @@ sentry-tower = { workspace = true }
 sentry-tracing = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
+sha1 = { workspace = true }
 strum = { workspace = true }
 tokio = { workspace = true }
 tower = { workspace = true }

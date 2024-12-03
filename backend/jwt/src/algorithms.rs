@@ -4,7 +4,7 @@ use serde::{de::DeserializeOwned, Serialize};
 use crate::{
     claims::{decode_jwt, encode_jwt},
     keys::{
-        generate_ed25519_keys, generate_esdca_keys, generate_hmac_keys, generate_rsa_keys, RawKeys,
+        generate_ecdsa_keys, generate_ed25519_keys, generate_hmac_keys, generate_rsa_keys, RawKeys,
         ES256_SIGNING_ALG, ES384_SIGNING_ALG,
     },
     Error, Result,
@@ -49,8 +49,8 @@ impl Algorithm {
     pub fn generate_keys(&self) -> Result<RawKeys> {
         match self {
             Algorithm::EdDSA => generate_ed25519_keys(),
-            Algorithm::ES256 => generate_esdca_keys(ES256_SIGNING_ALG),
-            Algorithm::ES384 => generate_esdca_keys(ES384_SIGNING_ALG),
+            Algorithm::ES256 => generate_ecdsa_keys(ES256_SIGNING_ALG),
+            Algorithm::ES384 => generate_ecdsa_keys(ES384_SIGNING_ALG),
             Algorithm::RS256 => generate_rsa_keys(2048),
             Algorithm::RS384 => generate_rsa_keys(3072),
             Algorithm::RS512 => generate_rsa_keys(4096),
