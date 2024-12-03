@@ -2,6 +2,8 @@
 
 A small (less than 10MB) self-hosted authentication and authorization system designed to provide secure user management for web applications.
 
+![Screenshot](docs/screenshot.png)
+
 Key features:
 - User signup and authentication 
 - Email verification system with configurable code length
@@ -14,6 +16,7 @@ Key features:
 
 The system is built with:
 - Rust backend using Axum web framework
+- React frontend with Tanstack Query and Router styled with TailwindCSS and Shadcn/UI
 - Database integration for persistent storage
 - Email delivery capabilities for verification
 - Security features like password hashing
