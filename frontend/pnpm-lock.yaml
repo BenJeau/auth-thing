@@ -147,6 +147,9 @@ importers:
       tailwindcss:
         specifier: ^3.4.15
         version: 3.4.15
+      tsx:
+        specifier: 4.19.2
+        version: 4.19.2
       typescript:
         specifier: ~5.7.2
         version: 5.7.2
