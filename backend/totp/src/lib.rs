@@ -10,7 +10,7 @@ pub use error::{Error, Result};
 pub struct Totp {
     /// Secret key used to generate the OTP, which is zeroized on drop
     secret: String,
-    /// Crytographic algorithm used to generate the OTP
+    /// Cryptographic algorithm used to generate the OTP
     #[zeroize(skip)]
     algorithm: CryptoAlgorithm,
     /// Number of digits of the OTP (from 1 to 9)
