@@ -1,0 +1,2 @@
+[files]
+extend-exclude = ["*.jpg", "*.png", "*.svg", "backend/server/config.toml", "backend/server/scalar/*", "frontend/src/i18n/fr_CA.json"]

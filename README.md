@@ -36,7 +36,7 @@ docker build -t auth-thing:latest .
 
 Local development currently doesn't rely on Docker. You'll need Rust installed alongside Node.js and pnpm.
 
-### Running the applicaiton
+### Running the application
 
 *Backend*
 

@@ -56,7 +56,7 @@ const SaveUserData: React.FC = () => {
       }
       return <Navigate to="/auth/verify-email" />;
     } else {
-      console.log("mising fields in token");
+      console.log("missing fields in token");
       error = "invalidToken";
     }
   }

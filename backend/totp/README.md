@@ -12,7 +12,7 @@ It is recommended to use a default time-step size of **30 seconds**. It can be a
 
 > **Note:** the `CryptoAlgorithm.generate_key()` method respects two of the three points below.
 
-The length of the key can be any length, but it is recommended to correspond with the corresponing algorithm:
+The length of the key can be any length, but it is recommended to correspond with the corresponding algorithm:
 - SHA1: 160 bits (20 characters)
 - SHA256: 256 bits (32 characters)
 - SHA512: 512 bits (64 characters)
