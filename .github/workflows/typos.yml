@@ -1,0 +1,20 @@
+name: CI - Spell Check with Typos
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  run:
+    name: Spell Check with Typos
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Actions Repository
+        uses: actions/checkout@v4
+      - name: Use custom config file
+        uses: crate-ci/typos@v1.28.2
+        with:
+          config: ./typos.toml
