@@ -1073,12 +1073,6 @@
               "string",
               "null"
             ]
-          },
-          "verificationCode": {
-            "type": [
-              "string",
-              "null"
-            ]
           }
         }
       },

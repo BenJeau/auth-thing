@@ -1,6 +1,6 @@
 {
   "db_name": "SQLite",
-  "query": "SELECT id, created_at, updated_at, creator_id, slug, name, description, website, icon, api_token_auth_enabled, basic_auth_enabled, password_auth_enabled, password_auth_signup_enabled, password_min_length, password_max_length, password_min_lowercase, password_min_uppercase, password_min_number, password_min_special, password_unique, password_min_strength, verification_required, verification_method, verification_code FROM applications WHERE slug = ?",
+  "query": "SELECT id, created_at, updated_at, creator_id, slug, name, description, website, icon, api_token_auth_enabled, basic_auth_enabled, password_auth_enabled, password_auth_signup_enabled, password_min_length, password_max_length, password_min_lowercase, password_min_uppercase, password_min_number, password_min_special, password_unique, password_min_strength, verification_required, verification_method FROM applications WHERE slug = ?",
   "describe": {
     "columns": [
       {
@@ -117,11 +117,6 @@
         "name": "verification_method",
         "ordinal": 22,
         "type_info": "Text"
-      },
-      {
-        "name": "verification_code",
-        "ordinal": 23,
-        "type_info": "Text"
       }
     ],
     "parameters": {
@@ -150,9 +145,8 @@
       false,
       false,
       false,
-      true,
       true
     ]
   },
-  "hash": "1e7ad43f19855eb1b964fe96352f3030921302bbe7f2d7bb24d1fe890a1e60de"
+  "hash": "2489878bb51623675b7fa0613d2f03f2519e206413bb0fbbcde011cb180b363d"
 }

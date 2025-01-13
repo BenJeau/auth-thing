@@ -40,7 +40,6 @@ CREATE TABLE applications (
         CHECK (password_min_strength IN ('weak', 'medium', 'strong')),
     verification_required BOOLEAN DEFAULT FALSE NOT NULL,
     verification_method TEXT,
-    verification_code TEXT,
     active_jwt_config_id INTEGER,
     FOREIGN KEY (creator_id) REFERENCES users(id),
     FOREIGN KEY (active_jwt_config_id) REFERENCES jwt_configs(id)

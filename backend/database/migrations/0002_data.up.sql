@@ -5,7 +5,7 @@ VALUES
 
 INSERT INTO applications (id, slug, name, description, website, creator_id, password_min_length, password_min_strength)
 VALUES
-  ('1', 'example', 'Example', 'Example application', 'https://example.com', '1', 8, 'medium');
+  ('1', 'example', 'Example', 'Example application description', 'https://example.com', '1', 8, 'medium');
 
 INSERT INTO application_passwords (application_id, user_id, password)
 VALUES

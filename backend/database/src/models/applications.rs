@@ -29,7 +29,6 @@ pub struct Application {
     pub password_min_strength: String,
     pub verification_required: bool,
     pub verification_method: Option<String>,
-    pub verification_code: Option<String>,
 }
 
 #[derive(Debug, Deserialize, ToSchema)]

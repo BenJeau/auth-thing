@@ -8,7 +8,7 @@ use crate::{
 use sqlx::{Result, SqlitePool};
 
 pub async fn get_application(pool: &SqlitePool, id: i64) -> Result<Option<Application>> {
-    sqlx::query_as!(Application, "SELECT id, created_at, updated_at, creator_id, slug, name, description, website, icon, api_token_auth_enabled, basic_auth_enabled, password_auth_enabled, password_auth_signup_enabled, password_min_length, password_max_length, password_min_lowercase, password_min_uppercase, password_min_number, password_min_special, password_unique, password_min_strength, verification_required, verification_method, verification_code FROM applications WHERE id = ?", id)
+    sqlx::query_as!(Application, "SELECT id, created_at, updated_at, creator_id, slug, name, description, website, icon, api_token_auth_enabled, basic_auth_enabled, password_auth_enabled, password_auth_signup_enabled, password_min_length, password_max_length, password_min_lowercase, password_min_uppercase, password_min_number, password_min_special, password_unique, password_min_strength, verification_required, verification_method FROM applications WHERE id = ?", id)
         .fetch_optional(pool)
         .await
 }
@@ -16,7 +16,7 @@ pub async fn get_application(pool: &SqlitePool, id: i64) -> Result<Option<Applic
 pub async fn get_applications(pool: &SqlitePool) -> Result<Vec<Application>> {
     sqlx::query_as!(
         Application,
-        "SELECT id, created_at, updated_at, creator_id, slug, name, description, website, icon, api_token_auth_enabled, basic_auth_enabled, password_auth_enabled, password_auth_signup_enabled, password_min_length, password_max_length, password_min_lowercase, password_min_uppercase, password_min_number, password_min_special, password_unique, password_min_strength, verification_required, verification_method, verification_code FROM applications ORDER BY created_at DESC"
+        "SELECT id, created_at, updated_at, creator_id, slug, name, description, website, icon, api_token_auth_enabled, basic_auth_enabled, password_auth_enabled, password_auth_signup_enabled, password_min_length, password_max_length, password_min_lowercase, password_min_uppercase, password_min_number, password_min_special, password_unique, password_min_strength, verification_required, verification_method FROM applications ORDER BY created_at DESC"
     )
     .fetch_all(pool)
     .await
@@ -34,7 +34,7 @@ pub async fn get_application_from_slug(
 ) -> Result<Option<Application>> {
     sqlx::query_as!(
         Application,
-        "SELECT id, created_at, updated_at, creator_id, slug, name, description, website, icon, api_token_auth_enabled, basic_auth_enabled, password_auth_enabled, password_auth_signup_enabled, password_min_length, password_max_length, password_min_lowercase, password_min_uppercase, password_min_number, password_min_special, password_unique, password_min_strength, verification_required, verification_method, verification_code FROM applications WHERE slug = ?",
+        "SELECT id, created_at, updated_at, creator_id, slug, name, description, website, icon, api_token_auth_enabled, basic_auth_enabled, password_auth_enabled, password_auth_signup_enabled, password_min_length, password_max_length, password_min_lowercase, password_min_uppercase, password_min_number, password_min_special, password_unique, password_min_strength, verification_required, verification_method FROM applications WHERE slug = ?",
         slug
     )
     .fetch_optional(pool)
