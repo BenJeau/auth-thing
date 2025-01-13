@@ -34,6 +34,7 @@ struct JwkKey {
     e: String,
 }
 
+/// Get JSON Web Key Set for an application
 #[utoipa::path(
     get,
     path = "",
