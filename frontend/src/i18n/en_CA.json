@@ -42,6 +42,7 @@
   "login.image.alt": "Random image for login",
   "login.image.blurry.alt": "Random blurry image for login",
   "login.signup.description": "Don't have an account? {link} to create a new account",
+  "login.signup.disabled.description": "Don't have an account? Signup is currently disabled.",
   "login.subsection.code.description": "View the source code and contribute to the project on GitHub",
   "login.subsection.code.title": "{name} Project",
   "login.subsection.documentation.description": "Learn more about the platform, API, and how to integrate it within your application",

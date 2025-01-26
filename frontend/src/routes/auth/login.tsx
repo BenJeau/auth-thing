@@ -13,6 +13,14 @@ import { api } from "@/api";
 const Login: React.FC = () => {
   const { next } = Route.useSearch();
 
+  const config = api.useSuspenseQuery(
+    "get",
+    "/auth/applications/{slug}/config",
+    {
+      params: { path: { slug: "example" } },
+    },
+  );
+
   // const query = next ? `?next=${next}` : "";
 
   const login = api.useMutation("post", "/auth/applications/{slug}/login");
@@ -82,14 +90,18 @@ const Login: React.FC = () => {
         />
         <p className="mt-2 text-center text-xs text-muted-foreground">
           <Trans
-            id="login.signup.description"
+            id={
+              config.data.password.signupEnabled
+                ? "login.signup.description"
+                : "login.signup.disabled.description"
+            }
             link={
               <Link
-                className="text-primary underline"
+                className="text-primary"
                 to={"/auth/signup"}
                 search={{ next }}
               >
-                <Trans id="signup.here" />
+                <Trans id="signup.here" case="sentence" />
               </Link>
             }
           />
@@ -115,4 +127,15 @@ export const Route = createFileRoute("/auth/login")({
   validateSearch: ({ next }: SearchParams): SearchParams => ({
     next: next && next !== "/" ? next : undefined,
   }),
+  loader: async ({ context: { queryClient } }) => {
+    await queryClient.ensureQueryData(
+      api.queryOptions("get", "/auth/applications/{slug}/config", {
+        params: {
+          path: {
+            slug: "example",
+          },
+        },
+      }),
+    );
+  },
 });

@@ -233,6 +233,7 @@
         "tags": [
           "Auth"
         ],
+        "summary": "Get JSON Web Key Set for an application",
         "operationId": "get_jwks",
         "parameters": [
           {
@@ -272,6 +273,14 @@
         ],
         "summary": "Get authentication configuration for an application",
         "operationId": "auth_config",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "description": "Application slug",
+            "required": true
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successfully retrieved auth config",

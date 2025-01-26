@@ -66,6 +66,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /** Get JSON Web Key Set for an application */
         get: operations["get_jwks"];
         put?: never;
         post?: never;
@@ -793,7 +794,10 @@ export interface operations {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                /** @description Application slug */
+                slug: string;
+            };
             cookie?: never;
         };
         requestBody?: never;

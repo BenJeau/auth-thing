@@ -131,7 +131,7 @@ pub async fn signup(
         logic::action_logs::create_action_log(&state.pool, action_log),
         logic::applications::create_application_password(
             &state.pool,
-            application_data.id,
+            application.id,
             user_id,
             hash_password(&data.password)?,
         )
