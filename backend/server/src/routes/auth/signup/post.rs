@@ -50,9 +50,17 @@ pub async fn signup(
         return Err(Error::PasswordSignupDisabled);
     }
 
+    if logic::users::get_user_from_email(&state.pool, &data.email)
+        .await?
+        .is_some()
+    {
+        return Err(Error::EmailAlreadyUsed);
+    }
+
     let validator = PasswordRequirementsBuilder::from(&application).build()?;
 
     let previous_passwords = if application.password_unique {
+        // TODO: I don't this will work... data.email is a String not a number
         logic::users::get_user_passwords(&state.pool, &data.email).await?
     } else {
         vec![]
