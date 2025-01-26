@@ -21,6 +21,9 @@ pub enum Error {
     ChaChaSecretLength,
     PasswordHash(password::PasswordHashError),
     // Auth/User errors
+    // TODO: What is the correct response for these two errors??
+    PasswordAuthDisabled,
+    PasswordSignupDisabled,
     DisabledUser,
     NotVerified,
     AlreadyVerified,

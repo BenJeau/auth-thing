@@ -41,14 +41,18 @@ pub async fn signup(
     Path(application_slug): Path<String>,
     Json(data): Json<SignupUserRequest>,
 ) -> Result<impl IntoResponse> {
-    let application_data =
+    let application =
         logic::applications::get_application_from_slug(&state.pool, &application_slug)
             .await?
             .ok_or(Error::NotFound("Application not found".to_string()))?;
 
-    let validator = PasswordRequirementsBuilder::from(&application_data).build()?;
+    if !application.password_auth_signup_enabled {
+        return Err(Error::PasswordSignupDisabled);
+    }
 
-    let previous_passwords = if application_data.password_unique {
+    let validator = PasswordRequirementsBuilder::from(&application).build()?;
+
+    let previous_passwords = if application.password_unique {
         logic::users::get_user_passwords(&state.pool, &data.email).await?
     } else {
         vec![]
@@ -114,7 +118,7 @@ pub async fn signup(
         Result::Ok(())
     };
 
-    let (result, action_log, application) = join!(
+    let (result, action_log, application_affected_rows) = join!(
         maybe_send_email,
         logic::action_logs::create_action_log(&state.pool, action_log),
         logic::applications::create_application_password(
@@ -127,7 +131,7 @@ pub async fn signup(
 
     result?;
     action_log?;
-    application?;
+    application_affected_rows?;
 
     // parse_and_validate_referer(&headers, &state.config.auth)?;
 

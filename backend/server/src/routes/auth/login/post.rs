@@ -40,16 +40,20 @@ pub async fn login(
     // headers: HeaderMap,
     Json(data): Json<LoginUserRequest>,
 ) -> Result<impl IntoResponse> {
-    let Some(application_id) =
-        logic::applications::get_application_id(&state.pool, &application_slug).await?
+    let Some(application) =
+        logic::applications::get_application_from_slug(&state.pool, &application_slug).await?
     else {
         return Err(Error::NotFound("Application not found".to_string()));
     };
 
+    if !application.password_auth_enabled {
+        return Err(Error::PasswordAuthDisabled);
+    }
+
     let Some(user) = logic::users::get_user_from_email_with_latest_password(
         &state.pool,
         &data.email,
-        application_id,
+        application.id,
     )
     .await?
     else {
@@ -87,7 +91,7 @@ pub async fn login(
     };
 
     let jwt_config =
-        database::logic::jwt_configs::get_active_jwt_config(&state.pool, application_id)
+        database::logic::jwt_configs::get_active_jwt_config(&state.pool, application.id)
             .await?
             .ok_or(Error::UnableToCreateToken)?;
 
