@@ -1,4 +1,6 @@
 {
+  "signup.disabled.toast.title": "L'inscription est désactivé",
+  "signup.disabled.toast.description": "Connectez-vous si vous avez un compte",
   "auth.error.disabled": "Votre compte est désactivé",
   "auth.error.title": "Erreur d'authentification",
   "auth.error.token.invalid": "Jeton invalide",

@@ -1,5 +1,6 @@
 import {
   Link,
+  Navigate,
   createFileRoute,
   redirect,
   useNavigate,
@@ -10,11 +11,28 @@ import { api } from "@/api";
 import { Forms, Trans } from "@/components";
 import { store } from "@/atoms";
 import { userAtom } from "@/atoms/auth";
+import { useTranslation } from "@/i18n";
 
 const Signup: React.FC = () => {
   const { next } = Route.useSearch();
   const signup = api.useMutation("post", "/auth/applications/{slug}/signup");
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const config = api.useSuspenseQuery(
+    "get",
+    "/auth/applications/{slug}/config",
+    {
+      params: { path: { slug: "example" } },
+    },
+  );
+
+  if (!config.data.password.signupEnabled) {
+    toast.info(t("signup.disabled.toast.title"), {
+      description: t("signup.disabled.toast.description"),
+      id: "signup.disabled",
+    });
+    return <Navigate to="/auth/login" replace />;
+  }
 
   const handleOnSubmit = async (data: Forms.Signup.FormSchema) => {
     await signup.mutateAsync({
@@ -88,4 +106,15 @@ export const Route = createFileRoute("/auth/signup")({
   validateSearch: ({ next }: SearchParams): SearchParams => ({
     next: next && next !== "/" ? next : undefined,
   }),
+  loader: async ({ context: { queryClient } }) => {
+    await queryClient.ensureQueryData(
+      api.queryOptions("get", "/auth/applications/{slug}/config", {
+        params: {
+          path: {
+            slug: "example",
+          },
+        },
+      }),
+    );
+  },
 });
