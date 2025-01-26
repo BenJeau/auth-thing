@@ -83,11 +83,19 @@ const Login: React.FC = () => {
             </div>
           </div>
         )}
-        <Forms.Login.default
-          onSubmit={handleOnSubmit}
-          loading={login.isPending}
-          error={login.isError}
-        />
+        <div className="relative flex">
+          <div className="flex-1 blur-sm">
+            <Forms.Login.default
+              onSubmit={handleOnSubmit}
+              loading={login.isPending}
+              error={login.isError}
+              disabled={!config.data.password.enabled}
+            />
+          </div>
+          <p className="absolute bottom-0 left-0 right-0 top-0 flex flex-1 items-center justify-center text-center text-sm font-medium italic">
+            Password login is currently disabled
+          </p>
+        </div>
         <p className="mt-2 text-center text-xs text-muted-foreground">
           <Trans
             id={

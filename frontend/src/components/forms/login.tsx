@@ -20,9 +20,10 @@ interface Props {
   onSubmit: (values: FormSchema) => Promise<void>;
   loading: boolean;
   error: boolean;
+  disabled: boolean;
 }
 
-const Login: React.FC<Props> = ({ onSubmit, loading, error }) => {
+const Login: React.FC<Props> = ({ onSubmit, loading, error, disabled }) => {
   const { t } = useTranslation();
   const form = useForm({
     validatorAdapter: valibotValidator(),
@@ -56,7 +57,9 @@ const Login: React.FC<Props> = ({ onSubmit, loading, error }) => {
       onSubmit={(e) => {
         e.preventDefault();
         e.stopPropagation();
-        form.handleSubmit();
+        if (!disabled) {
+          form.handleSubmit();
+        }
       }}
       className="flex h-full flex-col gap-2"
     >
@@ -64,6 +67,7 @@ const Login: React.FC<Props> = ({ onSubmit, loading, error }) => {
         {(field) => (
           <div className="grid gap-2">
             <Input
+              disabled={disabled}
               placeholder={t("email").toLowerCase()}
               name={field.name}
               value={field.state.value}
@@ -77,6 +81,7 @@ const Login: React.FC<Props> = ({ onSubmit, loading, error }) => {
         {(field) => (
           <div className="grid gap-2">
             <Input
+              disabled={disabled}
               placeholder={t("password").toLowerCase()}
               type="password"
               name={field.name}
@@ -92,7 +97,7 @@ const Login: React.FC<Props> = ({ onSubmit, loading, error }) => {
           className="w-full gap-2"
           type="submit"
           variant={isError ? "destructive" : undefined}
-          disabled={loading}
+          disabled={loading || disabled}
         >
           <AutoAnimate>
             {loading && <Loader2 size={16} className="animate-spin" />}
