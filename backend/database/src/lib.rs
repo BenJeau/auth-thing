@@ -17,7 +17,7 @@ pub async fn connect_to_db(
 ) -> Result<SqlitePool, Error> {
     assert!(max_connections >= min_connections);
 
-    info!("Connecting to database");
+    info!(url, "Connecting to database");
     let options = SqliteConnectOptions::from_str(url)?;
 
     SqlitePoolOptions::new()

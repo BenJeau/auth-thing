@@ -3,12 +3,17 @@ edition = "2021"
 name = "database"
 version = "0.1.0"
 
+[[bin]]
+name = "seeder"
+path = "./src/seeder.rs"
+
 [dependencies]
 chrono = { workspace = true }
 regex = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 sqlx = { workspace = true }
+tokio = { workspace = true }
 tracing = { workspace = true }
 utoipa = { workspace = true }
 zeroize = { workspace = true }

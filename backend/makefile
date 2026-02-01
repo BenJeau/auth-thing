@@ -5,8 +5,12 @@ run-db:
 	cd database && cargo sqlx database setup
 
 reset-db:
-	cd database && cargo sqlx database drop -y
-	cd database && cargo sqlx database setup
+	cd database && $(if $(DB_FILE),DATABASE_URL=sqlite://./$(DB_FILE)) cargo sqlx database drop -y
+	cd database && $(if $(DB_FILE),DATABASE_URL=sqlite://./$(DB_FILE)) cargo sqlx database setup
+	cd database && source .env && $(if $(DB_FILE),DATABASE_URL=sqlite://./$(DB_FILE),DATABASE_URL=$$DATABASE_URL) cargo run --bin seeder $${SEED_FILES:-data.sql}
+
+delete-db:
+	if [ -n "$(DB_FILE)" ]; then rm -f "./database/$(DB_FILE)" "./database/$(DB_FILE)-wal" "./database/$(DB_FILE)-shm"; fi
 
 link-openapi:
 	npx @redocly/cli@latest lint ./openapi.json 

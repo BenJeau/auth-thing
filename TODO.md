@@ -1,0 +1,19 @@
+- [x] Make backend respect the authentication configuration for the login/signup
+  - [x] Disable/Enable password login
+  - [x] Disable/Enable signup
+  - [x] Cannot create a user email
+- [ ] Make frontend realm login respect the authentication configuration for the login/signup
+  - [ ] Display the correct login options
+    - [x] Enabled/Disabled
+    - [ ] OAuth
+    - [ ] ... TOTP?
+  - [ ] Display the correct signup options
+    - [x] Enabled/Disabled
+    - [x] Password login
+    - [ ] Ask for the correct fields, ...
+  - [ ] Display in the correct language
+- [ ] Support magic login links?
+  - [ ] Would probably want to be from the same IP/headers of the requets...
+- [ ] Reset password flow
+- [ ] What happens when multiple "accounts" use the same email
+  - [ ] Ideally, it would link to the same account
